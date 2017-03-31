@@ -5,6 +5,5 @@
 
 <p> If you plan to connect your application to a database you must configure your database first.</p>
 <a target="_blank" href="https://docs.djangoproject.com/en/1.10/topics/install/#database-installation" > Django database support </a>
-<p>Django supports several popular databases. </p>
 <a target="_blank" href="https://www.digitalocean.com/community/tutorials/sqlite-vs-mysql-vs-postgresql-a-comparison-of-relational-database-management-systems"> Read more about different database options</a>
 
