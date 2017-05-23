@@ -157,3 +157,19 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+
+# Settings for Email
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = '_MY_EMAIL_@gmail.com'
+EMAIL_HOST_PASSWORD = '_MY_PASSWORD_'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'EMAIL@DOMAIN.com'
+SERVER_EMAIL = 'EMAIL@DOMAIN.com'
+
+
+
+
+
