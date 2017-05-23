@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 
-# endpoint for /index
+# rest_framework imports
+
+# endpoint for '/'
 def index(request):
     #get the template 
     template = loader.get_template('index.html')
+    return HttpResponse(template.render())
 
-    #render the template in HttpResponse
-    return HttpResponse(template.render())	
