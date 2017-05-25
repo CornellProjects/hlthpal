@@ -3,12 +3,16 @@ from django.shortcuts import render
 from django.template import loader
 from django.contrib.auth import get_user_model
 
+# Custom models
+from .models import Symptoms
 
 # Serializers import
 from .serializers import (
     UserCreateSerializer,
     UserLoginSerializer,
     UserProfileSerializer,
+    SymptomsCreateSerializer,
+    SymptomsGetSerializer,
 )
 
 # rest_framework imports
@@ -21,6 +25,7 @@ from rest_framework.generics import (
     DestroyAPIView,
     ListAPIView,
     RetrieveAPIView,
+    ListCreateAPIView
 )
 
 # Import permissions
@@ -29,6 +34,9 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
 )
+
+# Custom permissions
+from .permissions import IsOwner
 
 ######################################################################################
 # Method based views
@@ -60,7 +68,7 @@ class UserLoginView(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         serializer = UserLoginSerializer(data=data)
-        if serializer.is_valid(raise_exception=True ):
+        if serializer.is_valid(raise_exception=True):
             result = serializer.data
             # Only return token
             if result.has_key('username'):
@@ -82,4 +90,32 @@ class UserProfileView(APIView):
         user_obj = self.request.user
         query = User.objects.filter(username=user_obj)
         serializer = UserProfileSerializer(user_obj)
+        return Response(serializer.data)
+
+
+# Symptoms Create API
+class SymptomsCreateAPIView(ListCreateAPIView):
+    """
+    Create a new symptoms record.
+    """
+    queryset = Symptoms.objects.all()
+    serializer_class = SymptomsCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+# Symptoms GET API
+class SymptomsGetAPIView(ListAPIView):
+    """
+    Get symptoms for a user.
+    """
+    queryset = Symptoms.objects.all()
+    serializer_class = SymptomsGetSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        symptoms = Symptoms.objects.filter(owner=self.request.user)
+        serializer = SymptomsGetSerializer(symptoms, many=True,)
         return Response(serializer.data)
