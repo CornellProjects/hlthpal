@@ -12,13 +12,13 @@
 <p>  3. Create an android virtual device using the emulator in Android studio.  </p>
 <p>  4. Launch the android emulated device and compile react native - "react-native run-android". </p>
 <p>  5. Double tap R to reload
-</hr>
+<hr/>
 
 <h3>Completed</h3>
 <p>Login screen</p>
 <p>Home screen(redesign needed)</p>
 <p>Question screen</p>
-</hr>
+<hr/>
 
 <h3>In progress</h3>
 <p>Store data in local database</p>
