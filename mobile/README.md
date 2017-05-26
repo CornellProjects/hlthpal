@@ -2,7 +2,8 @@
 
 <p> React native development requires several dependencies to be installed.</p>
 <a target="_blank" href="https://facebook.github.io/react-native/docs/getting-started.html"> get started with React native</a> 
-<p> NativeBase is used to implement pages.NativeBase is a free and open source UI component library for React Native to build native mobile apps for iOS and Android platforms.</p>
+
+<p> <s>NativeBase</s> is used to implement pages.<s>NativeBase</s> is a free and open source UI component library for React Native to build native mobile apps for iOS and Android platforms.</p>
 <a target="_blank" href="https://docs.nativebase.io/">NativeBase Documentation</a>
 <hr/>
 
