@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">project</string>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey"></string>
+    <string name="app_name">NativeStarterKit</string>
 </resources>
