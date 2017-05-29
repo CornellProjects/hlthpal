@@ -27,7 +27,11 @@ export default {
     alignSelf: 'center',
   },
   buttons:{
+<<<<<<< HEAD
     marginTop: 30,
+=======
+    marginTop: 50,
+>>>>>>> 22322b7cc60c65b1909914747144b3308cf853e2
     marginBottom:18,
   }
 };

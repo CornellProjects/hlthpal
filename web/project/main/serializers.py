@@ -6,6 +6,9 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
+# Custom models
+from .models import Symptoms
+
 ######################################################################################
 # Serializers for user object
 
@@ -122,3 +125,32 @@ class UserProfileSerializer(ModelSerializer):
             'first_name',
             'last_name',
         ]
+
+
+# Create Symptoms serializer
+class SymptomsCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Symptoms
+        fields =[
+            'id',
+            's1',
+            's2',
+            's3'
+        ]
+
+
+# GET Symptoms serializer
+class SymptomsGetSerializer(ModelSerializer):
+    class Meta:
+        model = Symptoms
+        fields =[
+            'id',
+            'date',
+            's1',
+            's2',
+            's3'
+        ]
+
+
+
+

@@ -55,7 +55,11 @@ class Login extends Component {
                         </Button>
                     </Col>
                     <Col>
+<<<<<<< HEAD
                         <Button rounded bordered style={styles.center} onPress={() => Actions.fillInfo()}>
+=======
+                        <Button rounded bordered style={styles.center}>
+>>>>>>> 22322b7cc60c65b1909914747144b3308cf853e2
                           <Text>Sign up</Text>
                         </Button>
                     </Col>

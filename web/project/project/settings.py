@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '-4y=cq=mm^=tp$yav3q-!$0qs-o)#)5)bnvl-ks3@h8^l*ws^w'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -178,8 +180,6 @@ EMAIL_HOST_PASSWORD = '_MY_PASSWORD_'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'EMAIL@DOMAIN.com'
 SERVER_EMAIL = 'EMAIL@DOMAIN.com'
-
-
 
 
 

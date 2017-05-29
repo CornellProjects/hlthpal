@@ -15,8 +15,11 @@ import { statusBarColor } from './themes/base-theme';
 import Qone from './components/qone';
 import Qtwo from './components/qtwo';
 import QtwoOne from './components/qtwoOne';
+<<<<<<< HEAD
 import FillInfo from './components/fillInfo';
 
+=======
+>>>>>>> 22322b7cc60c65b1909914747144b3308cf853e2
 
 const RouterWithRedux = connect()(Router);
 
@@ -60,11 +63,17 @@ class AppNavigator extends Component {
       case 'qone':
         return <Qone />;
       case 'qtwo':
+<<<<<<< HEAD
         return <Qtwo />;
       case 'qtwoOne':
         return <QtwoOne />;
       case 'fillInfo':
         return <FillInfo />;
+=======
+        return <Qtwo />
+      case 'qtwoOne':
+        return <QtwoOne />
+>>>>>>> 22322b7cc60c65b1909914747144b3308cf853e2
       default:
         return <Login />;
     }
@@ -111,7 +120,10 @@ class AppNavigator extends Component {
             <Scene key="qone" component={Qone} />
             <Scene key="qtwo" component={Qtwo} />
             <Scene key="qtwoOne" component={QtwoOne} />
+<<<<<<< HEAD
             <Scene key="fillInfo" component={FillInfo} />
+=======
+>>>>>>> 22322b7cc60c65b1909914747144b3308cf853e2
           </Scene>
         </RouterWithRedux>
       </Drawer>
