@@ -50,15 +50,9 @@ class Home extends Component {
 
         <Content>
           <View style={styles.mt}>
-<<<<<<< HEAD
           <Thumbnail style={styles.center} size={80} source={require('../../../images/avatar.png')} />
             <Text style={styles.text}>
               Hi Nish, how are you today?
-=======
-          <Thumbnail size={80} style={styles.center} source={require('../../../images/miranda.jpeg')} />
-            <Text style={styles.text}>
-              Hi Joyce, how are you today?
->>>>>>> 22322b7cc60c65b1909914747144b3308cf853e2
             </Text>
         
 
