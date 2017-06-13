@@ -11,7 +11,7 @@ import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
 
 
-class QtwoOne extends Component {
+class Qfour extends Component {
 
   static propTypes = {
     name: React.PropTypes.string,
@@ -33,31 +33,31 @@ class QtwoOne extends Component {
             <Button transparent onPress={this.props.openDrawer}>
               <Icon active name="menu" />
             </Button>
-           
+
           </Left>
 
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Question 2 - 1'}</Title>
+            <Title>{(this.props.name) ? this.props.name : 'Question 4'}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
               <Icon active name="power" />
             </Button>
           </Right>
-          
+
         </Header>
 
         <Content>
            <Text style={styles.text}>
-            Pain
+            Have any of your family or friends been anxious or worried about you?
           </Text>
 
            <Grid style={styles.options}>
               <Row><Text style={styles.optionText}>0 (Not at all)</Text></Row>
-              <Row><Text style={styles.optionText}>1 (Slightly)</Text></Row>
-              <Row><Text style={styles.optionText}>2 (Moderately)</Text></Row>
-              <Row><Text style={styles.optionText}>3 (Severely)</Text></Row>
-              <Row><Text style={styles.optionText}>4 (Overwhelmingly)</Text></Row>
+              <Row><Text style={styles.optionText}>1 (Occasionally)</Text></Row>
+              <Row><Text style={styles.optionText}>2 (Sometimes)</Text></Row>
+              <Row><Text style={styles.optionText}>3 (Most of the time)</Text></Row>
+              <Row><Text style={styles.optionText}>4 (Always)</Text></Row>
            </Grid>
 
           <Grid>
@@ -66,23 +66,23 @@ class QtwoOne extends Component {
             <Col><Radio selected={false} /><Text style={styles.radioText}>1</Text></Col>
             <Col><Radio selected={true} /><Text style={styles.radioText}>2</Text></Col>
             <Col><Radio selected={false} /><Text style={styles.radioText}>3</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>4</Text></Col>   
+            <Col><Radio selected={false} /><Text style={styles.radioText}>4</Text></Col>
           </Row>
           </Grid>
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button light rounded onPress={() => Actions.qone()} style={styles.center}> 
+              <Button light rounded onPress={() => Actions.qthree()} style={styles.center}>
                   <Text>Back</Text>
               </Button>
             </Col>
             <Col>
-              <Button rounded onPress={() => Actions.qtwoTwo()} style={styles.center}>
+              <Button rounded onPress={() => Actions.qfive()} style={styles.center}>
                   <Text>Next</Text>
               </Button>
             </Col>
           </Grid>
-         
+
         </Content>
       </Container>
     );
@@ -101,4 +101,4 @@ const mapStateToProps = state => ({
   list: state.list.list,
 });
 
-export default connect(mapStateToProps, bindAction)(QtwoOne);
+export default connect(mapStateToProps, bindAction)(Qfour);

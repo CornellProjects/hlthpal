@@ -13,6 +13,14 @@ export default {
   text: {
     marginTop:60,
     fontSize: 30,
+    alignSelf:'center',
+    color: '#F16C00',
+    marginLeft: 20,
+    marginRight:20,
+    fontFamily: 'sans-serif-condensed',
+  },
+  subText: {
+    fontSize: 20,
     marginBottom: 15,
     alignSelf:'center',
     color: '#F16C00',

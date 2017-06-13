@@ -50,7 +50,7 @@ class Qone extends Component {
         <Content>
           
           <Text style={styles.text}>
-            Q1: What have been your main problems and concerns over the past week?(optional)
+            What have been your main problems and concerns over the past week? (optional)
           </Text>
           <Item underline style={styles.input}>
               <Input placeholder='Enter Text Here' />

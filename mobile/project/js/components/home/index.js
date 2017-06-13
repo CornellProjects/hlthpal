@@ -10,8 +10,18 @@ import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
 
+//import axios from 'axios';
+
 
 class Home extends Component {
+
+  constructor(props) {
+      super(props);
+      this.state = {
+        data: [],
+        status: [],
+      };
+  }
 
   static propTypes = {
     name: React.PropTypes.string,
@@ -25,9 +35,39 @@ class Home extends Component {
     Actions.blankPage();
   }
 
+  componentWillMount() {
+  // trying to connect through axios
+//    axios.get("http://128.84.125.93:8000/home")
+//    .then(response => {
+//        this.setState({status:response.status})
+//        this.setState({data: response.data})
+//    });
+  // trying to connect through standard Fetch API
+//      fetch('http://128.84.125.93:8000/api/login', {
+//           method: 'POST',
+//           headers: {
+//           'Accept': 'application/json',
+//           'Content-Type': 'application/json',
+//           },
+//
+//           body: JSON.stringify({
+//           username: 'testuser',
+//           password: 'k234',
+//           })
+//        })
+//           .then((response) => {
+//                   this.setState({response: response.status});
+//                   return response.json() })
+//           .then((responseJson) => {
+//                   this.setState({token: responseJson.token});
+//            })
+//           .catch((error) => { console.error(error); });
+
+    }
 
   render() {
-    return (
+    console.log(this.state)
+     return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
           <Left>
@@ -50,11 +90,10 @@ class Home extends Component {
 
         <Content>
           <View style={styles.mt}>
-          <Thumbnail style={styles.center} size={80} source={require('../../../images/avatar.png')} />
+          <Thumbnail size={80} style={styles.center} source={require('../../../images/avatar.png')} />
             <Text style={styles.text}>
-              Hi Nish, how are you today?
+              Hi Joyce, how are you today?
             </Text>
-        
 
             <View style={styles.buttons}>
                 <Button rounded bordered style={styles.center} onPress={() => Actions.qone()}>

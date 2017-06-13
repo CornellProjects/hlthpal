@@ -5,18 +5,16 @@ const { StyleSheet } = React;
 export default {
   container: {
     backgroundColor: '#FBFAFA',
-  }, 
+  },
   text: {
-    marginTop:60,
-    fontSize: 24,
-    marginBottom: 15,
-    alignItems: 'center',
-    alignContent: 'center',
-    color: '#F16C00',
-    marginLeft: 20,
-    marginRight:20,
-    justifyContent:'center',
-    fontFamily: 'sans-serif-condensed',
+      marginTop:60,
+      fontSize: 30,
+      marginBottom: 15,
+      alignSelf:'center',
+      color: '#F16C00',
+      marginLeft: 20,
+      marginRight:20,
+      fontFamily: 'sans-serif-condensed',
   },
   mt: {
     marginTop: 18,

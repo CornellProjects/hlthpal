@@ -12,13 +12,14 @@ export default {
   },
   text: {
     marginTop:60,
-    fontSize: 20,
+    fontSize: 24,
     marginBottom: 15,
     alignItems: 'center',
     alignContent: 'center',
     color: '#F16C00',
     marginLeft: 20,
     marginRight:20,
+    fontFamily: 'sans-serif-condensed',
   },
   input:{
     marginTop:60,

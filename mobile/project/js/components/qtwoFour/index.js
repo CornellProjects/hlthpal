@@ -11,7 +11,7 @@ import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
 
 
-class QtwoOne extends Component {
+class QtwoFour extends Component {
 
   static propTypes = {
     name: React.PropTypes.string,
@@ -33,23 +33,26 @@ class QtwoOne extends Component {
             <Button transparent onPress={this.props.openDrawer}>
               <Icon active name="menu" />
             </Button>
-           
+
           </Left>
 
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Question 2 - 1'}</Title>
+            <Title>{(this.props.name) ? this.props.name : 'Question 2 - 4'}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
               <Icon active name="power" />
             </Button>
           </Right>
-          
+
         </Header>
 
         <Content>
            <Text style={styles.text}>
-            Pain
+            Nausea{"\n"}
+          </Text>
+          <Text style={styles.subText}>
+          (feeling like you are going to be sick)
           </Text>
 
            <Grid style={styles.options}>
@@ -66,23 +69,23 @@ class QtwoOne extends Component {
             <Col><Radio selected={false} /><Text style={styles.radioText}>1</Text></Col>
             <Col><Radio selected={true} /><Text style={styles.radioText}>2</Text></Col>
             <Col><Radio selected={false} /><Text style={styles.radioText}>3</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>4</Text></Col>   
+            <Col><Radio selected={false} /><Text style={styles.radioText}>4</Text></Col>
           </Row>
           </Grid>
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button light rounded onPress={() => Actions.qone()} style={styles.center}> 
+              <Button light rounded onPress={() => Actions.qtwoThree()} style={styles.center}>
                   <Text>Back</Text>
               </Button>
             </Col>
             <Col>
-              <Button rounded onPress={() => Actions.qtwoTwo()} style={styles.center}>
+              <Button rounded onPress={() => Actions.qtwoFive()} style={styles.center}>
                   <Text>Next</Text>
               </Button>
             </Col>
           </Grid>
-         
+
         </Content>
       </Container>
     );
@@ -101,4 +104,4 @@ const mapStateToProps = state => ({
   list: state.list.list,
 });
 
-export default connect(mapStateToProps, bindAction)(QtwoOne);
+export default connect(mapStateToProps, bindAction)(QtwoFour);

@@ -41,38 +41,38 @@ class FillInfo extends Component {
             </Text>
               
                 <Item regular style={styles.list}>
-                    <Input placeholder='Your Name'/>
+                    <Input style={styles.input} placeholder='Your Name'/>
                 </Item>
               
               <Grid style = {styles.radios}>
                  <Col style={styles.center}>
 
                     <Radio selected={true} />
-                    <Text>Male</Text>
+                    <Text style={styles.radioText}>Male</Text>
                     
                   </Col>
 
                   <Col style={styles.center}>
                     <Radio selected={false} />
-                    <Text>Female</Text>
+                    <Text style={styles.radioText}>Female</Text>
                   </Col>
               </Grid>
 
              
                   <Item regular style={styles.list}>
-                    <Input placeholder='Patient ID'/>
+                    <Input style={styles.input} placeholder='Patient ID'/>
                   </Item>
                 
                   <Item regular style={styles.list}>
-                    <Input placeholder='Mobile'/>
+                    <Input style={styles.input} placeholder='Mobile'/>
                   </Item>
                 
                  <Item regular style={styles.list}>
-                    <Input placeholder='My diagnosis'/>
+                    <Input style={styles.input} placeholder='My diagnosis'/>
                   </Item>
                  
                   <Item regular style={styles.list}>
-                    <Input placeholder='My doctor name'/>
+                    <Input style={styles.input} placeholder='My doctor name'/>
                   </Item>
                 
              

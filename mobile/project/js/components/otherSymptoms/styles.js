@@ -6,29 +6,27 @@ export default {
   container: {
     backgroundColor: '#FBFAFA',
   },
-  btn: {
+  text: {
+    marginTop:60,
+    fontSize: 24,
+    marginBottom: 15,
+    alignItems: 'center',
+    alignContent: 'center',
     color: '#F16C00',
-  },
-  text:{
-    color: '#F16C00',
-    marginTop:20,
-    fontSize: 20,
+    marginLeft: 20,
+    marginRight:20,
+    justifyContent:'center',
     fontFamily: 'sans-serif-condensed',
   },
-  input:{
-    marginTop:60,
-    marginBottom:15,
-  },
   mt: {
-    marginTop: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: 18,
   },
-    center: {
+  center: {
     alignSelf: 'center',
   },
   buttons:{
     marginTop: 50,
     marginBottom:18,
+    justifyContent: 'center',
   }
 };
