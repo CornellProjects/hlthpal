@@ -10,16 +10,12 @@ import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
 
-//import axios from 'axios';
-
-
 class Home extends Component {
 
   constructor(props) {
       super(props);
       this.state = {
-        data: [],
-        status: [],
+        response: [],
       };
   }
 
@@ -36,37 +32,9 @@ class Home extends Component {
   }
 
   componentWillMount() {
-  // trying to connect through axios
-//    axios.get("http://128.84.125.93:8000/home")
-//    .then(response => {
-//        this.setState({status:response.status})
-//        this.setState({data: response.data})
-//    });
-  // trying to connect through standard Fetch API
-//      fetch('http://128.84.125.93:8000/api/login', {
-//           method: 'POST',
-//           headers: {
-//           'Accept': 'application/json',
-//           'Content-Type': 'application/json',
-//           },
-//
-//           body: JSON.stringify({
-//           username: 'testuser',
-//           password: 'k234',
-//           })
-//        })
-//           .then((response) => {
-//                   this.setState({response: response.status});
-//                   return response.json() })
-//           .then((responseJson) => {
-//                   this.setState({token: responseJson.token});
-//            })
-//           .catch((error) => { console.error(error); });
-
-    }
+  }
 
   render() {
-    console.log(this.state)
      return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
