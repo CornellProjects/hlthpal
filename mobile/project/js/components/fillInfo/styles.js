@@ -34,7 +34,11 @@ export default {
   center:{
     alignSelf: 'center',
     marginTop: 8,
+  },
+  bottom: {
+    marginTop: 8,
     marginBottom: 25,
+    alignSelf: 'center',
   },
   title:{
     marginTop: 25,

@@ -24,7 +24,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      token: [],
+      token: '',
       error: '',
       status: '',
     };
@@ -60,7 +60,7 @@ class Login extends Component {
                 if (this.state.status === 200) {
                    // Status 200 = OK
                    // User is logged in and goes to homepage
-                   this.onLoginSuccess()
+                   this.onLoginSuccess();
                    Actions.home();
                 }
                 else {
@@ -75,6 +75,7 @@ class Login extends Component {
   }
 
   onLoginSuccess() {
+    // clear fields upon logged in
     this.setState({
         email: '',
         password: '',
@@ -82,7 +83,6 @@ class Login extends Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <Container>
         <View style={styles.container}>
