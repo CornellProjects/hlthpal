@@ -135,7 +135,10 @@ class SymptomsCreateSerializer(ModelSerializer):
             'id',
             's1',
             's2',
-            's3'
+            's3',
+            'r1',
+            'r2',
+            'r3'
         ]
 
 
@@ -148,7 +151,10 @@ class SymptomsGetSerializer(ModelSerializer):
             'date',
             's1',
             's2',
-            's3'
+            's3',
+            'r1',
+            'r2',
+            'r3'
         ]
 
 

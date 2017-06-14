@@ -57,21 +57,28 @@ class Login extends Component {
            })
            .then((response) => {
                 this.setState({status: response.status})
+                if (this.state.status === 200) {
+                   // Status 200 = OK
+                   // User is logged in and goes to homepage
+                   this.onLoginSuccess()
+                   Actions.home();
+                }
+                else {
+                   // throws an error
+                   this.setState({error: 'Authentication Failed'})
+                }
                 return response.json()
                 })
            .then((responseJson) => {
                 this.setState({token: responseJson.token});
             });
+  }
 
-   if (this.state.status === 200) {
-       // Status 200 = OK
-       // User is logged in and goes to homepage
-       Actions.home();
-   }
-   else {
-       // throws an error
-       this.setState({error: 'Authentication Failed'})
-   }
+  onLoginSuccess() {
+    this.setState({
+        email: '',
+        password: '',
+    });
   }
 
   render() {
