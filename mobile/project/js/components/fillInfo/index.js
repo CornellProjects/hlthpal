@@ -9,6 +9,7 @@ import { Grid, Row,Col } from 'react-native-easy-grid';
 import { setUser } from '../../actions/user';
 import styles from './styles';
 import TextField from '../TextField'
+import { SegmentedControls } from 'react-native-radio-buttons'
 
 
 const background = require('../../../images/login_background.png');
@@ -28,8 +29,13 @@ class FillInfo extends Component {
       username: '',
       email: '',
       password: '',
+      diagnosis: '',
+      doctor: '',
+      mobile: '',
+      patientID: '',
       status: '',
       error: '',
+      selectedOption: '',
     };
   }
 
@@ -81,10 +87,20 @@ class FillInfo extends Component {
       username: '',
       email: '',
       password: '',
+      diagnosis: '',
+      doctor: '',
+      mobile: '',
+      patientID: '',
+      selectedOption: '',
     });
   }
 
   render() {
+    const options = [
+        'Male',
+        'Female'
+    ];
+
     return (
       <Container>
         <View style={styles.container}>
@@ -111,21 +127,15 @@ class FillInfo extends Component {
                     />
                 </Item>
 
-              <Grid style = {styles.radios}>
-                 <Col style={styles.center}>
+                <Item regular style={styles.list}>
+                    <SegmentedControls
+                        tint={'#F16C00'}
+                        options={options}
+                        onSelection={selectedOption => this.setState({selectedOption})}
+                        selectedOption={ this.state.selectedOption }
+                    />
+                </Item>
 
-                    <Radio selected={true} />
-                    <Text style={styles.radioText}>Male</Text>
-                    
-                  </Col>
-
-                  <Col style={styles.center}>
-                    <Radio selected={false} />
-                    <Text style={styles.radioText}>Female</Text>
-                  </Col>
-              </Grid>
-
-             
                   <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
@@ -155,19 +165,39 @@ class FillInfo extends Component {
                   </Item>
 
                   <Item regular style={styles.list}>
-                    <TextField style={styles.input} placeholder='Patient ID'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='Patient ID'
+                        value={this.state.patientID}
+                        onChangeText={patientID => this.setState({ patientID })}
+                    />
                   </Item>
 
                   <Item regular style={styles.list}>
-                    <TextField style={styles.input} placeholder='Mobile'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='Mobile'
+                        value={this.state.mobile}
+                        onChangeText={mobile => this.setState({ mobile })}
+                    />
                   </Item>
                 
                  <Item regular style={styles.list}>
-                    <TextField style={styles.input} placeholder='My diagnosis'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='My diagnosis'
+                        value={this.state.diagnosis}
+                        onChangeText={diagnosis => this.setState({ diagnosis })}
+                    />
                   </Item>
                  
                   <Item regular style={styles.list}>
-                    <TextField style={styles.input} placeholder='My doctor name'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='My doctor name'
+                        value={this.state.doctor}
+                        onChangeText={doctor => this.setState({ doctor })}
+                    />
                   </Item>
                 
              
