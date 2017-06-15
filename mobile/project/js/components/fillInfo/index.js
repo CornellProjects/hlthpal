@@ -44,11 +44,21 @@ class FillInfo extends Component {
   }
 
   onButtonPress() {
-      const { email, password, first_name, last_name, username } = this.state;
+      const {
+        email,
+        password,
+        first_name,
+        last_name,
+        username,
+        diagnosis,
+        doctor,
+        mobile,
+        patientID,
+        selectedOption } = this.state;
 
       // Change IP address according to yours
       // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
-      fetch('http://0.0.0.0:8000/api/register', {
+      fetch('http://0.0.0.0:8000/api/patient/post', {
              method: 'POST',
              headers: {
              'Accept': 'application/json',
@@ -61,11 +71,16 @@ class FillInfo extends Component {
              username: last_name,
              email: email,
              password: password,
+             diagnosis: diagnosis,
+             doctor: doctor,
+             mobile: mobile,
+             patientID: patientID,
+             gender: selectedOption,
              })
              })
              .then((response) => {
                   this.setState({status: response.status})
-                  if (this.state.status === 201) {
+                  if (this.state.status === 200) {
                      // Status 201 = User Created
                      // User is logged in and goes to login page
                      this.onRegistration();
@@ -96,6 +111,7 @@ class FillInfo extends Component {
   }
 
   render() {
+    console.log(this.state);
     const options = [
         'Male',
         'Female'
@@ -131,7 +147,7 @@ class FillInfo extends Component {
                     <SegmentedControls
                         tint={'#F16C00'}
                         options={options}
-                        onSelection={selectedOption => this.setState({selectedOption})}
+                        onSelection={selectedOption => this.setState({ selectedOption })}
                         selectedOption={ this.state.selectedOption }
                     />
                 </Item>

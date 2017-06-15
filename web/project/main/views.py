@@ -4,7 +4,7 @@ from django.template import loader
 from django.contrib.auth import get_user_model
 
 # Custom models
-from .models import Symptoms
+from .models import Symptoms, Patient
 
 # Serializers import
 from .serializers import (
@@ -13,6 +13,8 @@ from .serializers import (
     UserProfileSerializer,
     SymptomsCreateSerializer,
     SymptomsGetSerializer,
+    PatientCreateSerializer,
+    PatientGetSerializer,
 )
 
 # rest_framework imports
@@ -106,6 +108,13 @@ class SymptomsCreateAPIView(ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
+
+class PatientCreateAPIView(ListCreateAPIView):
+    serializer_class = PatientCreateSerializer
+    permission_classes = [AllowAny]
+    queryset = Patient.objects.all()
+
+
 # Symptoms GET API
 class SymptomsGetAPIView(ListAPIView):
     """
@@ -118,4 +127,15 @@ class SymptomsGetAPIView(ListAPIView):
     def get(self, request, format=None):
         symptoms = Symptoms.objects.filter(owner=self.request.user)
         serializer = SymptomsGetSerializer(symptoms, many=True,)
+        return Response(serializer.data)
+
+
+class PatientGetAPIView(APIView):
+    queryset = Patient.objects.all()
+    serializer_class = PatientGetSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        patient = Patient.objects.filter(patient=self.request.user)
+        serializer = PatientGetSerializer(patient, many=True,)
         return Response(serializer.data)

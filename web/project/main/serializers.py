@@ -1,13 +1,13 @@
 from rest_framework import serializers, exceptions
 from rest_framework import permissions
-from rest_framework.serializers import(ModelSerializer, EmailField, CharField)
+from rest_framework.serializers import (ModelSerializer, EmailField, CharField, HyperlinkedModelSerializer)
 from rest_framework_jwt.settings import api_settings
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 # Custom models
-from .models import Symptoms
+from .models import Symptoms, Patient
 
 ######################################################################################
 # Serializers for user object
@@ -15,7 +15,7 @@ from .models import Symptoms
 User = get_user_model()
 
 # New user register serializer
-class UserCreateSerializer(ModelSerializer):
+class UserCreateSerializer(HyperlinkedModelSerializer):
     email = EmailField(label="Email address")
     class Meta:
         model = User
@@ -55,7 +55,8 @@ class UserCreateSerializer(ModelSerializer):
                         email=email,
                         password=password,
                         first_name = first_name,
-                        last_name = last_name)
+                        last_name = last_name
+            )
             user_obj.set_password(password)
             user_obj.save()
             return validated_data
@@ -158,5 +159,40 @@ class SymptomsGetSerializer(ModelSerializer):
         ]
 
 
+# Create Patient Serializer
+class PatientCreateSerializer(HyperlinkedModelSerializer):
+    username = serializers.CharField(source='patient.username')
+    email = serializers.CharField(source='patient.email')
+    first_name = serializers.CharField(source='patient.first_name')
+    last_name = serializers.CharField(source='patient.last_name')
+    password = serializers.CharField(source='patient.password')
 
+    class Meta:
+        model = Patient
+        fields = [
+            'first_name',
+            'last_name',
+            'username',
+            'password',
+            'email',
+            'patientID',
+            'mobile',
+            'diagnosis',
+            'doctor',
+            'gender',
+        ]
+
+
+# Get Patient Serializer
+class PatientGetSerializer(ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = [
+            'id',
+            'patientID',
+            'mobile',
+            'diagnosis',
+            'doctor',
+            'gender',
+        ]
 

@@ -22,6 +22,10 @@ from django.contrib.auth.models import User
 
 
 # Create a model for symptoms table
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
 class Symptoms(models.Model):
     # record input symptoms
     s1 = models.CharField(max_length=20)
@@ -36,3 +40,11 @@ class Symptoms(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey('auth.User', related_name="user")
     #owner = models.ForeignKey('auth.User', related_name="user", on_delete=models.CASCADE)
+
+class Patient(models.Model):
+    patient = models.OneToOneField(User, on_delete=models.CASCADE)
+    patientID = models.IntegerField()
+    doctor = models.CharField(max_length=50)
+    diagnosis = models.CharField(max_length=50)
+    gender = models.CharField(max_length=6)
+    mobile = models.CharField(max_length=10)
