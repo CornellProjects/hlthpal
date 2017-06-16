@@ -14,7 +14,6 @@ from .serializers import (
     SymptomsCreateSerializer,
     SymptomsGetSerializer,
     PatientCreateSerializer,
-    PatientGetSerializer,
 )
 
 # rest_framework imports
@@ -111,8 +110,12 @@ class SymptomsCreateAPIView(ListCreateAPIView):
 
 class PatientCreateAPIView(ListCreateAPIView):
     serializer_class = PatientCreateSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Patient.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 
 # Symptoms GET API
@@ -127,15 +130,4 @@ class SymptomsGetAPIView(ListAPIView):
     def get(self, request, format=None):
         symptoms = Symptoms.objects.filter(owner=self.request.user)
         serializer = SymptomsGetSerializer(symptoms, many=True,)
-        return Response(serializer.data)
-
-
-class PatientGetAPIView(APIView):
-    queryset = Patient.objects.all()
-    serializer_class = PatientGetSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, format=None):
-        patient = Patient.objects.filter(patient=self.request.user)
-        serializer = PatientGetSerializer(patient, many=True,)
         return Response(serializer.data)

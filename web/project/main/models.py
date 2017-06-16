@@ -41,10 +41,12 @@ class Symptoms(models.Model):
     owner = models.ForeignKey('auth.User', related_name="user")
     #owner = models.ForeignKey('auth.User', related_name="user", on_delete=models.CASCADE)
 
+
+# Model to extend User class on the creation of a new patient
 class Patient(models.Model):
-    patient = models.OneToOneField(User, on_delete=models.CASCADE)
-    patientID = models.IntegerField()
-    doctor = models.CharField(max_length=50)
-    diagnosis = models.CharField(max_length=50)
-    gender = models.CharField(max_length=6)
-    mobile = models.CharField(max_length=10)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
+    doctor = models.CharField(max_length=50, blank=True)
+    diagnosis = models.CharField(max_length=50, blank=True)
+    gender = models.CharField(max_length=6, blank=True)
+    mobile = models.CharField(max_length=10, blank=True)
+

@@ -14,12 +14,32 @@ from .models import Symptoms, Patient
 
 User = get_user_model()
 
+
+# Create Patient Serializer
+class PatientCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = [
+            'id',
+            'mobile',
+            'diagnosis',
+            'doctor',
+            'gender',
+        ]
+
+
 # New user register serializer
-class UserCreateSerializer(HyperlinkedModelSerializer):
+class UserCreateSerializer(ModelSerializer):
     email = EmailField(label="Email address")
+    password = CharField(style={'input_type': 'password'})
+
+    # Pass PatientCreateSerializer and include it in fields
+    patient = PatientCreateSerializer()
+
     class Meta:
         model = User
         fields = [
+            'patient',
             'first_name',
             'last_name',
             'username',
@@ -36,6 +56,7 @@ class UserCreateSerializer(HyperlinkedModelSerializer):
         first_name = validated_data['first_name']
         last_name = validated_data['last_name']
 
+        # Require user's first name
         if first_name.strip() == '':
             raise serializers.ValidationError("First name is required.")
             return
@@ -55,10 +76,21 @@ class UserCreateSerializer(HyperlinkedModelSerializer):
                         email=email,
                         password=password,
                         first_name = first_name,
-                        last_name = last_name
+                        last_name = last_name,
             )
             user_obj.set_password(password)
             user_obj.save()
+
+            # call Patient create and map the data into the Patient table
+            # call it after User has been created and saved; One-To-One Relationship
+            patient_data = Patient.objects.create(
+                user=user_obj,
+                mobile=validated_data['patient']['mobile'],
+                diagnosis=validated_data['patient']['diagnosis'],
+                doctor=validated_data['patient']['doctor'],
+                gender=validated_data['patient']['gender']
+            )
+
             return validated_data
 
 
@@ -125,6 +157,11 @@ class UserProfileSerializer(ModelSerializer):
         fields = [
             'first_name',
             'last_name',
+            'patientID',
+            'mobile',
+            'diagnosis',
+            'doctor',
+            'gender'
         ]
 
 
@@ -159,40 +196,12 @@ class SymptomsGetSerializer(ModelSerializer):
         ]
 
 
-# Create Patient Serializer
-class PatientCreateSerializer(HyperlinkedModelSerializer):
-    username = serializers.CharField(source='patient.username')
-    email = serializers.CharField(source='patient.email')
-    first_name = serializers.CharField(source='patient.first_name')
-    last_name = serializers.CharField(source='patient.last_name')
-    password = serializers.CharField(source='patient.password')
-
+class UserSerializer(HyperlinkedModelSerializer):
     class Meta:
-        model = Patient
+        model = User
         fields = [
             'first_name',
             'last_name',
-            'username',
-            'password',
-            'email',
-            'patientID',
-            'mobile',
-            'diagnosis',
-            'doctor',
-            'gender',
         ]
 
-
-# Get Patient Serializer
-class PatientGetSerializer(ModelSerializer):
-    class Meta:
-        model = Patient
-        fields = [
-            'id',
-            'patientID',
-            'mobile',
-            'diagnosis',
-            'doctor',
-            'gender',
-        ]
 

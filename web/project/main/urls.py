@@ -17,5 +17,4 @@ urlpatterns = [
     url(r'^api/symptoms/post', views.SymptomsCreateAPIView.as_view(), name="symptoms/post"),
     url(r'^api/patient/post', views.PatientCreateAPIView.as_view(), name="patient/post"),
     url(r'^api/symptoms/get', views.SymptomsGetAPIView.as_view(), name="symptoms/get"),
-    url(r'^api/patient/get', views.PatientGetAPIView.as_view(), name="patient/get"),
 ]

@@ -32,7 +32,6 @@ class FillInfo extends Component {
       diagnosis: '',
       doctor: '',
       mobile: '',
-      patientID: '',
       status: '',
       error: '',
       selectedOption: '',
@@ -53,12 +52,11 @@ class FillInfo extends Component {
         diagnosis,
         doctor,
         mobile,
-        patientID,
         selectedOption } = this.state;
 
       // Change IP address according to yours
       // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
-      fetch('http://0.0.0.0:8000/api/patient/post', {
+      fetch('http://localhost:8000/api/register', {
              method: 'POST',
              headers: {
              'Accept': 'application/json',
@@ -71,16 +69,17 @@ class FillInfo extends Component {
              username: last_name,
              email: email,
              password: password,
-             diagnosis: diagnosis,
-             doctor: doctor,
-             mobile: mobile,
-             patientID: patientID,
-             gender: selectedOption,
+             patient: {
+                 diagnosis: diagnosis,
+                 doctor: doctor,
+                 mobile: mobile,
+                 gender: selectedOption,
+             }
              })
              })
              .then((response) => {
                   this.setState({status: response.status})
-                  if (this.state.status === 200) {
+                  if (this.state.status === 201) {
                      // Status 201 = User Created
                      // User is logged in and goes to login page
                      this.onRegistration();
@@ -105,7 +104,8 @@ class FillInfo extends Component {
       diagnosis: '',
       doctor: '',
       mobile: '',
-      patientID: '',
+      error: '',
+      status: '',
       selectedOption: '',
     });
   }
@@ -177,15 +177,6 @@ class FillInfo extends Component {
                         placeholder='Password'
                         value={this.state.password}
                         onChangeText={password => this.setState({ password })}
-                    />
-                  </Item>
-
-                  <Item regular style={styles.list}>
-                    <TextField
-                        style={styles.input}
-                        placeholder='Patient ID'
-                        value={this.state.patientID}
-                        onChangeText={patientID => this.setState({ patientID })}
                     />
                   </Item>
 
