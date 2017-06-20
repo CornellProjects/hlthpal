@@ -1,21 +1,41 @@
-
 import type { Action } from '../actions/types';
-import { SET_USER } from '../actions/user';
+import {
+    EMAIL_CHANGED,
+    PASSWORD_CHANGED,
+    LOGIN_USER_SUCCESS,
+    LOGIN_USER_FAIL,
+    LOGIN_USER
+} from '../actions/user';
 
 export type State = {
-    name: string
+    email: string,
+    password: string,
+    user: string,
+    error: string,
+    loading: boolean
 }
 
 const initialState = {
-  name: '',
+    email: '',
+    password: '',
+    user: null,
+    error: '',
+    loading: false
 };
 
 export default function (state:State = initialState, action:Action): State {
-  if (action.type === SET_USER) {
-    return {
-      ...state,
-      name: action.payload,
-    };
+  switch (action.type){
+      case EMAIL_CHANGED:
+          return { ...state, email: action.payload };
+      case PASSWORD_CHANGED:
+          return { ...state, password: action.payload };
+      case LOGIN_USER:
+          return { ...state, loading: true, error: '' };
+      case LOGIN_USER_SUCCESS:
+          return { ...state, ...initialState, user: action.payload, error: '', loading: false };
+      case LOGIN_USER_FAIL:
+          return { ...state, error: 'Authentication Failed.', password: '', loading: false };
+      default:
+          return state;
   }
-  return state;
 }

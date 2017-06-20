@@ -6,7 +6,7 @@ import { Container, Content, Item, Button, Icon, View, Text, Radio, InputGroup} 
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
 
-import { setUser } from '../../actions/user';
+import { setUser, registerUser } from '../../actions/RegisterUser';
 import styles from './styles';
 import TextField from '../TextField'
 import { SegmentedControls } from 'react-native-radio-buttons'
@@ -18,100 +18,36 @@ class FillInfo extends Component {
 
   static propTypes = {
     setUser: React.PropTypes.func,
-    registUser: React.PropTypes.func,
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      first_name: '',
-      last_name: '',
-      username: '',
-      email: '',
-      password: '',
-      diagnosis: '',
-      doctor: '',
-      mobile: '',
-      status: '',
-      error: '',
-      selectedOption: '',
-    };
-  }
-
-  setUser(name) {
-    this.props.setUser(name);
+    registerUser: React.PropTypes.func,
   }
 
   onButtonPress() {
       const {
         email,
+        username,
         password,
         first_name,
         last_name,
-        username,
+        mobile,
         diagnosis,
         doctor,
-        mobile,
-        selectedOption } = this.state;
+        selectedOption
+      } = this.props;
 
-      // Change IP address according to yours
-      // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
-      fetch('http://localhost:8000/api/register', {
-             method: 'POST',
-             headers: {
-             'Accept': 'application/json',
-             'Content-Type': 'application/json',
-             },
-
-             body: JSON.stringify({
-             first_name: first_name,
-             last_name: last_name,
-             username: last_name,
-             email: email,
-             password: password,
-             patient: {
-                 diagnosis: diagnosis,
-                 doctor: doctor,
-                 mobile: mobile,
-                 gender: selectedOption,
-             }
-             })
-             })
-             .then((response) => {
-                  this.setState({status: response.status})
-                  if (this.state.status === 201) {
-                     // Status 201 = User Created
-                     // User is logged in and goes to login page
-                     this.onRegistration();
-                     Actions.login();
-                  }
-                  else {
-                     // throws an error
-                     this.setState({error: 'Authentication Failed'})
-                  }
-                  return response.json()
-             });
-  }
-
-  onRegistration() {
-    // clear fields after user is registered
-    this.setState({
-      first_name: '',
-      last_name: '',
-      username: '',
-      email: '',
-      password: '',
-      diagnosis: '',
-      doctor: '',
-      mobile: '',
-      error: '',
-      status: '',
-      selectedOption: '',
-    });
+      this.props.registerUser({
+          email,
+          username,
+          password,
+          first_name,
+          last_name,
+          mobile,
+          diagnosis,
+          doctor,
+          selectedOption: selectedOption || 'Male'
+      });
   }
 
   render() {
-    console.log(this.state);
     const options = [
         'Male',
         'Female'
@@ -129,8 +65,10 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='First Name'
-                        value={this.state.first_name}
-                        onChangeText={first_name => this.setState({ first_name })}
+                        value={this.props.first_name}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'first_name', value
+                        })}
                     />
                 </Item>
 
@@ -138,8 +76,10 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='Last Name'
-                        value={this.state.last_name}
-                        onChangeText={last_name => this.setState({ last_name })}
+                        value={this.props.last_name}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'last_name', value
+                        })}
                     />
                 </Item>
 
@@ -147,8 +87,10 @@ class FillInfo extends Component {
                     <SegmentedControls
                         tint={'#F16C00'}
                         options={options}
-                        onSelection={selectedOption => this.setState({ selectedOption })}
-                        selectedOption={ this.state.selectedOption }
+                        onSelection={value => this.props.setUser({
+                            prop: 'selectedOption', value
+                        })}
+                        selectedOption={ this.props.selectedOption }
                     />
                 </Item>
 
@@ -156,8 +98,10 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='Username'
-                        value={this.state.username}
-                        onChangeText={username => this.setState({ username })}
+                        value={this.props.username}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'username', value
+                        })}
                     />
                   </Item>
 
@@ -165,8 +109,10 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='Email'
-                        value={this.state.email}
-                        onChangeText={email => this.setState({ email })}
+                        value={this.props.email}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'email', value
+                        })}
                     />
                   </Item>
 
@@ -175,8 +121,10 @@ class FillInfo extends Component {
                         secureTextEntry
                         style={styles.input}
                         placeholder='Password'
-                        value={this.state.password}
-                        onChangeText={password => this.setState({ password })}
+                        value={this.props.password}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'password', value
+                        })}
                     />
                   </Item>
 
@@ -184,8 +132,10 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='Mobile'
-                        value={this.state.mobile}
-                        onChangeText={mobile => this.setState({ mobile })}
+                        value={this.props.mobile}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'mobile', value
+                        })}
                     />
                   </Item>
                 
@@ -193,8 +143,10 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='My diagnosis'
-                        value={this.state.diagnosis}
-                        onChangeText={diagnosis => this.setState({ diagnosis })}
+                        value={this.props.diagnosis}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'diagnosis', value
+                        })}
                     />
                   </Item>
                  
@@ -202,8 +154,10 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='My doctor name'
-                        value={this.state.doctor}
-                        onChangeText={doctor => this.setState({ doctor })}
+                        value={this.props.doctor}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'doctor', value
+                        })}
                     />
                   </Item>
                 
@@ -228,11 +182,30 @@ class FillInfo extends Component {
   }
 }
 
-function bindActions(dispatch) {
-  return {
-    setUser: name => dispatch(setUser(name)),
-  };
-}
+const mapStateToProps = (state) => {
+    const {
+        email,
+        username,
+        password,
+        first_name,
+        last_name,
+        mobile,
+        diagnosis,
+        doctor,
+        selectedOption
+    } = state.registerUser;
 
+    return {
+        email,
+        username,
+        password,
+        first_name,
+        last_name,
+        mobile,
+        diagnosis,
+        doctor,
+        selectedOption
+    };
+};
 
-export default connect(null, bindActions)(FillInfo);
+export default connect(mapStateToProps, { setUser, registerUser })(FillInfo);

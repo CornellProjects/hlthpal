@@ -6,7 +6,7 @@ import { Container, Content, Item, Button, Icon, View, Text } from 'native-base'
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
 
-import { setUser } from '../../actions/user';
+import { emailChanged, passwordChanged, loginUser } from '../../actions/user';
 import styles from './styles';
 import TextField from '../TextField'
 
@@ -15,71 +15,18 @@ const background = require('../../../images/login_background.png');
 
 class Login extends Component {
 
-  static propTypes = {
-    setUser: React.PropTypes.func,
+  onEmailChange(text) {
+      this.props.emailChanged(text);
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      token: '',
-      error: '',
-      status: '',
-    };
-  }
-
-  setUser(name) {
-    this.props.setUser(email);
+  onPasswordChange(text) {
+      this.props.passwordChanged(text);
   }
 
   onButtonPress() {
-    // Take the values within the state variables: email and password to send a login
-    // request to Django REST Api
-    const { email, password } = this.state;
+      const { email, password } = this.props;
 
-    this.setState({error: ''});
-
-    // Change IP address according to yours
-    // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
-    fetch('http://0.0.0.0:8000/api/login', {
-           method: 'POST',
-           headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'application/json',
-           },
-
-           body: JSON.stringify({
-           email: email,
-           password: password,
-           })
-           })
-           .then((response) => {
-                this.setState({status: response.status})
-                if (this.state.status === 200) {
-                   // Status 200 = OK
-                   // User is logged in and goes to homepage
-                   this.onLoginSuccess();
-                   Actions.home();
-                }
-                else {
-                   // throws an error
-                   this.setState({error: 'Authentication Failed'})
-                }
-                return response.json()
-                })
-           .then((responseJson) => {
-                this.setState({token: responseJson.token});
-            });
-  }
-
-  onLoginSuccess() {
-    // clear fields upon logged in
-    this.setState({
-        email: '',
-        password: '',
-    });
+      this.props.loginUser({ email, password });
   }
 
   render() {
@@ -91,20 +38,20 @@ class Login extends Component {
               <View style={styles.bg}>
                 <Item style={styles.input}>
                   <TextField placeholder="email"
-                    value={this.state.email}
-                    onChangeText={email => this.setState({ email })} />
+                    value={this.props.email}
+                    onChangeText={this.onEmailChange.bind(this)} />
                 </Item>
                 <Item style={styles.input}>
                   <TextField
                     placeholder="password"
-                    value={this.state.password}
-                    onChangeText={password => this.setState({ password })}
+                    value={this.props.password}
+                    onChangeText={this.onPasswordChange.bind(this)}
                     secureTextEntry
                   />
                 </Item>
                 <Grid>
                     <Col>
-                        <Button rounded style={styles.center} onPress={() => this.onButtonPress()}>
+                        <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)}>
                           <Text>Login</Text>
                         </Button>
                     </Col>
@@ -123,11 +70,14 @@ class Login extends Component {
   }
 }
 
-function bindActions(dispatch) {
-  return {
-    setUser: name => dispatch(setUser(name)),
-  };
-}
+const mapStateToProps = ({ user }) => {
+    const { email, password, error } = user;
 
+    return { email, password, error };
+};
 
-export default connect(null, bindActions)(Login);
+export default connect(mapStateToProps, {
+    emailChanged,
+    passwordChanged,
+    loginUser
+})(Login);

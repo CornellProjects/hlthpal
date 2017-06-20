@@ -7,8 +7,11 @@ export type Action =
     | { type: 'REPLACE_OR_PUSH_ROUTE', route: string }
     | { type: 'OPEN_DRAWER'}
     | { type: 'CLOSE_DRAWER'}
-    | { type: 'SET_USER', name: string}
+    | { type: 'SET_USER'}
+    | { type: 'USER_CREATE'}
     | { type: 'SET_LIST', list: string}
+    | { type: 'EMAIL_CHANGED', text: string}
+    | { type: 'PASSWORD_CHANGED', text: string}
 
 export type Dispatch = (action:Action | Array<Action>) => any;
 export type GetState = () => Object;
