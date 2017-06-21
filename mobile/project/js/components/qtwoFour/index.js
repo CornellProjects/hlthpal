@@ -3,11 +3,12 @@ import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
+import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
+import { SegmentedControls } from 'react-native-radio-buttons';
 import styles from './styles';
 
 
@@ -26,6 +27,14 @@ class QtwoFour extends Component {
   }
 
   render() {
+    const options = [
+        'Not at all',
+        'Slightly',
+        'Moderately',
+        'Severely',
+        'Overwhelmingly'
+     ];
+
     return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -55,33 +64,26 @@ class QtwoFour extends Component {
           (feeling like you are going to be sick)
           </Text>
 
-           <Grid style={styles.options}>
-              <Row><Text style={styles.optionText}>0 (Not at all)</Text></Row>
-              <Row><Text style={styles.optionText}>1 (Slightly)</Text></Row>
-              <Row><Text style={styles.optionText}>2 (Moderately)</Text></Row>
-              <Row><Text style={styles.optionText}>3 (Severely)</Text></Row>
-              <Row><Text style={styles.optionText}>4 (Overwhelmingly)</Text></Row>
-           </Grid>
-
-          <Grid>
-          <Row style={styles.radios}>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>0</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>1</Text></Col>
-            <Col><Radio selected={true} /><Text style={styles.radioText}>2</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>3</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>4</Text></Col>
-          </Row>
-          </Grid>
+           <Card style={styles.radios}>
+             <SegmentedControls
+                 direction={'column'}
+                 tint={'#F16C00'}
+                 options={options}
+                 containerBorderRadius={0}
+                 optionStyle={{fontSize:20, paddingTop: 8}}
+                 optionContainerStyle={{ height: 60, alignItems: 'center' }}
+             />
+           </Card>
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button light rounded onPress={() => Actions.qtwoThree()} style={styles.center}>
-                  <Text>Back</Text>
+              <Button transparent onPress={() => Actions.qtwoThree()} style={styles.center}>
+                  <Icon name='arrow-back' />
               </Button>
             </Col>
             <Col>
-              <Button rounded onPress={() => Actions.qtwoFive()} style={styles.center}>
-                  <Text>Next</Text>
+              <Button transparent onPress={() => Actions.qtwoFive()} style={styles.center}>
+                  <Icon name='arrow-forward' />
               </Button>
             </Col>
           </Grid>
