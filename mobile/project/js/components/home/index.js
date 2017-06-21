@@ -5,22 +5,14 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Text, Button, Icon, Left, Body,Thumbnail,Right,View} from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-
+import { getUser } from '../../actions/user';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
 
 class Home extends Component {
 
-  constructor(props) {
-      super(props);
-      this.state = {
-        response: [],
-      };
-  }
-
   static propTypes = {
-    name: React.PropTypes.string,
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
@@ -29,9 +21,6 @@ class Home extends Component {
   newPage(index) {
     this.props.setIndex(index);
     Actions.blankPage();
-  }
-
-  componentWillMount() {
   }
 
   render() {
@@ -60,7 +49,7 @@ class Home extends Component {
           <View style={styles.mt}>
           <Thumbnail size={80} style={styles.center} source={require('../../../images/avatar.png')} />
             <Text style={styles.text}>
-              Hi Joyce, how are you today?
+              Hi {this.props.email}, how are you today?
             </Text>
 
             <View style={styles.buttons}>
@@ -78,13 +67,13 @@ class Home extends Component {
 function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
-    openDrawer: () => dispatch(openDrawer()),
+    openDrawer: () => dispatch(openDrawer())
   };
 }
 
 const mapStateToProps = state => ({
-  name: state.user.name,
   list: state.list.list,
+  email: state.user.email,
 });
 
 export default connect(mapStateToProps, bindAction)(Home);

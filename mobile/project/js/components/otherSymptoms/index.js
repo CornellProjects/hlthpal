@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
@@ -14,7 +13,6 @@ import styles from './styles';
 class otherSymptoms extends Component {
 
   static propTypes = {
-    name: React.PropTypes.string,
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
@@ -37,7 +35,7 @@ class otherSymptoms extends Component {
           </Left>
 
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Other Symptoms'}</Title>
+            <Title>Other Symptoms</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
@@ -48,23 +46,33 @@ class otherSymptoms extends Component {
         </Header>
 
         <Content>
-           <Text style={styles.text}>
-            Please list any other symptoms not mentioned above, and tick one box to show show
+            <Text style={styles.text}>
+            Please list any other symptoms not mentioned above, and tick one box to show how
              they have affected you over the past week.
-          </Text>
+            </Text>
 
             <Grid style={styles.buttons}>
-            <Col>
-              <Button light rounded onPress={() => Actions.qtwoTen()} style={styles.center}>
-                  <Text>Back</Text>
-              </Button>
-            </Col>
-            <Col>
-              <Button rounded onPress={() => Actions.pastWeek()} style={styles.center}>
-                  <Text>Next</Text>
-              </Button>
-            </Col>
-          </Grid>
+                <Row>
+                    <Col>
+                        <Button rounded onPress={() => Actions.symptomsForm()} style={styles.center}>
+                            <Text>Add</Text>
+                        </Button>
+                    </Col>
+                </Row>
+            </Grid>
+
+            <Grid style={styles.buttons}>
+                <Col>
+                  <Button transparent onPress={() => Actions.qtwoTen()} style={styles.center}>
+                      <Icon name='arrow-back' />
+                  </Button>
+                </Col>
+                <Col>
+                  <Button transparent onPress={() => Actions.pastWeek()} style={styles.center}>
+                      <Icon name='arrow-forward' />
+                  </Button>
+                </Col>
+            </Grid>
 
         </Content>
       </Container>
@@ -80,7 +88,6 @@ function bindAction(dispatch) {
 }
 
 const mapStateToProps = state => ({
-  name: state.user.name,
   list: state.list.list,
 });
 

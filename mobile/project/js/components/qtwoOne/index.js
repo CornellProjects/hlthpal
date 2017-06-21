@@ -8,7 +8,7 @@ import { Grid, Row } from 'react-native-easy-grid';
 
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
-import { SegmentedControls } from 'react-native-radio-buttons';
+import { SegmentedControls } from 'react-native-radio-buttons'
 import styles from './styles';
 
 
@@ -73,6 +73,7 @@ class QtwoOne extends Component {
             </Card>
 
           <Grid style={styles.buttons}>
+
             <Col>
               <Button transparent onPress={() => Actions.qone()} style={styles.center}>
                   <Icon name='arrow-back' />
@@ -82,9 +83,7 @@ class QtwoOne extends Component {
               <Button transparent onPress={() => Actions.qtwoTwo()} style={styles.center}>
                    <Icon name='arrow-forward' />
               </Button>
-            </Col>
           </Grid>
-         
         </Content>
       </Container>
     );

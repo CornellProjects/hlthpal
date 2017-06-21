@@ -12,6 +12,7 @@ export type State = {
     password: string,
     user: string,
     error: string,
+    token: string,
     loading: boolean
 }
 
@@ -20,6 +21,7 @@ const initialState = {
     password: '',
     user: null,
     error: '',
+    token: '',
     loading: false
 };
 
@@ -32,7 +34,7 @@ export default function (state:State = initialState, action:Action): State {
       case LOGIN_USER:
           return { ...state, loading: true, error: '' };
       case LOGIN_USER_SUCCESS:
-          return { ...state, ...initialState, user: action.payload, error: '', loading: false };
+          return { ...state, user: action.payload, token: action.token, error: '', loading: false };
       case LOGIN_USER_FAIL:
           return { ...state, error: 'Authentication Failed.', password: '', loading: false };
       default:

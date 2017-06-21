@@ -35,6 +35,7 @@ import QtwoTen from './components/qtwoTen';
 import otherSymptoms from './components/otherSymptoms';
 import pastWeek from './components/pastWeek';
 import FillInfo from './components/fillInfo';
+import symptomsForm from './components/symptomsForm';
 
 const RouterWithRedux = connect()(Router);
 
@@ -105,6 +106,8 @@ class AppNavigator extends Component {
         return <QtwoTen />
       case 'otherSymptoms':
         return <otherSymptoms />
+      case 'symptomsForm':
+        return <symptomsForm />
       case 'pastWeek':
         return <pastWeek />
       case 'qthree':
@@ -188,6 +191,7 @@ class AppNavigator extends Component {
             <Scene key="qtwoNine" component={QtwoNine} />
             <Scene key="qtwoTen" component={QtwoTen} />
             <Scene key="otherSymptoms" component={otherSymptoms} />
+            <Scene key="symptomsForm" component={symptomsForm} />
             <Scene key="pastWeek" component={pastWeek} />
           </Scene>
         </RouterWithRedux>
