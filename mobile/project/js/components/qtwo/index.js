@@ -49,14 +49,14 @@ class Qtwo extends Component {
 
         <Content>
            <Text style={styles.text}>
-            Below is a list of symptoms, which you may or may not have experienced. For 
+            Below is a list of symptoms, which you may or may not have experienced. For
             each symptom, please tick one box that best describe how it affected you 
             over the past week.
           </Text>
 
             <Grid style={styles.buttons}>
             <Col>
-              <Button light rounded onPress={() => Actions.qone()} style={styles.center}> 
+              <Button bordered rounded onPress={() => Actions.qone()} style={styles.center}>
                   <Text>Back</Text>
               </Button>
             </Col>

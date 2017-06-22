@@ -9,7 +9,6 @@ export default {
   text: {
     marginTop:60,
     fontSize: 24,
-    marginBottom: 100,
     alignItems: 'center',
     alignContent: 'center',
     color: '#F16C00',
@@ -24,11 +23,18 @@ export default {
       marginLeft: 30,
       marginRight: 30,
   },
-  mt: {
-    marginTop: 18,
-  },
   center: {
     alignSelf: 'center',
+  },
+  card: {
+    height: 120,
+    marginLeft: 30,
+    marginTop: 40,
+    marginRight: 30,
+  },
+  button: {
+    alignSelf: 'center',
+    marginTop: 20,
   },
   buttons:{
     marginTop: 50,

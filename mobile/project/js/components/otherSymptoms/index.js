@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio } from 'native-base';
+import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
@@ -51,10 +51,13 @@ class otherSymptoms extends Component {
              they have affected you over the past week.
             </Text>
 
+            <Card style={styles.card}>
+            </Card>
+
             <Grid style={styles.buttons}>
                 <Row>
                     <Col>
-                        <Button rounded onPress={() => Actions.symptomsForm()} style={styles.center}>
+                        <Button rounded onPress={() => Actions.symptomsForm()} style={styles.button}>
                             <Text>Add</Text>
                         </Button>
                     </Col>
@@ -68,7 +71,7 @@ class otherSymptoms extends Component {
                   </Button>
                 </Col>
                 <Col>
-                  <Button transparent onPress={() => Actions.pastWeek()} style={styles.center}>
+                  <Button transparent onPress={() => Actions.qthree()} style={styles.center}>
                       <Icon name='arrow-forward' />
                   </Button>
                 </Col>

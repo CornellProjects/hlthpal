@@ -3,11 +3,12 @@ import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
+import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
+import { SegmentedControls } from 'react-native-radio-buttons';
 import styles from './styles';
 
 
@@ -26,6 +27,14 @@ class Qseven extends Component {
   }
 
   render() {
+    const options = [
+        'Always',
+        'Most of the time',
+        'Sometimes',
+        'Occasionally',
+        'Not at all'
+    ];
+
     return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -37,7 +46,7 @@ class Qseven extends Component {
           </Left>
 
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Question 7'}</Title>
+            <Title style={styles.title}>{(this.props.name) ? this.props.name : 'Over the past week'}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
@@ -52,33 +61,26 @@ class Qseven extends Component {
             Have you been able to share how you are feeling with your family or friends as much as you wanted?
            </Text>
 
-           <Grid style={styles.options}>
-              <Row><Text style={styles.optionText}>0 (Always)</Text></Row>
-              <Row><Text style={styles.optionText}>1 (Most of the time)</Text></Row>
-              <Row><Text style={styles.optionText}>2 (Sometimes)</Text></Row>
-              <Row><Text style={styles.optionText}>3 (Occasionally)</Text></Row>
-              <Row><Text style={styles.optionText}>4 (Not at all)</Text></Row>
-           </Grid>
-
-          <Grid>
-          <Row style={styles.radios}>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>0</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>1</Text></Col>
-            <Col><Radio selected={true} /><Text style={styles.radioText}>2</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>3</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>4</Text></Col>
-          </Row>
-          </Grid>
+           <Card style={styles.radios}>
+                <SegmentedControls
+                    direction={'column'}
+                    tint={'#F16C00'}
+                    options={options}
+                    containerBorderRadius={0}
+                    optionStyle={{fontSize:20, paddingTop: 8}}
+                    optionContainerStyle={{ height: 60, alignItems: 'center' }}
+                />
+           </Card>
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button light rounded onPress={() => Actions.qsix()} style={styles.center}>
-                  <Text>Back</Text>
+              <Button transparent onPress={() => Actions.qsix()} style={styles.center}>
+                  <Icon name='arrow-back' />
               </Button>
             </Col>
             <Col>
-              <Button rounded onPress={() => Actions.qeight()} style={styles.center}>
-                  <Text>Next</Text>
+              <Button transparent onPress={() => Actions.qeight()} style={styles.center}>
+                  <Icon name='arrow-forward' />
               </Button>
             </Col>
           </Grid>

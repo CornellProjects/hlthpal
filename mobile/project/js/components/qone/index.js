@@ -58,7 +58,7 @@ class Qone extends Component {
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button light rounded style={styles.center} onPress={() => Actions.home()}> 
+              <Button bordered rounded style={styles.center} onPress={() => Actions.home()}>
                   <Text>Cancel</Text>
               </Button>
             </Col>

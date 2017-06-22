@@ -11,43 +11,31 @@ export default {
     alignItems: 'center',
   },
   text: {
-      marginTop:60,
+      marginTop:50,
       fontSize: 24,
       marginBottom: 15,
       alignItems: 'center',
       alignContent: 'center',
       color: '#F16C00',
-      marginLeft: 20,
-      marginRight:20,
+      marginLeft: 30,
+      marginRight: 30,
       fontFamily: 'sans-serif-condensed',
   },
   radios: {
     flex:1,
-    alignItems: 'center',
-    marginTop: 30,
-    marginLeft: 40,
-  },
-  radioText: {
-    color:'#0A3E68',
-    alignContent: 'center',
-    marginLeft:5,
+    marginTop: 20,
+    marginLeft: 30,
+    marginRight: 30,
   },
   center: {
     alignSelf: 'center',
   },
-  options: {
-    marginLeft: 30,
-    marginTop: 15,
-    marginBottom:15,
-  },
-  optionText: {
-    fontSize: 20,
-    color:'#0A3E68',
-    marginLeft: 5,
-  },
   buttons:{
-    marginTop: 50,
+    marginTop: 45,
     marginBottom:18,
     justifyContent: 'center',
+  },
+  title: {
+    width: 175,
   }
 };
