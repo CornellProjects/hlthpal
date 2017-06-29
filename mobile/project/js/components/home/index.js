@@ -23,7 +23,14 @@ class Home extends Component {
     Actions.blankPage();
   }
 
+  componentWillMount() {
+    const { token } = this.props;
+
+    this.props.getUser({ token });
+  }
+
   render() {
+     console.log(this.props.token);
      return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -49,7 +56,7 @@ class Home extends Component {
           <View style={styles.mt}>
           <Thumbnail size={80} style={styles.center} source={require('../../../images/avatar.png')} />
             <Text style={styles.text}>
-              Hi {this.props.email}, how are you today?
+              Hi {this.props.username}, how are you today?
             </Text>
 
             <View style={styles.buttons}>
@@ -74,6 +81,9 @@ function bindAction(dispatch) {
 const mapStateToProps = state => ({
   list: state.list.list,
   email: state.user.email,
+  token: state.user.token,
+  username: state.user.username,
+  user: state.user,
 });
 
-export default connect(mapStateToProps, bindAction)(Home);
+export default connect(mapStateToProps, { getUser })(Home);

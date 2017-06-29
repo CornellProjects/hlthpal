@@ -2,9 +2,10 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 from django.contrib.auth import get_user_model
+from rest_framework.authentication import TokenAuthentication
 
 # Custom models
-from .models import Symptoms, Patient
+from .models import Symptoms, Patient, Record
 
 # Serializers import
 from .serializers import (
@@ -13,7 +14,8 @@ from .serializers import (
     UserProfileSerializer,
     SymptomsCreateSerializer,
     SymptomsGetSerializer,
-    PatientCreateSerializer,
+    PatientCreateSerializer
+
 )
 
 # rest_framework imports
@@ -131,3 +133,28 @@ class SymptomsGetAPIView(ListAPIView):
         symptoms = Symptoms.objects.filter(owner=self.request.user)
         serializer = SymptomsGetSerializer(symptoms, many=True,)
         return Response(serializer.data)
+
+
+class CurrentUserView(APIView):
+    permission_classes = [IsOwner]
+
+    def get(self, request):
+        serializer = UserCreateSerializer(self.request.user)
+        return Response(serializer.data)
+
+
+class UserView(RetrieveAPIView):
+    queryset = User.objects.all()
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = UserCreateSerializer
+
+    def retrieve(self, request, pk=None):
+        """
+        If provided 'pk' is "me" then return the current user.
+        """
+        if request.user and pk == 'me':
+            return Response(UserCreateSerializer(request.user).data)
+        return super(UserView, self).retrieve(request, pk)
+
+

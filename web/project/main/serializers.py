@@ -1,13 +1,13 @@
 from rest_framework import serializers, exceptions
 from rest_framework import permissions
-from rest_framework.serializers import (ModelSerializer, EmailField, CharField, HyperlinkedModelSerializer)
+from rest_framework.serializers import (ModelSerializer, EmailField, CharField)
 from rest_framework_jwt.settings import api_settings
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 # Custom models
-from .models import Symptoms, Patient
+from .models import Symptoms, Patient, Record, Question, Answers
 
 ######################################################################################
 # Serializers for user object
@@ -157,11 +157,6 @@ class UserProfileSerializer(ModelSerializer):
         fields = [
             'first_name',
             'last_name',
-            'patientID',
-            'mobile',
-            'diagnosis',
-            'doctor',
-            'gender'
         ]
 
 
@@ -173,10 +168,7 @@ class SymptomsCreateSerializer(ModelSerializer):
             'id',
             's1',
             's2',
-            's3',
-            'r1',
-            'r2',
-            'r3'
+            's3'
         ]
 
 
@@ -189,19 +181,15 @@ class SymptomsGetSerializer(ModelSerializer):
             'date',
             's1',
             's2',
-            's3',
-            'r1',
-            'r2',
-            'r3'
+            's3'
         ]
 
 
-class UserSerializer(HyperlinkedModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = [
             'first_name',
             'last_name',
         ]
-
 

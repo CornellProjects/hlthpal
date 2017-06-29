@@ -28,14 +28,9 @@ from django.dispatch import receiver
 
 class Symptoms(models.Model):
     # record input symptoms
-    s1 = models.CharField(max_length=20)
-    s2 = models.CharField(max_length=20)
-    s3 = models.CharField(max_length=20)
-
-    # record rating of each symptom
-    r1 = models.IntegerField()
-    r2 = models.IntegerField()
-    r3 = models.IntegerField()
+    s1 = models.CharField(max_length=20, blank=True)
+    s2 = models.CharField(max_length=20, blank=True)
+    s3 = models.CharField(max_length=20, blank=True)
 
     date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey('auth.User', related_name="user")
@@ -50,3 +45,25 @@ class Patient(models.Model):
     gender = models.CharField(max_length=6, blank=True)
     mobile = models.CharField(max_length=10, blank=True)
 
+
+class Record(models.Model):
+    owner = models.ForeignKey('auth.User')
+    rating = models.IntegerField(blank=True)
+    records = models.ManyToManyField("self")
+
+
+class Question(models.Model):
+    record = models.ForeignKey(Record)
+    question = models.CharField(max_length=1000, blank=True)
+    questions = models.ManyToManyField("self")
+
+
+class Answers(models.Model):
+    question = models.ForeignKey(Question)
+    rating = models.IntegerField(blank=True)
+    ratings = models.ManyToManyField("self")
+
+
+class TextInput(models.Model):
+    question = models.ForeignKey(Question)
+    input = models.CharField(max_length=1000)
