@@ -57,11 +57,12 @@ export const getUser = ({ token }) => {
                    headers: {
                    'Accept': 'application/json',
                    'Content-Type': 'application/json',
-                   'Authorization': 'Token '+token,
+                   'Authorization': 'JWT '+token,
                    },
                    })
                    .then(response => {
-                        getCurrentUser(dispatch, response);
+                        var str = JSON.stringify(eval('(' + response._bodyInit + ')'));
+                        getCurrentUser(dispatch, JSON.parse(str).first_name);
                     });
     };
 };
@@ -79,9 +80,9 @@ const loginUserSuccess = (dispatch, user) => {
     Actions.home();
 };
 
-const getCurrentUser = (dispatch, username) => {
+const getCurrentUser = (dispatch, first_name) => {
     dispatch({
         type: CURRENT_USER,
-        payload: username
+        payload: first_name
     });
 };

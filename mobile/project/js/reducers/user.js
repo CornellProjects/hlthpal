@@ -9,7 +9,7 @@ import {
 } from '../actions/user';
 
 export type State = {
-    username: string,
+    first_name: string,
     email: string,
     password: string,
     user: string,
@@ -20,7 +20,7 @@ export type State = {
 
 const initialState = {
     email: '',
-    username: '',
+    first_name: '',
     password: '',
     user: null,
     error: '',
@@ -48,9 +48,9 @@ export default function (state:State = initialState, action:Action): State {
       case LOGIN_USER:
           return { ...state, loading: true, error: '' };
       case LOGIN_USER_SUCCESS:
-          return { ...state, user: action.payload, token: getToken(action.payload._bodyInit), error: '', loading: false };
+          return { ...state, error: '', user: action.payload, token: getToken(action.payload._bodyInit), loading: false };
       case CURRENT_USER:
-          return { ...state, username: action.payload };
+          return { ...state, first_name: action.payload };
       case LOGIN_USER_FAIL:
           return { ...state, error: 'Authentication Failed.', password: '', loading: false };
       default:

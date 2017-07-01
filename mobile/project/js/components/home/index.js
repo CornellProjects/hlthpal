@@ -16,6 +16,7 @@ class Home extends Component {
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
+    getUser: React.PropTypes.func,
   }
 
   newPage(index) {
@@ -30,7 +31,6 @@ class Home extends Component {
   }
 
   render() {
-     console.log(this.props.token);
      return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -56,7 +56,7 @@ class Home extends Component {
           <View style={styles.mt}>
           <Thumbnail size={80} style={styles.center} source={require('../../../images/avatar.png')} />
             <Text style={styles.text}>
-              Hi {this.props.username}, how are you today?
+              Hi {this.props.first_name}, how are you today?
             </Text>
 
             <View style={styles.buttons}>
@@ -74,7 +74,8 @@ class Home extends Component {
 function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
-    openDrawer: () => dispatch(openDrawer())
+    openDrawer: () => dispatch(openDrawer()),
+    getUser: token => dispatch(getUser(token)),
   };
 }
 
@@ -82,8 +83,8 @@ const mapStateToProps = state => ({
   list: state.list.list,
   email: state.user.email,
   token: state.user.token,
-  username: state.user.username,
+  first_name: state.user.first_name,
   user: state.user,
 });
 
-export default connect(mapStateToProps, { getUser })(Home);
+export default connect(mapStateToProps, bindAction)(Home);
