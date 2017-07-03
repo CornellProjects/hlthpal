@@ -1,19 +1,20 @@
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from rest_framework import serializers, exceptions
 from rest_framework import permissions
 from rest_framework.serializers import (ModelSerializer, EmailField, CharField)
 from rest_framework_jwt.settings import api_settings
-from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
+
 # Custom models
-from .models import Symptoms, Patient, Record, Question, Answers
+from .models import Symptoms, Patient, Question, Answer
 
 ######################################################################################
 # Serializers for user object
 
 User = get_user_model()
-
 
 # Create Patient Serializer
 class PatientCreateSerializer(ModelSerializer):
@@ -193,3 +194,40 @@ class UserSerializer(ModelSerializer):
             'last_name',
         ]
 
+
+class QuestionSerializer(ModelSerializer):
+    class Meta:
+        model = Question
+        fields = [
+            'question'
+        ]
+
+
+class AnswerSerializer(ModelSerializer):
+    question = QuestionSerializer()
+
+    class Meta:
+        model = Answer
+        fields = [
+            'date',
+            'answer',
+            'question'
+        ]
+
+    def create(self, validated_data):
+        answer=validated_data['answer']
+
+        user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
+
+        question = Question.objects.create(
+            user=user,
+            question=validated_data['question']['question']
+        )
+        Answer.objects.create(
+            question=question,
+            answer=answer
+        )
+        return validated_data

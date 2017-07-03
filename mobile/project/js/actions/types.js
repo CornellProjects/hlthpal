@@ -9,6 +9,8 @@ export type Action =
     | { type: 'CLOSE_DRAWER'}
     | { type: 'SET_USER'}
     | { type: 'USER_CREATE'}
+    | { type: 'ANSWER_CHANGED'}
+    | { type: 'ANSWER_CREATE'}
     | { type: 'SET_LIST', list: string}
     | { type: 'EMAIL_CHANGED', text: string}
     | { type: 'PASSWORD_CHANGED', text: string}

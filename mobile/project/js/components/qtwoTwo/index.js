@@ -74,7 +74,7 @@ class QtwoTwo extends Component {
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button transparent onPress={() => Actions.qtwo()} style={styles.center}>
+              <Button transparent onPress={() => Actions.qtwoOne()} style={styles.center}>
                   <Icon name='arrow-back' />
               </Button>
             </Col>

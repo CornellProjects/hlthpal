@@ -4,28 +4,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 
-
-#class Country(models.Model):
-# sector name
-# sector code
-
-
-#class Sector(models.Model):
-# sector name
-# sector code
-
-
-#class Notes(models.Model):
-#id
-#data
-#foreignkey symptoms table
-
-
-# Create a model for symptoms table
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-
 class Symptoms(models.Model):
     # record input symptoms
     s1 = models.CharField(max_length=20, blank=True)
@@ -34,7 +12,6 @@ class Symptoms(models.Model):
 
     date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey('auth.User', related_name="user")
-    #owner = models.ForeignKey('auth.User', related_name="user", on_delete=models.CASCADE)
 
 
 # Model to extend User class on the creation of a new patient
@@ -46,24 +23,33 @@ class Patient(models.Model):
     mobile = models.CharField(max_length=10, blank=True)
 
 
-class Record(models.Model):
-    owner = models.ForeignKey('auth.User')
-    rating = models.IntegerField(blank=True)
-    records = models.ManyToManyField("self")
+####################################################################
+#                      TESTING DATABASE DESIGN                     #
+####################################################################
 
-
+# Model to associate questions with answers
 class Question(models.Model):
-    record = models.ForeignKey(Record)
-    question = models.CharField(max_length=1000, blank=True)
-    questions = models.ManyToManyField("self")
+    user = models.ForeignKey('auth.User', related_name='owner')
+    question = models.CharField(max_length=500, blank=True)
+
+    def __str__(self):
+        return self.question
 
 
-class Answers(models.Model):
-    question = models.ForeignKey(Question)
-    rating = models.IntegerField(blank=True)
-    ratings = models.ManyToManyField("self")
-
-
-class TextInput(models.Model):
-    question = models.ForeignKey(Question)
-    input = models.CharField(max_length=1000)
+# Model to get answers from the user
+class Answer(models.Model):
+    ZERO = 0
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    RATING_CHOICES = (
+        (ZERO,  'Not at all'),
+        (ONE,   'Slightly'),
+        (TWO,   'Moderately'),
+        (THREE, 'Severely'),
+        (FOUR,  'Overwhelmingly'),
+    )
+    answer = models.CharField(max_length=20, choices=RATING_CHOICES)
+    date = models.DateTimeField(auto_now_add=True)
+    question = models.ForeignKey(Question, related_name="answers")

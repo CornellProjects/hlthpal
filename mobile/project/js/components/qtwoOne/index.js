@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Card, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-
+import { answerChanged, createAnswer } from '../../actions/user';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons'
@@ -15,15 +15,16 @@ import styles from './styles';
 class QtwoOne extends Component {
 
   static propTypes = {
-    name: React.PropTypes.string,
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
+    createAnswer: React.PropTypes.func,
+    answerChanged: React.PropTypes.func,
   }
 
-  newPage(index) {
-    this.props.setIndex(index);
-    Actions.blankPage();
+  onButtonPress() {
+    const { rating, token } = this.props;
+    this.props.createAnswer({ rating, token });
   }
 
   render() {
@@ -69,6 +70,8 @@ class QtwoOne extends Component {
                   containerBorderRadius={0}
                   optionStyle={{fontSize:20, paddingTop: 8}}
                   optionContainerStyle={{ height: 60, alignItems: 'center' }}
+                  selectedIndex={ this.props.rating }
+                  onSelection={value => this.props.answerChanged(value)}
               />
             </Card>
 
@@ -80,7 +83,7 @@ class QtwoOne extends Component {
               </Button>
             </Col>
             <Col>
-              <Button transparent onPress={() => Actions.qtwoTwo()} style={styles.center}>
+              <Button transparent onPress={() => this.onButtonPress()} style={styles.center}>
                    <Icon name='arrow-forward' />
               </Button>
             </Col>
@@ -95,12 +98,15 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
+    answerChanged: rating => dispatch(answerChanged(rating)),
+    createAnswer: ({ rating,token }) => dispatch(createAnswer({ rating,token })),
   };
 }
 
-const mapStateToProps = state => ({
-  name: state.user.name,
+const mapStateToProps = (state) => ({
+  token: state.user.token,
   list: state.list.list,
+  rating: state.user.rating,
 });
 
 export default connect(mapStateToProps, bindAction)(QtwoOne);

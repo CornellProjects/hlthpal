@@ -5,7 +5,9 @@ import {
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAIL,
     LOGIN_USER,
-    CURRENT_USER
+    CURRENT_USER,
+    ANSWER_CHANGED,
+    ANSWER_CREATE
 } from '../actions/user';
 
 export type State = {
@@ -15,7 +17,9 @@ export type State = {
     user: string,
     error: string,
     token: string,
-    loading: boolean
+    loading: boolean,
+    rating: string,
+    object: string
 }
 
 const initialState = {
@@ -25,7 +29,9 @@ const initialState = {
     user: null,
     error: '',
     token: '',
-    loading: false
+    loading: false,
+    rating: 2,
+    object: ''
 };
 
 function getToken(token) {
@@ -53,6 +59,10 @@ export default function (state:State = initialState, action:Action): State {
           return { ...state, first_name: action.payload };
       case LOGIN_USER_FAIL:
           return { ...state, error: 'Authentication Failed.', password: '', loading: false };
+      case ANSWER_CREATE:
+          return { ...state };
+      case ANSWER_CHANGED:
+          return { ...state, rating: action.payload }
       default:
           return state;
   }
