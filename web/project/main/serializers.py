@@ -9,7 +9,7 @@ from django.db.models import Q
 
 
 # Custom models
-from .models import Symptoms, Patient, Question, Answer
+from .models import Symptoms, Patient, Question, Answer, Questionnaire
 
 ######################################################################################
 # Serializers for user object
@@ -204,30 +204,68 @@ class QuestionSerializer(ModelSerializer):
 
 
 class AnswerSerializer(ModelSerializer):
-    question = QuestionSerializer()
-
     class Meta:
         model = Answer
         fields = [
-            'date',
             'answer',
-            'question'
+            'record',
+            'question',
+            'text'
         ]
 
     def create(self, validated_data):
-        answer=validated_data['answer']
+        Answer.objects.create(
+            answer=validated_data['answer'],
+            record=validated_data['record'],
+            text=validated_data['text'],
+            question=validated_data['question']
+        )
 
+        return validated_data
+
+
+class QuestionnaireSerializer(ModelSerializer):
+    class Meta:
+        model = Questionnaire
+        fields = [
+            'date',
+            'title'
+        ]
+
+    def create(self, validated_data):
         user = None
         request = self.context.get("request")
         if request and hasattr(request, "user"):
             user = request.user
 
-        question = Question.objects.create(
+        questionnaire = Questionnaire.objects.create(
             user=user,
-            question=validated_data['question']['question']
+            title=validated_data['title']
         )
-        Answer.objects.create(
-            question=question,
-            answer=answer
-        )
+
+        questions = [
+            'What have been your main problems or concerns over the past week?',
+            'Pain',
+            'Shortness of breath',
+            'Weakness or lack of energy',
+            'Nausea (feeling like you are going to be sick',
+            'Vomiting (being sick)',
+            'Poor appetite',
+            'Constipation',
+            'Sore or dry mouth',
+            'Drowsiness',
+            'Poor mobility',
+            'Have you been feeling anxious or worried about your illness or treatment?',
+            'Have any of your family or friends been anxious or worried about you?',
+            'Have you been able to share how you are feeling with your family or friends'
+            ' as much as you wanted?',
+            'Have you had as much information as you wanted?',
+            'Have any practical problems resulting from your illness been addressed? '
+            '(such as financial or personal)',
+            'How did you complete this questionnaire?'
+        ]
+
+        for question in questions:
+            Question.objects.create(question=question, record=questionnaire)
+
         return validated_data

@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.authentication import TokenAuthentication
 
 # Custom models
-from .models import Symptoms, Patient, Answer
+from .models import Symptoms, Patient, Questionnaire, Answer
 
 # Serializers import
 from .serializers import (
@@ -15,7 +15,8 @@ from .serializers import (
     SymptomsCreateSerializer,
     SymptomsGetSerializer,
     PatientCreateSerializer,
-    AnswerSerializer
+    AnswerSerializer,
+    QuestionnaireSerializer
 
 )
 
@@ -110,13 +111,19 @@ class SymptomsCreateAPIView(ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class QuestionAPIView(ListCreateAPIView):
+class AnswerAPIView(ListCreateAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
     permission_classes = [IsAuthenticated]
 
+
+class QuestionAPIView(ListCreateAPIView):
+    queryset = Questionnaire.objects.all()
+    serializer_class = QuestionnaireSerializer
+    permission_classes = [IsAuthenticated]
+
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class PatientCreateAPIView(ListCreateAPIView):

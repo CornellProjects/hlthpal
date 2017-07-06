@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+import json
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
@@ -27,10 +27,20 @@ class Patient(models.Model):
 #                      TESTING DATABASE DESIGN                     #
 ####################################################################
 
+# Model to store questions and answers from the user
+class Questionnaire(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=100)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+
 # Model to associate questions with answers
 class Question(models.Model):
-    user = models.ForeignKey('auth.User', related_name='owner')
-    question = models.CharField(max_length=500, blank=True)
+    record = models.ForeignKey(Questionnaire)
+    question = models.CharField(max_length=500, blank=True, help_text='Enter question text here')
 
     def __str__(self):
         return self.question
@@ -38,18 +48,12 @@ class Question(models.Model):
 
 # Model to get answers from the user
 class Answer(models.Model):
-    ZERO = 0
-    ONE = 1
-    TWO = 2
-    THREE = 3
-    FOUR = 4
-    RATING_CHOICES = (
-        (ZERO,  'Not at all'),
-        (ONE,   'Slightly'),
-        (TWO,   'Moderately'),
-        (THREE, 'Severely'),
-        (FOUR,  'Overwhelmingly'),
-    )
-    answer = models.CharField(max_length=20, choices=RATING_CHOICES)
-    date = models.DateTimeField(auto_now_add=True)
-    question = models.ForeignKey(Question, related_name="answers")
+    answer = models.IntegerField()
+    record = models.ForeignKey(Questionnaire)
+    question = models.ForeignKey(Question)
+
+    # Field to enter answer to first question
+    text = models.CharField(max_length=1500, blank=True)
+
+    # To be computed but left blank for now
+    # score = models.IntegerField()
