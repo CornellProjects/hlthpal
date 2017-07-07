@@ -208,20 +208,9 @@ class AnswerSerializer(ModelSerializer):
         model = Answer
         fields = [
             'answer',
-            'record',
-            'question',
-            'text'
+            'text',
+            'question'
         ]
-
-    def create(self, validated_data):
-        Answer.objects.create(
-            answer=validated_data['answer'],
-            record=validated_data['record'],
-            text=validated_data['text'],
-            question=validated_data['question']
-        )
-
-        return validated_data
 
 
 class QuestionnaireSerializer(ModelSerializer):
@@ -229,43 +218,7 @@ class QuestionnaireSerializer(ModelSerializer):
         model = Questionnaire
         fields = [
             'date',
-            'title'
+            'title',
+            'question',
+            'answer'
         ]
-
-    def create(self, validated_data):
-        user = None
-        request = self.context.get("request")
-        if request and hasattr(request, "user"):
-            user = request.user
-
-        questionnaire = Questionnaire.objects.create(
-            user=user,
-            title=validated_data['title']
-        )
-
-        questions = [
-            'What have been your main problems or concerns over the past week?',
-            'Pain',
-            'Shortness of breath',
-            'Weakness or lack of energy',
-            'Nausea (feeling like you are going to be sick',
-            'Vomiting (being sick)',
-            'Poor appetite',
-            'Constipation',
-            'Sore or dry mouth',
-            'Drowsiness',
-            'Poor mobility',
-            'Have you been feeling anxious or worried about your illness or treatment?',
-            'Have any of your family or friends been anxious or worried about you?',
-            'Have you been able to share how you are feeling with your family or friends'
-            ' as much as you wanted?',
-            'Have you had as much information as you wanted?',
-            'Have any practical problems resulting from your illness been addressed? '
-            '(such as financial or personal)',
-            'How did you complete this questionnaire?'
-        ]
-
-        for question in questions:
-            Question.objects.create(question=question, record=questionnaire)
-
-        return validated_data

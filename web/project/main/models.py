@@ -3,6 +3,8 @@ import json
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
+from django.db.models import Sum
+
 
 class Symptoms(models.Model):
     # record input symptoms
@@ -23,24 +25,13 @@ class Patient(models.Model):
     mobile = models.CharField(max_length=10, blank=True)
 
 
-####################################################################
-#                      TESTING DATABASE DESIGN                     #
-####################################################################
-
-# Model to store questions and answers from the user
-class Questionnaire(models.Model):
-    date = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title
-
-
 # Model to associate questions with answers
 class Question(models.Model):
-    record = models.ForeignKey(Questionnaire)
-    question = models.CharField(max_length=500, blank=True, help_text='Enter question text here')
+    question = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text='Enter question text here'
+    )
 
     def __str__(self):
         return self.question
@@ -48,12 +39,23 @@ class Question(models.Model):
 
 # Model to get answers from the user
 class Answer(models.Model):
-    answer = models.IntegerField()
-    record = models.ForeignKey(Questionnaire)
-    question = models.ForeignKey(Question)
-
-    # Field to enter answer to first question
+    # text field is used to enter answer to first question
     text = models.CharField(max_length=1500, blank=True)
+    answer = models.IntegerField()
+    question = models.ManyToManyField(Question)
 
-    # To be computed but left blank for now
-    # score = models.IntegerField()
+    def __str__(self):
+        return str(self.answer)
+
+
+# Model to store questions and answers from the user
+class Questionnaire(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    answer = models.ManyToManyField(Answer)
+    question = models.ManyToManyField(Question)
+
+    def __str__(self):
+        return self.title
+

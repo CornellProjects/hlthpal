@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^api/symptoms/get', views.SymptomsGetAPIView.as_view(), name="symptoms/get"),
     url(r'^api/user', views.CurrentUserView.as_view(), name="user"),
     url(r'^api/record', views.QuestionAPIView.as_view(), name="record"),
+    url(r'^api/answer', views.AnswerAPIView.as_view(), name="answer"),
 ]
