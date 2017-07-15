@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.authentication import TokenAuthentication
 
 # Custom models
-from .models import Symptoms, Patient, Questionnaire, Answer
+from .models import Symptoms, Patient, Questionnaire, Answer, Entity, Question
 
 # Serializers import
 from .serializers import (
@@ -16,9 +16,10 @@ from .serializers import (
     SymptomsGetSerializer,
     PatientCreateSerializer,
     AnswerSerializer,
-    QuestionnaireSerializer
-
-)
+    QuestionnaireSerializer,
+    DoctorCreateSerializer,
+    EntityCreateSerializer,
+    QuestionGetSerializer)
 
 # rest_framework imports
 from rest_framework import status
@@ -60,6 +61,19 @@ User = get_user_model()
 class UserCreateView(CreateAPIView):
     '''API to create a new user '''
     serializer_class = UserCreateSerializer
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+
+class EntityCreateView(CreateAPIView):
+    '''API to create a new user '''
+    serializer_class = EntityCreateSerializer
+    permission_classes = [AllowAny]
+    queryset = Entity.objects.all()
+
+
+class DoctorCreateView(CreateAPIView):
+    '''API to create a new doctor user '''
+    serializer_class = DoctorCreateSerializer
     permission_classes = [AllowAny]
     queryset = User.objects.all()
 
@@ -149,6 +163,12 @@ class SymptomsGetAPIView(ListAPIView):
         symptoms = Symptoms.objects.filter(owner=self.request.user)
         serializer = SymptomsGetSerializer(symptoms, many=True,)
         return Response(serializer.data)
+
+
+class QuestionGetAPIView(ListAPIView):
+    serializer_class = QuestionGetSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Question.objects.all()
 
 
 class CurrentUserView(APIView):

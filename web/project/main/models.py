@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
-import json
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
-from django.db.models import Sum
 
 
 class Symptoms(models.Model):
@@ -16,13 +14,41 @@ class Symptoms(models.Model):
     owner = models.ForeignKey('auth.User', related_name="user")
 
 
+class Entity(models.Model):
+    name = models.CharField(max_length=1000)
+    street = models.CharField(max_length=1000)
+    city = models.CharField(max_length=1000)
+    state = models.CharField(max_length=1000)
+    country = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.name
+
+
+class Doctor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor')
+    entity = models.ForeignKey(Entity)
+
+
 # Model to extend User class on the creation of a new patient
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
-    doctor = models.CharField(max_length=50, blank=True)
+    # doctor = models.CharField(max_length=50, blank=True)
+    doctor = models.ForeignKey(Doctor)
+    care_giver = models.CharField(max_length=100)
     diagnosis = models.CharField(max_length=50, blank=True)
     gender = models.CharField(max_length=6, blank=True)
     mobile = models.CharField(max_length=10, blank=True)
+    street = models.CharField(max_length=1000)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+
+
+class Note(models.Model):
+    owner = models.ForeignKey(Doctor)
+    patient = models.ManyToManyField(Patient)
+    text_field = models.CharField(max_length=2500)
 
 
 # Model to associate questions with answers
@@ -58,4 +84,5 @@ class Questionnaire(models.Model):
 
     def __str__(self):
         return self.title
+
 
