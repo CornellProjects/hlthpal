@@ -7,7 +7,9 @@ import {
     LOGIN_USER,
     CURRENT_USER,
     ANSWER_CHANGED,
-    ANSWER_CREATE
+    ANSWER_CREATE,
+    GET_QUESTION,
+    CHANGE_CONNECTION_STATUS
 } from '../actions/user';
 
 export type State = {
@@ -19,7 +21,10 @@ export type State = {
     token: string,
     loading: boolean,
     rating: string,
-    object: string
+    isConnected: boolean,
+    answers: object,
+    question: integer,
+    questions: string
 }
 
 const initialState = {
@@ -31,7 +36,10 @@ const initialState = {
     token: '',
     loading: false,
     rating: 2,
-    object: ''
+    isConnected: false,
+    answers: [],
+    question: 1,
+    questions: ''
 };
 
 function getToken(token) {
@@ -61,8 +69,12 @@ export default function (state:State = initialState, action:Action): State {
           return { ...state, error: 'Authentication Failed.', password: '', loading: false };
       case ANSWER_CREATE:
           return { ...state };
+      case GET_QUESTION:
+          return { ...state, questions: action.payload };
       case ANSWER_CHANGED:
-          return { ...state, rating: action.payload }
+          return { ...state, rating: action.payload  };
+      case CHANGE_CONNECTION_STATUS:
+          return Object.assign({}, state, { isConnected: action.isConnected });
       default:
           return state;
   }

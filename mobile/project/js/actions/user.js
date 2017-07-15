@@ -8,9 +8,12 @@ export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS';
 export const LOGIN_USER_FAIL = 'LOGIN_USER_FAIL';
 export const LOGIN_USER = 'LOGIN_USER';
 export const CURRENT_USER = 'CURRENT_USER';
+export const GET_QUESTION = 'GET_QUESTION';
 
 export const ANSWER_CHANGED = 'ANSWER_CHANGED';
 export const ANSWER_CREATE = 'ANSWER_CREATE';
+
+export const CHANGE_CONNECTION_STATUS = 'CHANGE_CONNECTION_STATUS';
 
 export const emailChanged = (text) => {
     return {
@@ -93,12 +96,14 @@ const getCurrentUser = (dispatch, first_name) => {
 
 export const createAnswer = ({
         rating,
-        token
+        token,
+        question
     }) => {
           // Change IP address according to yours
           // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
           return (dispatch) => {
-              fetch('http://0.0.0.0:8000/api/record', {
+              var arr = [1,2,3,4,5,6];
+              fetch('http://0.0.0.0:8000/api/answer', {
                      method: 'POST',
                      headers: {
                      'Accept': 'application/json',
@@ -107,7 +112,8 @@ export const createAnswer = ({
                      },
 
                      body: JSON.stringify({
-                     answer: rating
+                     answer: rating,
+                     question: arr
                      })
                      })
                      .then((response) => {
@@ -134,4 +140,45 @@ export const answerChanged = (rating) => {
         type: ANSWER_CHANGED,
         payload: options[rating]
     };
+};
+
+export const connectionState = ({ status }) => {
+    return {
+        type: CHANGE_CONNECTION_STATUS,
+        isConnected: status
+    };
+};
+
+export const getQuestions = ({ token }) => {
+    return (dispatch) => {
+        fetch('http://0.0.0.0:8000/api/questions', {
+                   method: 'GET',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
+                   })
+                   .then(response => {
+                        var str = JSON.stringify(eval('(' + response._bodyInit + ')'));
+//                        getQuestion(dispatch, JSON.parse(str).results[0].id);
+                        var obj = JSON.parse(str).results;
+//                        while (JSON.parse(str).next != null) {
+                        console.log(JSON.parse(str).next);
+                        dispatch({ type: GET_QUESTION });
+                        var my_array = [];
+                        for (var i in obj) {
+                            my_array.push(obj[i].id);
+                        }
+                        getQuestion(dispatch, my_array);
+//                        }
+                    });
+    };
+};
+
+const getQuestion = (dispatch, question) => {
+    dispatch({
+        type: GET_QUESTION,
+        payload: question
+    });
 };

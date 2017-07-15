@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Card, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { answerChanged, createAnswer } from '../../actions/user';
+import { answerChanged, getQuestions, createAnswer } from '../../actions/user';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons'
@@ -20,14 +20,18 @@ class QtwoOne extends Component {
     openDrawer: React.PropTypes.func,
     createAnswer: React.PropTypes.func,
     answerChanged: React.PropTypes.func,
+    getQuestions: React.PropTypes.func,
   }
 
   onButtonPress() {
-    const { rating, token } = this.props;
-    this.props.createAnswer({ rating, token });
+    const { rating, token, question, answers, questions } = this.props;
+    this.props.getQuestions({ token });
+    this.props.createAnswer({ rating, token, questions });
+    answers.push(rating);
   }
 
   render() {
+    console.log('questions',this.props.questions);
     const options = [
         'Not at all',
         'Slightly',
@@ -99,7 +103,9 @@ function bindAction(dispatch) {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
     answerChanged: rating => dispatch(answerChanged(rating)),
+    questionChanged: question => dispatch(questionChanged(question)),
     createAnswer: ({ rating,token }) => dispatch(createAnswer({ rating,token })),
+    getQuestions: token => dispatch(getQuestions(token)),
   };
 }
 
@@ -107,6 +113,9 @@ const mapStateToProps = (state) => ({
   token: state.user.token,
   list: state.list.list,
   rating: state.user.rating,
+  answers: state.user.answers,
+  question: state.user.question,
+  questions: state.user.questions,
 });
 
 export default connect(mapStateToProps, bindAction)(QtwoOne);
