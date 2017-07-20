@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^api/answer', views.AnswerAPIView.as_view(), name="answer"),
     url(r'^api/entity', views.EntityCreateView.as_view(), name="entity"),
     url(r'^api/questions', views.QuestionGetAPIView.as_view(), name="questions"),
+    url(r'^api/questionnaire/delete/(?P<pk>\d+)$', views.QuestionDeleteView.as_view(), name="questionnaire/delete"),
 ]

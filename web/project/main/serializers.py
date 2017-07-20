@@ -299,7 +299,8 @@ class AnswerSerializer(ModelSerializer):
         fields = [
             'answer',
             'text',
-            'question'
+            'question',
+            'record'
         ]
 
 
@@ -307,8 +308,6 @@ class QuestionnaireSerializer(ModelSerializer):
     class Meta:
         model = Questionnaire
         fields = [
+            'id',
             'date',
-            'title',
-            'question',
-            'answer'
         ]

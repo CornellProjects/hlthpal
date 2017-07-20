@@ -4,6 +4,8 @@ from django.template import loader
 from django.contrib.auth import get_user_model
 from rest_framework.authentication import TokenAuthentication
 
+from django.core.urlresolvers import reverse_lazy
+
 # Custom models
 from .models import Symptoms, Patient, Questionnaire, Answer, Entity, Question
 
@@ -31,8 +33,8 @@ from rest_framework.generics import (
     DestroyAPIView,
     ListAPIView,
     RetrieveAPIView,
-    ListCreateAPIView
-)
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView)
 
 # Import permissions
 from rest_framework.permissions import (
@@ -140,6 +142,14 @@ class QuestionAPIView(ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
+class QuestionDeleteView(RetrieveUpdateDestroyAPIView):
+    queryset = Questionnaire.objects.filter()
+    serializer_class = QuestionnaireSerializer
+    permission_classes = [IsAuthenticated]
+    model = Questionnaire
+    success_url = reverse_lazy('id')
+
+
 class PatientCreateAPIView(ListCreateAPIView):
     serializer_class = PatientCreateSerializer
     permission_classes = [IsAuthenticated]
@@ -172,7 +182,7 @@ class QuestionGetAPIView(ListAPIView):
 
 
 class CurrentUserView(APIView):
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         serializer = UserCreateSerializer(self.request.user)

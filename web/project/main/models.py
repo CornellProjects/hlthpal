@@ -33,7 +33,6 @@ class Doctor(models.Model):
 # Model to extend User class on the creation of a new patient
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
-    # doctor = models.CharField(max_length=50, blank=True)
     doctor = models.ForeignKey(Doctor)
     care_giver = models.CharField(max_length=100)
     diagnosis = models.CharField(max_length=50, blank=True)
@@ -56,33 +55,30 @@ class Question(models.Model):
     question = models.CharField(
         max_length=500,
         blank=True,
-        help_text='Enter question text here'
+        help_text='Enter question text here',
+        unique=True
     )
 
     def __str__(self):
         return self.question
 
 
-# Model to get answers from the user
-class Answer(models.Model):
-    # text field is used to enter answer to first question
-    text = models.CharField(max_length=1500, blank=True)
-    answer = models.IntegerField()
-    question = models.ManyToManyField(Question)
-
-    def __str__(self):
-        return str(self.answer)
-
-
 # Model to store questions and answers from the user
 class Questionnaire(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    answer = models.ManyToManyField(Answer)
-    question = models.ManyToManyField(Question)
+
+
+# Model to get answers from the user
+class Answer(models.Model):
+    # text field is used to enter answer to first question
+    text = models.CharField(max_length=1500, blank=True)
+    answer = models.IntegerField(null=True,blank=True)
+    question = models.ForeignKey(Question, to_field='question')
+    record = models.ForeignKey(Questionnaire)
 
     def __str__(self):
-        return self.title
+        return str(self.answer)
+
 
 
