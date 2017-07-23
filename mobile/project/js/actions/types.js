@@ -11,6 +11,8 @@ export type Action =
     | { type: 'USER_CREATE'}
     | { type: 'ANSWER_CHANGED'}
     | { type: 'GET_QUESTION'}
+    | { type: 'CREATE_RECORD'}
+    | { type: 'TEXT_INPUT_CHANGED'}
     | { type: 'ANSWER_CREATE'}
     | { type: 'SET_LIST', list: string}
     | { type: 'EMAIL_CHANGED', text: string}

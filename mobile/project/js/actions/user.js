@@ -8,10 +8,13 @@ export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS';
 export const LOGIN_USER_FAIL = 'LOGIN_USER_FAIL';
 export const LOGIN_USER = 'LOGIN_USER';
 export const CURRENT_USER = 'CURRENT_USER';
-export const GET_QUESTION = 'GET_QUESTION';
-
+export const GET_QUESTIONS = 'GET_QUESTIONS';
+export const CREATE_RECORD = 'CREATE_RECORD';
+export const SET_QUESTION = 'SET_QUESTION';
 export const ANSWER_CHANGED = 'ANSWER_CHANGED';
 export const ANSWER_CREATE = 'ANSWER_CREATE';
+export const SET_BACK = 'SET_BACK';
+export const TEXT_INPUT_CHANGED = 'TEXT_INPUT_CHANGED';
 
 export const CHANGE_CONNECTION_STATUS = 'CHANGE_CONNECTION_STATUS';
 
@@ -47,7 +50,8 @@ export const loginUser = ({ email, password }) => {
                    })
                    .then(user => {// calling after request is complete
                         if (user.status === 200) {
-                            loginUserSuccess(dispatch, user);
+                            var str = JSON.stringify(eval('(' + user._bodyInit + ')'));
+                            loginUserSuccess(dispatch, JSON.parse(str).token);
                         }
                         loginUserFail(dispatch);
                     });
@@ -94,39 +98,6 @@ const getCurrentUser = (dispatch, first_name) => {
     });
 };
 
-export const createAnswer = ({
-        rating,
-        token,
-        question
-    }) => {
-          // Change IP address according to yours
-          // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
-          return (dispatch) => {
-              var arr = [1,2,3,4,5,6];
-              fetch('http://0.0.0.0:8000/api/answer', {
-                     method: 'POST',
-                     headers: {
-                     'Accept': 'application/json',
-                     'Content-Type': 'application/json',
-                     'Authorization': 'JWT '+token,
-                     },
-
-                     body: JSON.stringify({
-                     answer: rating,
-                     question: arr
-                     })
-                     })
-                     .then((response) => {
-                        console.log(response);
-                        dispatch({ type: ANSWER_CREATE });
-
-                        if (response.status === 201) {
-                            Actions.qtwoTwo();
-                        }
-                     });
-         };
-    };
-
 export const answerChanged = (rating) => {
     const options = {
         'Not at all':     0,
@@ -149,8 +120,10 @@ export const connectionState = ({ status }) => {
     };
 };
 
-export const getQuestions = ({ token }) => {
+export const createAnswer = ({ token, rating, question, record }) => {
     return (dispatch) => {
+        dispatch({ type: SET_QUESTION });
+
         fetch('http://0.0.0.0:8000/api/questions', {
                    method: 'GET',
                    headers: {
@@ -161,24 +134,138 @@ export const getQuestions = ({ token }) => {
                    })
                    .then(response => {
                         var str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-//                        getQuestion(dispatch, JSON.parse(str).results[0].id);
-                        var obj = JSON.parse(str).results;
-//                        while (JSON.parse(str).next != null) {
-                        console.log(JSON.parse(str).next);
-                        dispatch({ type: GET_QUESTION });
-                        var my_array = [];
+                        var obj = JSON.parse(str);
+                        var arr = [];
                         for (var i in obj) {
-                            my_array.push(obj[i].id);
+                            arr.push(obj[i].id);
                         }
-                        getQuestion(dispatch, my_array);
-//                        }
+                        getQuestions(dispatch, arr);
+                        fetch('http://0.0.0.0:8000/api/answer', {
+                                 method: 'POST',
+                                 headers: {
+                                 'Accept': 'application/json',
+                                 'Content-Type': 'application/json',
+                                 'Authorization': 'JWT '+token,
+                                 },
+
+                                 body: JSON.stringify({
+                                 answer: rating,
+                                 question: arr[question],
+                                 record: record
+                                 })
+                                 })
+                                 .then((response) => {
+                                    console.log(response);
+
+                                    if (response.status === 201) {
+                                        dispatch({ type: ANSWER_CREATE });
+                                    }
+                                 });
                     });
     };
 };
 
-const getQuestion = (dispatch, question) => {
+const getQuestions = (dispatch, questions) => {
     dispatch({
-        type: GET_QUESTION,
-        payload: question
+        type: GET_QUESTIONS,
+        payload: questions
     });
+};
+
+export const setQuestion = (question) => {
+    return {
+        type: SET_QUESTION,
+        payload: question
+    };
+}
+
+export const createRecord = ({ token, text_input }) => {
+    return (dispatch) => {
+
+        fetch('http://0.0.0.0:8000/api/record', {
+                   method: 'POST',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
+                   })
+                   .then(response => {
+                        var str = JSON.stringify(eval('(' + response._bodyInit + ')'));
+                        var record_num = JSON.parse(str).id;
+                        setRecord(dispatch, record_num);
+                        fetch('http://0.0.0.0:8000/api/answer', {
+                             method: 'POST',
+                             headers: {
+                             'Accept': 'application/json',
+                             'Content-Type': 'application/json',
+                             'Authorization': 'JWT '+token,
+                             },
+
+                             body: JSON.stringify({
+                             text: text_input,
+                             question: 1,
+                             record: record_num
+                             })
+                             })
+                             .then((response) => {
+                                if (response.status === 201) {
+                                    dispatch({ type: ANSWER_CREATE });
+                                    Actions.qtwo();
+                                }
+                             });
+                    });
+    };
+};
+
+const setRecord = (dispatch, record) => {
+    dispatch({
+        type: CREATE_RECORD,
+        payload: record
+    });
+};
+
+export const textChanged = (text) => {
+    return {
+        type: TEXT_INPUT_CHANGED,
+        payload: text
+    };
+};
+
+export const deleteRecord = ({ token, param }) => {
+    return (dispatch) => {
+
+        fetch('http://0.0.0.0:8000/api/questionnaire/delete/' + param, {
+                   method: 'DELETE',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
+                   });
+    };
+};
+
+export const updateAnswer = ({ token, record, question, rating, text }) => {
+    return (dispatch) => {
+
+        fetch('http://0.0.0.0:8000/api/update/' + record + '/' + question, {
+                   method: 'PUT',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
+
+                   body: JSON.stringify({
+                   text: text,
+                   answer: rating
+                   })
+                   })
+                   .then((response) => {
+                        if (response.status === 200) {
+                            dispatch({ type: ANSWER_CREATE });
+                        }
+                   });
+    };
 };

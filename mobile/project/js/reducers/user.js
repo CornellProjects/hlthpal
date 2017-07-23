@@ -8,7 +8,10 @@ import {
     CURRENT_USER,
     ANSWER_CHANGED,
     ANSWER_CREATE,
-    GET_QUESTION,
+    GET_QUESTIONS,
+    SET_QUESTION,
+    CREATE_RECORD,
+    TEXT_INPUT_CHANGED,
     CHANGE_CONNECTION_STATUS
 } from '../actions/user';
 
@@ -23,8 +26,10 @@ export type State = {
     rating: string,
     isConnected: boolean,
     answers: object,
-    question: integer,
-    questions: string
+    question: number,
+    questions: string,
+    record: string,
+    text_input: string
 }
 
 const initialState = {
@@ -38,20 +43,12 @@ const initialState = {
     rating: 2,
     isConnected: false,
     answers: [],
-    question: 1,
-    questions: ''
+    question: '',
+    questions: [],
+    record: '',
+    text_input: ''
 };
 
-function getToken(token) {
-    myToken = "";
-    for (var i = 10; i < token.length; i++){
-        if (token[i] === '\"') {
-            break;
-        }
-        myToken += token[i];
-    }
-    return myToken;
-}
 
 export default function (state:State = initialState, action:Action): State {
   switch (action.type){
@@ -62,17 +59,23 @@ export default function (state:State = initialState, action:Action): State {
       case LOGIN_USER:
           return { ...state, loading: true, error: '' };
       case LOGIN_USER_SUCCESS:
-          return { ...state, error: '', user: action.payload, token: getToken(action.payload._bodyInit), loading: false };
+          return { ...state, error: '', token: action.payload, loading: false };
       case CURRENT_USER:
           return { ...state, first_name: action.payload };
       case LOGIN_USER_FAIL:
           return { ...state, error: 'Authentication Failed.', password: '', loading: false };
       case ANSWER_CREATE:
           return { ...state };
-      case GET_QUESTION:
+      case SET_QUESTION:
+          return { ...state, question: action.payload };
+      case GET_QUESTIONS:
           return { ...state, questions: action.payload };
       case ANSWER_CHANGED:
           return { ...state, rating: action.payload  };
+      case CREATE_RECORD:
+          return { ...state, record: action.payload  };
+      case TEXT_INPUT_CHANGED:
+          return { ...state, text_input: action.payload  };
       case CHANGE_CONNECTION_STATUS:
           return Object.assign({}, state, { isConnected: action.isConnected });
       default:

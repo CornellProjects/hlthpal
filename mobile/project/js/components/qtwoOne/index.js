@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Card, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { answerChanged, getQuestions, createAnswer } from '../../actions/user';
+import { answerChanged, setQuestion, createAnswer } from '../../actions/user';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons'
@@ -20,18 +20,24 @@ class QtwoOne extends Component {
     openDrawer: React.PropTypes.func,
     createAnswer: React.PropTypes.func,
     answerChanged: React.PropTypes.func,
-    getQuestions: React.PropTypes.func,
+    setQuestion: React.PropTypes.func,
+  }
+
+  componentWillMount() {
+    this.props.setQuestion(1);
+  }
+
+  componentDidMount() {
+    const { token } = this.props;
   }
 
   onButtonPress() {
-    const { rating, token, question, answers, questions } = this.props;
-    this.props.getQuestions({ token });
-    this.props.createAnswer({ rating, token, questions });
-    answers.push(rating);
+    const { rating, token, question, record, back } = this.props;
+    this.props.createAnswer({ rating, token, question, record });
+    Actions.qtwoTwo();
   }
 
   render() {
-    console.log('questions',this.props.questions);
     const options = [
         'Not at all',
         'Slightly',
@@ -103,19 +109,18 @@ function bindAction(dispatch) {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
     answerChanged: rating => dispatch(answerChanged(rating)),
-    questionChanged: question => dispatch(questionChanged(question)),
-    createAnswer: ({ rating,token }) => dispatch(createAnswer({ rating,token })),
-    getQuestions: token => dispatch(getQuestions(token)),
+    setQuestion: question => dispatch(setQuestion(question)),
+    createAnswer: token => dispatch(createAnswer(token)),
   };
 }
 
 const mapStateToProps = (state) => ({
-  token: state.user.token,
+  name: state.user.name,
   list: state.list.list,
   rating: state.user.rating,
-  answers: state.user.answers,
   question: state.user.question,
-  questions: state.user.questions,
+  record: state.user.record,
+  token: state.user.token,
 });
 
 export default connect(mapStateToProps, bindAction)(QtwoOne);

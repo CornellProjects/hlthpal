@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-
+import { answerChanged, setQuestion, createAnswer } from '../../actions/user';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
@@ -15,15 +15,32 @@ import styles from './styles';
 class QtwoNine extends Component {
 
   static propTypes = {
-    name: React.PropTypes.string,
-    setIndex: React.PropTypes.func,
-    list: React.PropTypes.arrayOf(React.PropTypes.string),
-    openDrawer: React.PropTypes.func,
+      name: React.PropTypes.string,
+      setIndex: React.PropTypes.func,
+      list: React.PropTypes.arrayOf(React.PropTypes.string),
+      openDrawer: React.PropTypes.func,
+      createAnswer: React.PropTypes.func,
+      answerChanged: React.PropTypes.func,
+      setQuestion: React.PropTypes.func,
   }
 
   newPage(index) {
-    this.props.setIndex(index);
-    Actions.blankPage();
+      this.props.setIndex(index);
+      Actions.blankPage();
+  }
+
+  componentWillMount() {
+      this.props.setQuestion(9);
+  }
+
+  componentDidMount() {
+      const { rating, token, question, record, back } = this.props;
+  }
+
+  onButtonPress() {
+      const { rating, token, question, record, back } = this.props;
+      this.props.createAnswer({ rating, token, question, record });
+      Actions.qtwoTen();
   }
 
   render() {
@@ -69,6 +86,8 @@ class QtwoNine extends Component {
                  containerBorderRadius={0}
                  optionStyle={{fontSize:20, paddingTop: 8}}
                  optionContainerStyle={{ height: 60, alignItems: 'center' }}
+                 selectedIndex={ this.props.rating }
+                 onSelection={ this.props.answerChanged.bind(this) }
              />
            </Card>
 
@@ -79,7 +98,7 @@ class QtwoNine extends Component {
               </Button>
             </Col>
             <Col>
-              <Button transparent onPress={() => Actions.qtwoTen()} style={styles.center}>
+              <Button transparent onPress={() => this.onButtonPress()} style={styles.center}>
                   <Icon name='arrow-forward' />
               </Button>
             </Col>
@@ -95,12 +114,19 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
+    answerChanged: rating => dispatch(answerChanged(rating)),
+    setQuestion: question => dispatch(setQuestion(question)),
+    createAnswer: token => dispatch(createAnswer(token)),
   };
 }
 
 const mapStateToProps = state => ({
   name: state.user.name,
   list: state.list.list,
+  rating: state.user.rating,
+  question: state.user.question,
+  record: state.user.record,
+  token: state.user.token,
 });
 
 export default connect(mapStateToProps, bindAction)(QtwoNine);
