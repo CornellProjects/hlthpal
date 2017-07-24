@@ -243,31 +243,6 @@ class UserProfileSerializer(ModelSerializer):
         ]
 
 
-# Create Symptoms serializer
-class SymptomsCreateSerializer(ModelSerializer):
-    class Meta:
-        model = Symptoms
-        fields =[
-            'id',
-            's1',
-            's2',
-            's3'
-        ]
-
-
-# GET Symptoms serializer
-class SymptomsGetSerializer(ModelSerializer):
-    class Meta:
-        model = Symptoms
-        fields =[
-            'id',
-            'date',
-            's1',
-            's2',
-            's3'
-        ]
-
-
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
@@ -310,4 +285,14 @@ class QuestionnaireSerializer(ModelSerializer):
         fields = [
             'id',
             'date',
+        ]
+
+# Create Symptoms serializer
+class SymptomsCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Symptoms
+        fields =[
+            'symptom',
+            'answer',
+            'record'
         ]

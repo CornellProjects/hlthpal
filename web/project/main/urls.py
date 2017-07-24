@@ -16,12 +16,11 @@ urlpatterns = [
     url(r'^api/login', views.UserLoginView.as_view(), name="login"),
     url(r'^api/profile', views.UserProfileView.as_view(), name="profile"),
     url(r'^api/symptoms/post', views.SymptomsCreateAPIView.as_view(), name="symptoms/post"),
-    url(r'^api/patient/post', views.PatientCreateAPIView.as_view(), name="patient/post"),
-    url(r'^api/symptoms/get', views.SymptomsGetAPIView.as_view(), name="symptoms/get"),
     url(r'^api/user', views.CurrentUserView.as_view(), name="user"),
     url(r'^api/record', views.QuestionAPIView.as_view(), name="record"),
     url(r'^api/answer', views.AnswerAPIView.as_view(), name="answer"),
     url(r'^api/entity', views.EntityCreateView.as_view(), name="entity"),
     url(r'^api/questions', views.QuestionGetAPIView.as_view(), name="questions"),
+    url(r'^api/update/(?P<record>\d+)/(?P<question>\d+)$', views.AnswerUpdateView.as_view(), name="update"),
     url(r'^api/questionnaire/delete/(?P<pk>\d+)$', views.QuestionDeleteView.as_view(), name="questionnaire/delete"),
 ]

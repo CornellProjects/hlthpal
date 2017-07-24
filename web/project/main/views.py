@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
 from django.contrib.auth import get_user_model
+from django.views.generic import UpdateView
 from rest_framework.authentication import TokenAuthentication
 
 from django.core.urlresolvers import reverse_lazy
@@ -15,8 +16,6 @@ from .serializers import (
     UserLoginSerializer,
     UserProfileSerializer,
     SymptomsCreateSerializer,
-    SymptomsGetSerializer,
-    PatientCreateSerializer,
     AnswerSerializer,
     QuestionnaireSerializer,
     DoctorCreateSerializer,
@@ -30,11 +29,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import (
     CreateAPIView,
-    DestroyAPIView,
     ListAPIView,
-    RetrieveAPIView,
     ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView)
+    RetrieveUpdateDestroyAPIView,
+    get_object_or_404)
 
 # Import permissions
 from rest_framework.permissions import (
@@ -114,19 +112,6 @@ class UserProfileView(APIView):
         return Response(serializer.data)
 
 
-# Symptoms Create API
-class SymptomsCreateAPIView(ListCreateAPIView):
-    """
-    Create a new symptoms record.
-    """
-    queryset = Symptoms.objects.all()
-    serializer_class = SymptomsCreateSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
 class AnswerAPIView(ListCreateAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
@@ -150,29 +135,32 @@ class QuestionDeleteView(RetrieveUpdateDestroyAPIView):
     success_url = reverse_lazy('id')
 
 
-class PatientCreateAPIView(ListCreateAPIView):
-    serializer_class = PatientCreateSerializer
-    permission_classes = [IsAuthenticated]
-    queryset = Patient.objects.all()
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-
-# Symptoms GET API
-class SymptomsGetAPIView(ListAPIView):
+# Custom mixin for Generic views in Django Rest Framework API Guide
+class MultipleFieldLookupMixin(object):
     """
-    Get symptoms for a user.
+    Apply this mixin to any view or viewset to get multiple field filtering
+    based on a `lookup_fields` attribute, instead of the default single field filtering.
     """
-    queryset = Symptoms.objects.all()
-    serializer_class = SymptomsGetSerializer
-    permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
-        symptoms = Symptoms.objects.filter(owner=self.request.user)
-        serializer = SymptomsGetSerializer(symptoms, many=True,)
-        return Response(serializer.data)
+    def get_object(self):
+        queryset = self.get_queryset()             # Get the base queryset
+        queryset = self.filter_queryset(queryset)  # Apply any filter backends
+        filter = {}
+        for field in self.lookup_fields:
+            if self.kwargs[field]: # Ignore empty fields.
+                filter[field] = self.kwargs[field]
+        return get_object_or_404(queryset, **filter)  # Lookup the object
+
+
+class AnswerUpdateView(RetrieveUpdateDestroyAPIView, MultipleFieldLookupMixin):
+    queryset = Answer.objects.filter()
+    serializer_class = AnswerSerializer
+    permission_classes = [IsAuthenticated]
+    model = Answer
+    success_url = reverse_lazy('record', 'question')
+    # lookup_fields declared separately for the URL conf in urls.py
+    lookup_field = ('record')
+    lookup_field = ('question')
 
 
 class QuestionGetAPIView(ListAPIView):
@@ -189,5 +177,23 @@ class CurrentUserView(APIView):
         return Response(serializer.data)
 
 
+# Symptoms Create API
+class SymptomsCreateAPIView(ListCreateAPIView):
+    queryset = Symptoms.objects.all()
+    serializer_class = SymptomsCreateSerializer
+    permission_classes = [IsAuthenticated]
 
 
+# Symptoms GET API
+# class SymptomsGetAPIView(ListAPIView):
+#     """
+#     Get symptoms for a user.
+#     """
+#     queryset = Symptoms.objects.all()
+#     serializer_class = SymptomsGetSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     def get(self, request, format=None):
+#         symptoms = Symptoms.objects.filter(owner=self.request.user)
+#         serializer = SymptomsGetSerializer(symptoms, many=True,)
+#         return Response(serializer.data)

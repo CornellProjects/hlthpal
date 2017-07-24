@@ -4,16 +4,6 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 
 
-class Symptoms(models.Model):
-    # record input symptoms
-    s1 = models.CharField(max_length=20, blank=True)
-    s2 = models.CharField(max_length=20, blank=True)
-    s3 = models.CharField(max_length=20, blank=True)
-
-    date = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey('auth.User', related_name="user")
-
-
 class Entity(models.Model):
     name = models.CharField(max_length=1000)
     street = models.CharField(max_length=1000)
@@ -28,6 +18,9 @@ class Entity(models.Model):
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor')
     entity = models.ForeignKey(Entity)
+
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name
 
 
 # Model to extend User class on the creation of a new patient
@@ -74,11 +67,18 @@ class Answer(models.Model):
     # text field is used to enter answer to first question
     text = models.CharField(max_length=1500, blank=True)
     answer = models.IntegerField(null=True,blank=True)
-    question = models.ForeignKey(Question, to_field='question')
+    question = models.ForeignKey(Question)
     record = models.ForeignKey(Questionnaire)
+
+    class Meta:
+        unique_together = ["question", "record"]
 
     def __str__(self):
         return str(self.answer)
 
 
+class Symptoms(models.Model):
+    symptom = models.CharField(max_length=20, blank=True)
+    answer = models.IntegerField(null=True,blank=True)
+    record = models.ForeignKey(Questionnaire)
 
