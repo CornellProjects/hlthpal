@@ -20,6 +20,8 @@ class Command(BaseCommand):
             'Poor mobility',
             'Have you been feeling anxious or worried about your illness or treatment?',
             'Have any of your family or friends been anxious or worried about you?',
+            'Have you been feeling depressed?',
+            'Have you felt at peace',
             'Have you been able to share how you are feeling with your family or friends'
             ' as much as you wanted?',
             'Have you had as much information as you wanted?',
