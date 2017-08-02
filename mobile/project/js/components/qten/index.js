@@ -3,11 +3,12 @@ import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
+import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-
+import { whoAnswered, setQuestion, createAnswer } from '../../actions/user';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
+import { SegmentedControls } from 'react-native-radio-buttons';
 import styles from './styles';
 
 
@@ -18,6 +19,23 @@ class Qten extends Component {
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
+    createAnswer: React.PropTypes.func,
+    whoAnswered: React.PropTypes.func,
+    setQuestion: React.PropTypes.func,
+  }
+
+  componentWillMount() {
+    this.props.setQuestion(18);
+  }
+
+  componentDidMount() {
+    const { token } = this.props;
+  }
+
+  onButtonPress() {
+    const { rating, token, question, record, back } = this.props;
+    this.props.createAnswer({ rating, token, question, record });
+    Actions.home();
   }
 
   newPage(index) {
@@ -26,6 +44,12 @@ class Qten extends Component {
   }
 
   render() {
+    const options = [
+        'On my own',
+        'With help from a friend or relative',
+        'With help from a member of staff'
+    ];
+
     return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -52,23 +76,28 @@ class Qten extends Component {
             How did you complete this questionnaire?
            </Text>
 
-          <Grid>
-          <Row style={styles.radios}>
-            <Col><Radio selected={true} /><Text style={styles.radioText}>On my own</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>With help from a friend or relative</Text></Col>
-            <Col><Radio selected={false} /><Text style={styles.radioText}>With help from a member of staff</Text></Col>
-          </Row>
-          </Grid>
+           <Card style={styles.radios}>
+              <SegmentedControls
+                  direction={'column'}
+                  tint={'#F16C00'}
+                  options={options}
+                  containerBorderRadius={0}
+                  optionStyle={{fontSize:20, paddingTop: 8}}
+                  optionContainerStyle={{ height: 60, alignItems: 'center' }}
+                  selectedIndex={ this.props.rating }
+                  onSelection={value => this.props.whoAnswered(value)}
+              />
+           </Card>
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button light rounded onPress={() => Actions.qnine()} style={styles.center}>
+              <Button rounded bordered onPress={() => Actions.qnine()} style={styles.center}>
                   <Text>Back</Text>
               </Button>
             </Col>
             <Col>
-              <Button rounded onPress={() => Actions.home()} style={styles.center}>
-                  <Text>Next</Text>
+              <Button rounded onPress={() => this.onButtonPress()} style={styles.center}>
+                  <Text>Finish</Text>
               </Button>
             </Col>
           </Grid>
@@ -83,12 +112,19 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
+    whoAnswered: rating => dispatch(whoAnswered(rating)),
+    setQuestion: question => dispatch(setQuestion(question)),
+    createAnswer: token => dispatch(createAnswer(token)),
   };
 }
 
 const mapStateToProps = state => ({
   name: state.user.name,
   list: state.list.list,
+  rating: state.user.rating,
+  question: state.user.question,
+  record: state.user.record,
+  token: state.user.token,
 });
 
 export default connect(mapStateToProps, bindAction)(Qten);

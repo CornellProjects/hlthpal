@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-
+import { answerModified, setQuestion, createAnswer } from '../../actions/user';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
@@ -19,6 +19,23 @@ class Qeight extends Component {
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
+    createAnswer: React.PropTypes.func,
+    answerModified: React.PropTypes.func,
+    setQuestion: React.PropTypes.func,
+  }
+
+  componentWillMount() {
+    this.props.setQuestion(16);
+  }
+
+  componentDidMount() {
+    const { token } = this.props;
+  }
+
+  onButtonPress() {
+    const { rating, token, question, record, back } = this.props;
+    this.props.createAnswer({ rating, token, question, record });
+    Actions.qnine();
   }
 
   newPage(index) {
@@ -69,6 +86,8 @@ class Qeight extends Component {
                    containerBorderRadius={0}
                    optionStyle={{fontSize:20, paddingTop: 8}}
                    optionContainerStyle={{ height: 60, alignItems: 'center' }}
+                   selectedIndex={ this.props.rating }
+                   onSelection={value => this.props.answerModified(value)}
                />
            </Card>
 
@@ -79,7 +98,7 @@ class Qeight extends Component {
               </Button>
             </Col>
             <Col>
-              <Button transparent onPress={() => Actions.qnine()} style={styles.center}>
+              <Button transparent onPress={() => this.onButtonPress()} style={styles.center}>
                   <Icon name='arrow-forward' />
               </Button>
             </Col>
@@ -95,12 +114,19 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
+    answerModified: rating => dispatch(answerModified(rating)),
+    setQuestion: question => dispatch(setQuestion(question)),
+    createAnswer: token => dispatch(createAnswer(token)),
   };
 }
 
 const mapStateToProps = state => ({
   name: state.user.name,
   list: state.list.list,
+  rating: state.user.rating,
+  question: state.user.question,
+  record: state.user.record,
+  token: state.user.token,
 });
 
 export default connect(mapStateToProps, bindAction)(Qeight);
