@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Entity(models.Model):
@@ -58,7 +59,7 @@ class Question(models.Model):
 
 # Model to store questions and answers from the user
 class Questionnaire(models.Model):
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
 
