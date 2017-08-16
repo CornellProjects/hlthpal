@@ -10,7 +10,6 @@ import {
     ANSWER_CREATE,
     GET_QUESTIONS,
     SET_QUESTION,
-    CREATE_RECORD,
     TEXT_INPUT_CHANGED,
     CHANGE_CONNECTION_STATUS
 } from '../actions/user';
@@ -28,7 +27,6 @@ export type State = {
     answers: object,
     question: number,
     questions: string,
-    record: string,
     text_input: string
 }
 
@@ -45,7 +43,6 @@ const initialState = {
     answers: [],
     question: '',
     questions: [],
-    record: '',
     text_input: ''
 };
 
@@ -72,8 +69,6 @@ export default function (state:State = initialState, action:Action): State {
           return { ...state, questions: action.payload };
       case ANSWER_CHANGED:
           return { ...state, rating: action.payload  };
-      case CREATE_RECORD:
-          return { ...state, record: action.payload  };
       case TEXT_INPUT_CHANGED:
           return { ...state, text_input: action.payload  };
       case CHANGE_CONNECTION_STATUS:

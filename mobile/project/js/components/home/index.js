@@ -6,6 +6,7 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Text, Button, Icon, Left, Body,Thumbnail,Right,View} from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 import { getUser } from '../../actions/user';
+import { displayRecords } from '../../actions/records';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
@@ -17,6 +18,7 @@ class Home extends Component {
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
     getUser: React.PropTypes.func,
+    displayRecords: React.PropTypes.func,
   }
 
   newPage(index) {
@@ -28,6 +30,7 @@ class Home extends Component {
     const { token } = this.props;
 
     this.props.getUser({ token });
+    this.props.displayRecords({ token });
   }
 
   render() {
@@ -76,6 +79,7 @@ function bindAction(dispatch) {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
     getUser: token => dispatch(getUser(token)),
+    displayRecords: token => dispatch(displayRecords(token)),
   };
 }
 

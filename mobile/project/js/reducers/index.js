@@ -3,6 +3,7 @@ import drawer from './drawer';
 import user from './user';
 import registerUser from './RegisterUser';
 import list from './list';
+import records from './records';
 
 export default combineReducers({
 
@@ -10,5 +11,6 @@ export default combineReducers({
   user,
   list,
   registerUser,
+  records,
 
 });

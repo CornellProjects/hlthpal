@@ -34,6 +34,7 @@ import QtwoNine from './components/qtwoNine';
 import QtwoTen from './components/qtwoTen';
 import otherSymptoms from './components/otherSymptoms';
 import FillInfo from './components/fillInfo';
+import RecordList from './components/RecordList';
 import symptomsForm from './components/symptomsForm';
 
 const RouterWithRedux = connect()(Router);
@@ -123,6 +124,8 @@ class AppNavigator extends Component {
         return <Qnine />
       case 'qten':
         return <Qten />
+      case 'RecordList':
+        return <RecordList />
       default:
         return <Login />;
     }
@@ -189,6 +192,7 @@ class AppNavigator extends Component {
             <Scene key="qtwoTen" component={QtwoTen} />
             <Scene key="otherSymptoms" component={otherSymptoms} />
             <Scene key="symptomsForm" component={symptomsForm} />
+            <Scene key="RecordList" component={RecordList} />
           </Scene>
         </RouterWithRedux>
       </Drawer>
@@ -205,6 +209,12 @@ function bindAction(dispatch) {
 const mapStateToProps = state => ({
   drawerState: state.drawer.drawerState,
   navigation: state.cardNavigation,
+  first_name: state.user.first_name,
+  rating: state.user.rating,
+  question: state.user.question,
+  token: state.user.token,
+  my_records: state.records.my_records,
+  selectedRecord: state.records.selectedRecord,
 });
 
 export default connect(mapStateToProps, bindAction)(AppNavigator);

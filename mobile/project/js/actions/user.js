@@ -9,7 +9,6 @@ export const LOGIN_USER_FAIL = 'LOGIN_USER_FAIL';
 export const LOGIN_USER = 'LOGIN_USER';
 export const CURRENT_USER = 'CURRENT_USER';
 export const GET_QUESTIONS = 'GET_QUESTIONS';
-export const CREATE_RECORD = 'CREATE_RECORD';
 export const SET_QUESTION = 'SET_QUESTION';
 export const ANSWER_CHANGED = 'ANSWER_CHANGED';
 export const ANSWER_CREATE = 'ANSWER_CREATE';
@@ -50,7 +49,6 @@ export const loginUser = ({ email, password }) => {
                    .then(user => {// calling after request is complete
                         if (user.status === 200) {
                             var str = JSON.stringify(eval('(' + user._bodyInit + ')'));
-                            console.log(JSON.parse(str).token);
                             loginUserSuccess(dispatch, JSON.parse(str).token);
                         }
                         loginUserFail(dispatch);
@@ -237,70 +235,10 @@ export const setQuestion = (question) => {
     };
 }
 
-export const createRecord = ({ token, text_input }) => {
-    return (dispatch) => {
-
-        fetch('http://0.0.0.0:8000/api/record', {
-                   method: 'POST',
-                   headers: {
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json',
-                   'Authorization': 'JWT '+token,
-                   },
-                   })
-                   .then(response => {
-                        var str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-                        var record_num = JSON.parse(str).id;
-                        setRecord(dispatch, record_num);
-                        fetch('http://0.0.0.0:8000/api/answer', {
-                             method: 'POST',
-                             headers: {
-                             'Accept': 'application/json',
-                             'Content-Type': 'application/json',
-                             'Authorization': 'JWT '+token,
-                             },
-
-                             body: JSON.stringify({
-                             text: text_input,
-                             question: 1,
-                             record: record_num
-                             })
-                             })
-                             .then((response) => {
-                                if (response.status === 201) {
-                                    dispatch({ type: ANSWER_CREATE });
-                                    Actions.qtwo();
-                                }
-                             });
-                    });
-    };
-};
-
-const setRecord = (dispatch, record) => {
-    dispatch({
-        type: CREATE_RECORD,
-        payload: record
-    });
-};
-
 export const textChanged = (text) => {
     return {
         type: TEXT_INPUT_CHANGED,
         payload: text
-    };
-};
-
-export const deleteRecord = ({ token, param }) => {
-    return (dispatch) => {
-
-        fetch('http://0.0.0.0:8000/api/questionnaire/delete/' + param, {
-                   method: 'DELETE',
-                   headers: {
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json',
-                   'Authorization': 'JWT '+token,
-                   },
-                   });
     };
 };
 
@@ -328,3 +266,5 @@ export const updateAnswer = ({ token, record, question, rating, text }) => {
                    });
     };
 };
+
+
