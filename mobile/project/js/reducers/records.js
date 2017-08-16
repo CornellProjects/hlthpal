@@ -13,7 +13,7 @@ const initialState = {
     my_records: [],
     selectedRecord: ''
 };
-
+ 
 export default function (state:State = initialState, action:Action): State {
     switch(action.type) {
         case SET_RECORD:
