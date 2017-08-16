@@ -2,19 +2,20 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework import serializers, exceptions
 from rest_framework import permissions
-from rest_framework.serializers import (ModelSerializer, EmailField, CharField)
+from rest_framework.serializers import (ModelSerializer, EmailField, CharField, ListSerializer)
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 
 # Custom models
-from .models import Symptoms, Patient, Doctor, Question, Answer, Questionnaire, Entity
+from .models import Patient, Doctor, Question, Answer, Questionnaire, Entity
 
 ######################################################################################
 # Serializers for user object
 
 User = get_user_model()
+
 
 # Create Patient Serializer
 class PatientCreateSerializer(ModelSerializer):
@@ -31,6 +32,7 @@ class PatientCreateSerializer(ModelSerializer):
             'state',
             'country'
         ]
+
 
 class EntityCreateSerializer(ModelSerializer):
     class Meta:
@@ -231,7 +233,6 @@ class UserLoginSerializer(ModelSerializer):
             return
 
 
-
 # User profile serializer
 class UserProfileSerializer(ModelSerializer):
     last_name = CharField(label="Last name", required=False, allow_blank=True)
@@ -259,6 +260,7 @@ class QuestionSerializer(ModelSerializer):
             'question'
         ]
 
+
 class QuestionGetSerializer(ModelSerializer):
     class Meta:
         model = Question
@@ -268,15 +270,22 @@ class QuestionGetSerializer(ModelSerializer):
         ]
 
 
+class AnswerListSerializer(ListSerializer):
+    def create(self, validated_data):
+        additionals = [Answer(**item) for item in validated_data]
+        return Answer.objects.bulk_create(additionals)
+
+
 class AnswerSerializer(ModelSerializer):
     class Meta:
         model = Answer
         fields = [
+            'id',
             'answer',
             'text',
-            'question',
-            'record'
+            'question'
         ]
+        list_serializer_class = AnswerListSerializer
 
 
 class QuestionnaireSerializer(ModelSerializer):
@@ -285,14 +294,5 @@ class QuestionnaireSerializer(ModelSerializer):
         fields = [
             'id',
             'date',
-        ]
-
-# Create Symptoms serializer
-class SymptomsCreateSerializer(ModelSerializer):
-    class Meta:
-        model = Symptoms
-        fields =[
-            'symptom',
-            'answer',
-            'record'
+            'answers'
         ]

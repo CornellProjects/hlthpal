@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
+# Model to determine where a doctor is from
 class Entity(models.Model):
     name = models.CharField(max_length=1000)
     street = models.CharField(max_length=1000)
@@ -16,6 +17,7 @@ class Entity(models.Model):
         return self.name
 
 
+# Model to extend User class on the creation of a new doctor
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor')
     entity = models.ForeignKey(Entity)
@@ -38,6 +40,7 @@ class Patient(models.Model):
     country = models.CharField(max_length=100)
 
 
+# Model to store notes on patients on the dashboard
 class Note(models.Model):
     owner = models.ForeignKey(Doctor)
     patient = models.ManyToManyField(Patient)
@@ -49,37 +52,23 @@ class Question(models.Model):
     question = models.CharField(
         max_length=500,
         blank=True,
-        help_text='Enter question text here',
-        unique=True
+        help_text='Enter question text here'
     )
 
     def __str__(self):
         return self.question
 
 
-# Model to store questions and answers from the user
-class Questionnaire(models.Model):
-    date = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-
-
 # Model to get answers from the user
 class Answer(models.Model):
     # text field is used to enter answer to first question
     text = models.CharField(max_length=1500, blank=True)
-    answer = models.IntegerField(null=True,blank=True)
+    answer = models.IntegerField(null=True)
     question = models.ForeignKey(Question)
-    record = models.ForeignKey(Questionnaire)
-
-    class Meta:
-        unique_together = ["question", "record"]
-
-    def __str__(self):
-        return str(self.answer)
 
 
-class Symptoms(models.Model):
-    symptom = models.CharField(max_length=20, blank=True)
-    answer = models.IntegerField(null=True,blank=True)
-    record = models.ForeignKey(Questionnaire)
-
+# Model to store questions and answers from the user
+class Questionnaire(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    answers = models.ManyToManyField(Answer)

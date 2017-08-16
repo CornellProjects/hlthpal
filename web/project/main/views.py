@@ -8,14 +8,13 @@ from rest_framework.authentication import TokenAuthentication
 from django.core.urlresolvers import reverse_lazy
 
 # Custom models
-from .models import Symptoms, Patient, Questionnaire, Answer, Entity, Question
+from .models import Questionnaire, Answer, Entity, Question
 
 # Serializers import
 from .serializers import (
     UserCreateSerializer,
     UserLoginSerializer,
     UserProfileSerializer,
-    SymptomsCreateSerializer,
     AnswerSerializer,
     QuestionnaireSerializer,
     DoctorCreateSerializer,
@@ -58,14 +57,16 @@ def index(request):
 
 User = get_user_model()
 
+
 class UserCreateView(CreateAPIView):
     '''API to create a new user '''
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
     queryset = User.objects.all()
 
+
 class EntityCreateView(CreateAPIView):
-    '''API to create a new user '''
+    '''API to create a new Entity '''
     serializer_class = EntityCreateSerializer
     permission_classes = [AllowAny]
     queryset = Entity.objects.all()
@@ -113,12 +114,21 @@ class UserProfileView(APIView):
 
 
 class AnswerAPIView(ListCreateAPIView):
+    '''API to create one or multiple Answer instances '''
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_serializer(self, *args, **kwargs):
+        if "data" in kwargs:
+            data = kwargs["data"]
+            if isinstance(data, list):
+                kwargs["many"] = True
+        return super(AnswerAPIView, self).get_serializer(*args, **kwargs)
 
-class QuestionAPIView(ListCreateAPIView):
+
+class QuestionnaireAPIView(ListCreateAPIView):
+    '''API to GET or create a new questionnaire '''
     queryset = Questionnaire.objects.all()
     serializer_class = QuestionnaireSerializer
     permission_classes = [IsAuthenticated]
@@ -126,8 +136,12 @@ class QuestionAPIView(ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def get_queryset(self):
+        return Questionnaire.objects.filter(user=self.request.user)
 
-class QuestionDeleteView(RetrieveUpdateDestroyAPIView):
+
+class QuestionnaireUpdateView(RetrieveUpdateDestroyAPIView):
+    '''API to delete or edit a questionnaire '''
     queryset = Questionnaire.objects.filter()
     serializer_class = QuestionnaireSerializer
     permission_classes = [IsAuthenticated]
@@ -152,36 +166,29 @@ class MultipleFieldLookupMixin(object):
         return get_object_or_404(queryset, **filter)  # Lookup the object
 
 
-class AnswerUpdateView(RetrieveUpdateDestroyAPIView, MultipleFieldLookupMixin):
+class AnswerUpdateView(RetrieveUpdateDestroyAPIView):
+    ''' API to delete or edit an answer based on the question associated with it '''
     queryset = Answer.objects.filter()
     serializer_class = AnswerSerializer
     permission_classes = [IsAuthenticated]
     model = Answer
-    success_url = reverse_lazy('record', 'question')
-    # lookup_fields declared separately for the URL conf in urls.py
-    lookup_field = ('record')
-    lookup_field = ('question')
+    success_url = reverse_lazy('id')
 
 
 class QuestionGetAPIView(ListAPIView):
+    '''API to get questions in the database '''
     serializer_class = QuestionGetSerializer
     permission_classes = [IsAuthenticated]
     queryset = Question.objects.all()
 
 
 class CurrentUserView(APIView):
+    '''API to get current user's information '''
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         serializer = UserCreateSerializer(self.request.user)
         return Response(serializer.data)
-
-
-# Symptoms Create API
-class SymptomsCreateAPIView(ListCreateAPIView):
-    queryset = Symptoms.objects.all()
-    serializer_class = SymptomsCreateSerializer
-    permission_classes = [IsAuthenticated]
 
 
 # Symptoms GET API
