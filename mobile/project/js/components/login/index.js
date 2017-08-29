@@ -11,7 +11,7 @@ import styles from './styles';
 import TextField from '../TextField'
 
 
-const background = require('../../../images/login_background.png');
+const background = require('../../../images/sun_logo.png');
 
 class Login extends Component {
 

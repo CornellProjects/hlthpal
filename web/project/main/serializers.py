@@ -9,7 +9,7 @@ from django.db.models import Q
 
 
 # Custom models
-from .models import Patient, Doctor, Question, Answer, Questionnaire, Entity
+from .models import Patient, Doctor, Question, Answer, Record, Entity, Symptom
 
 ######################################################################################
 # Serializers for user object
@@ -280,19 +280,35 @@ class AnswerSerializer(ModelSerializer):
     class Meta:
         model = Answer
         fields = [
-            'id',
             'answer',
             'text',
-            'question'
+            'question',
+            'record'
         ]
         list_serializer_class = AnswerListSerializer
 
 
-class QuestionnaireSerializer(ModelSerializer):
+class SymptomListSerializer(ListSerializer):
+    def create(self, validated_data):
+        additionals = [Symptom(**item) for item in validated_data]
+        return Symptom.objects.bulk_create(additionals)
+
+
+class SymptomSerializer(ModelSerializer):
     class Meta:
-        model = Questionnaire
+        model = Answer
+        fields = [
+            'symptom',
+            'answer',
+            'record'
+        ]
+        list_serializer_class = SymptomListSerializer
+
+
+class RecordSerializer(ModelSerializer):
+    class Meta:
+        model = Record
         fields = [
             'id',
-            'date',
-            'answers'
+            'date'
         ]

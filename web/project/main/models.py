@@ -47,6 +47,12 @@ class Note(models.Model):
     text_field = models.CharField(max_length=2500)
 
 
+# Model to store questions and answers from the user
+class Record(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+
+
 # Model to associate questions with answers
 class Question(models.Model):
     question = models.CharField(
@@ -63,12 +69,27 @@ class Question(models.Model):
 class Answer(models.Model):
     # text field is used to enter answer to first question
     text = models.CharField(max_length=1500, blank=True)
-    answer = models.IntegerField(null=True)
+    answer = models.IntegerField()
     question = models.ForeignKey(Question)
+    record = models.ForeignKey(Record)
+
+    # we only want to accept one answer per question per Record
+    class Meta:
+        unique_together = ["record", "question"]
 
 
-# Model to store questions and answers from the user
-class Questionnaire(models.Model):
-    date = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    answers = models.ManyToManyField(Answer)
+# Model to store calculated score for each record
+class Score(models.Model):
+    ''' Scores are calculated in the front-end '''
+    score = models.IntegerField()
+    record = models.ForeignKey(Record)
+
+
+# Model to store symptoms from the user
+class Symptom(models.Model):
+    symptom = models.CharField(max_length=500)
+    answer = models.IntegerField()
+    record = models.ForeignKey(Record)
+
+    class Meta:
+        unique_together = ["record", "symptom"]
