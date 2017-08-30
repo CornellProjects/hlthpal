@@ -5,19 +5,20 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Text, Button, Icon, Left, Body,Thumbnail,Right,View} from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-
+import { getUser } from '../../actions/user';
+import { displayRecords } from '../../actions/records';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
 
-
 class Home extends Component {
 
   static propTypes = {
-    name: React.PropTypes.string,
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
+    getUser: React.PropTypes.func,
+    displayRecords: React.PropTypes.func,
   }
 
   newPage(index) {
@@ -25,9 +26,15 @@ class Home extends Component {
     Actions.blankPage();
   }
 
+  componentWillMount() {
+    const { token } = this.props;
+
+    this.props.getUser({ token });
+    this.props.displayRecords({ token });
+  }
 
   render() {
-    return (
+     return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
           <Left>
@@ -50,11 +57,10 @@ class Home extends Component {
 
         <Content>
           <View style={styles.mt}>
-          <Thumbnail style={styles.center} size={80} source={require('../../../images/avatar.png')} />
+          <Thumbnail size={80} style={styles.center} source={require('../../../images/avatar.png')} />
             <Text style={styles.text}>
-              Hi Nish, how are you today?
+              Hi {this.props.first_name}, how are you today?
             </Text>
-        
 
             <View style={styles.buttons}>
                 <Button rounded bordered style={styles.center} onPress={() => Actions.qone()}>
@@ -72,12 +78,17 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
+    getUser: token => dispatch(getUser(token)),
+    displayRecords: token => dispatch(displayRecords(token)),
   };
 }
 
 const mapStateToProps = state => ({
-  name: state.user.name,
   list: state.list.list,
+  email: state.user.email,
+  token: state.user.token,
+  first_name: state.user.first_name,
+  user: state.user,
 });
 
 export default connect(mapStateToProps, bindAction)(Home);

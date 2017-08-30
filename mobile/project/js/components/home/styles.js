@@ -13,6 +13,7 @@ export default {
     color: '#F16C00',
     marginTop:20,
     fontSize: 20,
+    fontFamily: 'sans-serif-condensed',
   },
   input:{
     marginTop:60,
@@ -27,7 +28,7 @@ export default {
     alignSelf: 'center',
   },
   buttons:{
-    marginTop: 30,
+    marginTop: 50,
     marginBottom:18,
   }
 };

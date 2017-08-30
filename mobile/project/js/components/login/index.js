@@ -2,33 +2,32 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Item, Input, Button, Icon, View, Text } from 'native-base';
+import { Container, Content, Item, Button, Icon, View, Text } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
 
-import { setUser } from '../../actions/user';
+import { emailChanged, passwordChanged, loginUser } from '../../actions/user';
 import styles from './styles';
+import TextField from '../TextField'
 
 
-const background = require('../../../images/login_background.png');
+const background = require('../../../images/sun_logo.png');
 
 class Login extends Component {
 
-  static propTypes = {
-    setUser: React.PropTypes.func,
+  onEmailChange(text) {
+      this.props.emailChanged(text);
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-    };
+  onPasswordChange(text) {
+      this.props.passwordChanged(text);
   }
 
-  setUser(name) {
-    this.props.setUser(name);
-  }
+  onButtonPress() {
+      const { email, password } = this.props;
 
+      this.props.loginUser({ email, password });
+  }
 
   render() {
     return (
@@ -38,19 +37,21 @@ class Login extends Component {
             <Image source={background} style={styles.shadow}>
               <View style={styles.bg}>
                 <Item style={styles.input}>
-                  <Icon active name="person" />
-                  <Input placeholder="EMAIL" onChangeText={name => this.setState({ name })} />
+                  <TextField placeholder="email"
+                    value={this.props.email}
+                    onChangeText={this.onEmailChange.bind(this)} />
                 </Item>
                 <Item style={styles.input}>
-                  <Icon name="unlock" />
-                  <Input
-                    placeholder="PASSWORD"
+                  <TextField
+                    placeholder="password"
+                    value={this.props.password}
+                    onChangeText={this.onPasswordChange.bind(this)}
                     secureTextEntry
                   />
                 </Item>
                 <Grid>
                     <Col>
-                        <Button rounded style={styles.center} onPress={() => Actions.home()}>
+                        <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)}>
                           <Text>Login</Text>
                         </Button>
                     </Col>
@@ -69,11 +70,14 @@ class Login extends Component {
   }
 }
 
-function bindActions(dispatch) {
-  return {
-    setUser: name => dispatch(setUser(name)),
-  };
-}
+const mapStateToProps = ({ user }) => {
+    const { email, password, error } = user;
 
+    return { email, password, error };
+};
 
-export default connect(null, bindActions)(Login);
+export default connect(mapStateToProps, {
+    emailChanged,
+    passwordChanged,
+    loginUser
+})(Login);

@@ -29,26 +29,40 @@ export default {
     bottom: 0,
   },
   input: {
-    marginBottom: 20,
+    fontFamily: 'sans-serif-condensed',
   },
   center:{
     alignSelf: 'center',
+    marginTop: 8,
+  },
+  bottom: {
+    marginTop: 8,
+    marginBottom: 25,
+    alignSelf: 'center',
   },
   title:{
-    marginTop: 30,
-    marginLeft: 10,
+    marginTop: 25,
+    marginLeft: 30,
     color:'#F16C00',
     fontSize: 20,
+    fontFamily: 'sans-serif-condensed',
   },
   list:{
-    marginTop:15,
-    marginBottom:15,
-    marginLeft: 20,
-    marginRight:20,
+    marginTop: 15,
+    marginBottom: 20,
+    marginLeft: 25,
+    marginRight: 25,
   },
   radios:{
     alignItems: 'center',
     marginLeft: 30,
-    marginTop:20,
-  }
+    marginTop: 20,
+  },
+  radioText: {
+    marginLeft: 35,
+    position: 'relative',
+    top: -25,
+    fontSize: 18,
+    fontFamily: 'sans-serif-condensed',
+  },
 };

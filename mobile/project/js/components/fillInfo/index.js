@@ -2,12 +2,14 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Item, Input, Button, Icon, View, Text, Radio, InputGroup} from 'native-base';
+import { Container, Content, Item, Button, Icon, View, Text, Radio, InputGroup} from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
 
-import { setUser } from '../../actions/user';
+import { setUser, registerUser } from '../../actions/RegisterUser';
 import styles from './styles';
+import TextField from '../TextField'
+import { SegmentedControls } from 'react-native-radio-buttons'
 
 
 const background = require('../../../images/login_background.png');
@@ -16,22 +18,41 @@ class FillInfo extends Component {
 
   static propTypes = {
     setUser: React.PropTypes.func,
-    registUser: React.PropTypes.func,
+    registerUser: React.PropTypes.func,
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-    };
-  }
+  onButtonPress() {
+      const {
+        email,
+        username,
+        password,
+        first_name,
+        last_name,
+        mobile,
+        diagnosis,
+        doctor,
+        selectedOption
+      } = this.props;
 
-  setUser(name) {
-    this.props.setUser(name);
+      this.props.registerUser({
+          email,
+          username,
+          password,
+          first_name,
+          last_name,
+          mobile,
+          diagnosis,
+          doctor,
+          selectedOption: selectedOption || 'Male'
+      });
   }
-
 
   render() {
+    const options = [
+        'Male',
+        'Female'
+    ];
+
     return (
       <Container>
         <View style={styles.container}>
@@ -41,50 +62,115 @@ class FillInfo extends Component {
             </Text>
               
                 <Item regular style={styles.list}>
-                    <Input placeholder='Your Name'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='First Name'
+                        value={this.props.first_name}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'first_name', value
+                        })}
+                    />
                 </Item>
-              
-              <Grid style = {styles.radios}>
-                 <Col style={styles.center}>
 
-                    <Radio selected={true} />
-                    <Text>Male</Text>
-                    
-                  </Col>
+                <Item regular style={styles.list}>
+                    <TextField
+                        style={styles.input}
+                        placeholder='Last Name'
+                        value={this.props.last_name}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'last_name', value
+                        })}
+                    />
+                </Item>
 
-                  <Col style={styles.center}>
-                    <Radio selected={false} />
-                    <Text>Female</Text>
-                  </Col>
-              </Grid>
+                <Item regular style={styles.list}>
+                    <SegmentedControls
+                        tint={'#F16C00'}
+                        options={options}
+                        onSelection={value => this.props.setUser({
+                            prop: 'selectedOption', value
+                        })}
+                        selectedOption={ this.props.selectedOption }
+                    />
+                </Item>
 
-             
                   <Item regular style={styles.list}>
-                    <Input placeholder='Patient ID'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='Username'
+                        value={this.props.username}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'username', value
+                        })}
+                    />
                   </Item>
-                
+
                   <Item regular style={styles.list}>
-                    <Input placeholder='Mobile'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='Email'
+                        value={this.props.email}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'email', value
+                        })}
+                    />
+                  </Item>
+
+                  <Item regular style={styles.list}>
+                    <TextField
+                        secureTextEntry
+                        style={styles.input}
+                        placeholder='Password'
+                        value={this.props.password}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'password', value
+                        })}
+                    />
+                  </Item>
+
+                  <Item regular style={styles.list}>
+                    <TextField
+                        style={styles.input}
+                        placeholder='Mobile'
+                        value={this.props.mobile}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'mobile', value
+                        })}
+                    />
                   </Item>
                 
                  <Item regular style={styles.list}>
-                    <Input placeholder='My diagnosis'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='My diagnosis'
+                        value={this.props.diagnosis}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'diagnosis', value
+                        })}
+                    />
                   </Item>
                  
                   <Item regular style={styles.list}>
-                    <Input placeholder='My doctor name'/>
+                    <TextField
+                        style={styles.input}
+                        placeholder='My doctor name'
+                        value={this.props.doctor}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'doctor', value
+                        })}
+                    />
                   </Item>
                 
              
 
                 <Grid>
                     <Col>
-                        <Button rounded bordered style={styles.center} onPress={() => Actions.login()}>
+                        <Button rounded bordered style={styles.bottom} onPress={() => Actions.login()}>
                           <Text>Cancel</Text>
                         </Button>
                     </Col>
                     <Col>
-                        <Button rounded style={styles.center} onPress={() => Actions.home()}>
+                        <Button rounded style={styles.bottom} onPress={() => this.onButtonPress()}>
                           <Text>Submit</Text>
                         </Button>
                     </Col>
@@ -96,11 +182,30 @@ class FillInfo extends Component {
   }
 }
 
-function bindActions(dispatch) {
-  return {
-    setUser: name => dispatch(setUser(name)),
-  };
-}
+const mapStateToProps = (state) => {
+    const {
+        email,
+        username,
+        password,
+        first_name,
+        last_name,
+        mobile,
+        diagnosis,
+        doctor,
+        selectedOption
+    } = state.registerUser;
 
+    return {
+        email,
+        username,
+        password,
+        first_name,
+        last_name,
+        mobile,
+        diagnosis,
+        doctor,
+        selectedOption
+    };
+};
 
-export default connect(null, bindActions)(FillInfo);
+export default connect(mapStateToProps, { setUser, registerUser })(FillInfo);

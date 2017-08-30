@@ -77,26 +77,25 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-'''
 
 # Set up MY-Sql Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '_MY_DB_NAME_',
-        'USER': '_MY_DB_USER_',
-        'PASSWORD': '_MY_PASSWORD_',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': '_MY_DB_NAME_',
+#         'USER': '_MY_DB_USER_',
+#         'PASSWORD': '_MY_PASSWORD_',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 
 # Password validation
@@ -156,8 +155,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-
-    'PAGE_SIZE': 10
+    'DEFAULT_PAGINATION_SERIALIZER_CLASS'
+    'PAGINATE_BY': 25
 }
 
 

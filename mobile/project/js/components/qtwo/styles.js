@@ -8,23 +8,18 @@ export default {
   }, 
   text: {
     marginTop:60,
-    fontSize: 20,
-    marginBottom: 15,
-    alignItems: 'center',
-    alignContent: 'center',
+    fontSize: 24.5,
+    alignSelf:'center',
     color: '#F16C00',
-    marginLeft: 20,
-    marginRight:20,
-    justifyContent:'center',
-  },
-  mt: {
-    marginTop: 18,
+    marginLeft: 30,
+    marginRight:30,
+    fontFamily: 'sans-serif-condensed',
   },
   center: {
     alignSelf: 'center',
   },
   buttons:{
-    marginTop: 50,
+    marginTop: 260,
     marginBottom:18,
     justifyContent: 'center',
   }
