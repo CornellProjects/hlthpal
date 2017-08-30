@@ -7,11 +7,11 @@ from django.utils import timezone
 
 # Model to determine where a doctor is from
 class Entity(models.Model):
-    name = models.CharField(max_length=1000)
-    street = models.CharField(max_length=1000)
-    city = models.CharField(max_length=1000)
-    state = models.CharField(max_length=1000)
-    country = models.CharField(max_length=1000)
+    name = models.CharField(max_length=100)
+    street = models.CharField(max_length=200)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -34,7 +34,7 @@ class Patient(models.Model):
     diagnosis = models.CharField(max_length=50, blank=True)
     gender = models.CharField(max_length=6, blank=True)
     mobile = models.CharField(max_length=10, blank=True)
-    street = models.CharField(max_length=1000)
+    street = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
@@ -44,7 +44,7 @@ class Patient(models.Model):
 class Note(models.Model):
     owner = models.ForeignKey(Doctor)
     patient = models.ManyToManyField(Patient)
-    text_field = models.CharField(max_length=2500)
+    text_field = models.CharField(max_length=1000)
 
 
 # Model to store questions and answers from the user
@@ -68,7 +68,7 @@ class Question(models.Model):
 # Model to get answers from the user
 class Answer(models.Model):
     # text field is used to enter answer to first question
-    text = models.CharField(max_length=1500, blank=True)
+    text = models.CharField(max_length=600, blank=True)
     answer = models.IntegerField()
     question = models.ForeignKey(Question)
     record = models.ForeignKey(Record)
