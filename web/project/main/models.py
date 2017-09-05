@@ -44,7 +44,7 @@ class Patient(models.Model):
 class Note(models.Model):
     owner = models.ForeignKey(Doctor)
     patient = models.ManyToManyField(Patient)
-    text_field = models.CharField(max_length=1000)
+    text_field = models.CharField(max_length=255)
 
 
 # Model to store questions and answers from the user
@@ -56,7 +56,7 @@ class Record(models.Model):
 # Model to associate questions with answers
 class Question(models.Model):
     question = models.CharField(
-        max_length=500,
+        max_length=255,
         blank=True,
         help_text='Enter question text here'
     )
@@ -68,7 +68,7 @@ class Question(models.Model):
 # Model to get answers from the user
 class Answer(models.Model):
     # text field is used to enter answer to first question
-    text = models.CharField(max_length=600, blank=True)
+    text = models.CharField(max_length=255, blank=True)
     answer = models.IntegerField()
     question = models.ForeignKey(Question)
     record = models.ForeignKey(Record)
@@ -87,7 +87,7 @@ class Score(models.Model):
 
 # Model to store symptoms from the user
 class Symptom(models.Model):
-    symptom = models.CharField(max_length=500)
+    symptom = models.CharField(max_length=255)
     answer = models.IntegerField()
     record = models.ForeignKey(Record)
 
