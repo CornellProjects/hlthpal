@@ -4,6 +4,7 @@ from rest_framework_jwt import views as jwt_views
 from . import views
 
 urlpatterns = [
+    url(r'', views.index, name='index'),
     url(r'^home/', views.index, name='index'),
     # Authentication APIs
     url(r'^api/auth', jwt_views.obtain_jwt_token, name="auth"),
