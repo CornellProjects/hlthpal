@@ -6,7 +6,6 @@ from . import views
 urlpatterns = [
     url(r'^home/', views.index, name='index'),
     # Authentication APIs
-    #url(r'^api-token-auth/', authviews.obtain_auth_token),
     url(r'^api/auth', jwt_views.obtain_jwt_token, name="auth"),
     url(r'^api/token-verify', jwt_views.verify_jwt_token, name="token-verify"),
     url(r'^api/token-refresh', jwt_views.refresh_jwt_token, name="token-refresh"),
@@ -25,4 +24,6 @@ urlpatterns = [
     url(r'^api/edit_answer/(?P<record>\d+)/(?P<question>\d+)$', views.AnswerUpdateView.as_view(), name="edit_answer"),
     url(r'^api/edit_record/(?P<pk>\d+)$', views.RecordUpdateView.as_view(), name="edit_record"),
     url(r'^api/edit_question/(?P<pk>\d+)$', views.QuestionUpdateView.as_view(), name="edit_question"),
+    # Default index page
+    url(r'^', views.index, name='index'),
 ]
