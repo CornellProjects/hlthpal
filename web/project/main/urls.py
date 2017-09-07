@@ -24,6 +24,4 @@ urlpatterns = [
     url(r'^api/edit_answer/(?P<record>\d+)/(?P<question>\d+)$', views.AnswerUpdateView.as_view(), name="edit_answer"),
     url(r'^api/edit_record/(?P<pk>\d+)$', views.RecordUpdateView.as_view(), name="edit_record"),
     url(r'^api/edit_question/(?P<pk>\d+)$', views.QuestionUpdateView.as_view(), name="edit_question"),
-    # Default URL
-    url(r'', views.index, name='index'),
 ]
