@@ -296,7 +296,7 @@ class SymptomListSerializer(ListSerializer):
 
 class SymptomSerializer(ModelSerializer):
     class Meta:
-        model = Answer
+        model = Symptom
         fields = [
             'symptom',
             'answer',
@@ -310,5 +310,6 @@ class RecordSerializer(ModelSerializer):
         model = Record
         fields = [
             'id',
-            'date'
+            'date',
+            'score'
         ]
