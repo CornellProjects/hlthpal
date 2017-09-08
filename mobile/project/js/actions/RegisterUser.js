@@ -20,7 +20,12 @@ export const registerUser = ({
         mobile,
         diagnosis,
         doctor,
-        selectedOption
+        selectedOption,
+        care_giver,
+        street,
+        city,
+        my_state,
+        country
     }) => {
           // Change IP address according to yours
           // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
@@ -43,6 +48,10 @@ export const registerUser = ({
                          doctor: doctor,
                          mobile: mobile,
                          gender: selectedOption,
+                         street: street,
+                         city: city,
+                         state: my_state,
+                         country: country
                      }
                      })
                      })
