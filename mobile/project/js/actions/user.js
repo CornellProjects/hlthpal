@@ -143,13 +143,3 @@ export const createAnswer = ({ token, rating, question, record }) => {
                     });
     };
 };
-
-const getQuestions = (dispatch, questions) => {
-    dispatch({
-        type: GET_QUESTIONS,
-        payload: questions
-    });
-};
-
-
-

@@ -41,17 +41,17 @@ class Patient(models.Model):
     country = models.CharField(max_length=100)
 
 
-# Model to store questions and answers from the user
-class Record(models.Model):
-    date = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    score = models.IntegerField()
+# Model to store notes on patients on the dashboard
+class Note(models.Model):
+    owner = models.ForeignKey(Doctor)
+    patient = models.ManyToManyField(Patient)
+    text_field = models.CharField(max_length=255)
 
 
 # Model to associate questions with answers
 class Question(models.Model):
     question = models.CharField(
-        max_length=500,
+        max_length=255,
         blank=True,
         help_text='Enter question text here'
     )
@@ -60,17 +60,29 @@ class Question(models.Model):
         return self.question
 
 
+# Model to store questions and answers from the user
+class Record(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    score = models.IntegerField()
+
+
 # Model to get answers from the user
 class Answer(models.Model):
     # text field is used to enter answer to first question
-    text = models.CharField(max_length=600, blank=True)
+    text = models.CharField(max_length=255, blank=True)
     answer = models.IntegerField()
     question = models.ForeignKey(Question)
     record = models.ForeignKey(Record)
 
+    # we only want to accept one answer per question per Record
+    # class Meta:
+    #     unique_together = ["record", "question"]
+
 
 # Model to store symptoms from the user
 class Symptom(models.Model):
-    symptom = models.CharField(max_length=500)
+    symptom = models.CharField(max_length=255)
     answer = models.IntegerField()
     record = models.ForeignKey(Record)
+

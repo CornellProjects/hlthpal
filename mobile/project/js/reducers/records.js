@@ -4,7 +4,7 @@ import {
     SET_RECORDS,
     CALCULATE_SCORE,
     CREATE_RECORD,
-    PUSH_ANSWER
+    SET_RECORD
 } from '../actions/records';
 
 export type State = {
@@ -22,13 +22,11 @@ const initialState = {
     record: '',
     score: 0
 };
-
+ 
 export default function (state:State = initialState, action:Action): State {
     switch(action.type) {
         case CALCULATE_SCORE:
           return { score: action.payload  };
-        case CREATE_RECORD:
-          return { record: action.payload  };
         case SET_RECORDS:
           return { ...state, my_records: action.payload  };
         case SELECT_RECORD:

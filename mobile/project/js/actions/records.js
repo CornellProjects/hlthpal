@@ -1,7 +1,6 @@
 import type { Action } from './types';
 import { Actions } from 'react-native-router-flux';
 
-export const PUSH_ANSWER     = 'PUSH_ANSWER';
 export const SELECT_RECORD   = 'SELECT_RECORD';
 export const SET_RECORDS     = 'SET_RECORDS';
 export const CALCULATE_SCORE = 'CALCULATE_SCORE';
@@ -63,8 +62,27 @@ const setCurrentRecord = (dispatch, record) => {
     });
 };
 
-export const displayRecords = ({ token }) => {
+export const createRecord = ({ token, answers }) => {
+    return (dispatch) => {
 
+        fetch('http://0.0.0.0:8000/api/record', {
+                   method: 'POST',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
+
+                   body: JSON.stringify({
+                   answers: answers
+                   })
+                   });
+    };
+};
+
+export const displayRecords = ({ token }) => {
+      // Change IP address according to yours
+      // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
       return (dispatch) => {
           fetch('http://0.0.0.0:8000/api/record', {
                 method: 'GET',
@@ -99,13 +117,13 @@ export const selectRecord = (selectedRecord) => {
 export const deleteRecord = ({ token, param }) => {
     return (dispatch) => {
 
-        fetch('http://0.0.0.0:8000/api/edit_record/' + param, {
-               method: 'DELETE',
-               headers: {
-               'Accept': 'application/json',
-               'Content-Type': 'application/json',
-               'Authorization': 'JWT '+token,
-               },
-               });
+        fetch('http://0.0.0.0:8000/api/questionnaire/delete/' + param, {
+                   method: 'DELETE',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
+                   });
     };
 };

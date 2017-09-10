@@ -51,7 +51,8 @@ export const registerUser = ({
                          street: street,
                          city: city,
                          state: my_state,
-                         country: country
+                         country: country,
+                         care_giver: care_giver
                      }
                      })
                      })

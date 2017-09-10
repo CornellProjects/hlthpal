@@ -6,7 +6,6 @@ from . import views
 urlpatterns = [
     url(r'^home/', views.index, name='index'),
     # Authentication APIs
-    #url(r'^api-token-auth/', authviews.obtain_auth_token),
     url(r'^api/auth', jwt_views.obtain_jwt_token, name="auth"),
     url(r'^api/token-verify', jwt_views.verify_jwt_token, name="token-verify"),
     url(r'^api/token-refresh', jwt_views.refresh_jwt_token, name="token-refresh"),
