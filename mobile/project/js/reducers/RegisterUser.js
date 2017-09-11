@@ -48,8 +48,8 @@ const initialState = {
 
 export default function (state:State = initialState, action:Action): State {
     switch(action.type) {
-        case USER_CREATE:
-            return { initialState };
+//        case USER_CREATE:
+//            return { initialState };
         case SET_USER:
             return { ...state, [action.payload.prop]: action.payload.value };
         default:
