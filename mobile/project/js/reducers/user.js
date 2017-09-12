@@ -6,11 +6,6 @@ import {
     LOGIN_USER_FAIL,
     LOGIN_USER,
     CURRENT_USER,
-    ANSWER_CHANGED,
-    ANSWER_CREATE,
-    GET_QUESTIONS,
-    SET_QUESTION,
-    TEXT_INPUT_CHANGED,
     CHANGE_CONNECTION_STATUS
 } from '../actions/user';
 
@@ -22,12 +17,7 @@ export type State = {
     error: string,
     token: string,
     loading: boolean,
-    rating: string,
-    isConnected: boolean,
-    answers: object,
-    question: number,
-    questions: string,
-    text_input: string
+    isConnected: boolean
 }
 
 const initialState = {
@@ -38,12 +28,7 @@ const initialState = {
     error: '',
     token: '',
     loading: false,
-    rating: 2,
-    isConnected: false,
-    answers: [],
-    question: '',
-    questions: [],
-    text_input: ''
+    isConnected: false
 };
 
 
@@ -61,16 +46,6 @@ export default function (state:State = initialState, action:Action): State {
           return { ...state, first_name: action.payload };
       case LOGIN_USER_FAIL:
           return { ...state, error: 'Authentication Failed.', password: '', loading: false };
-      case ANSWER_CREATE:
-          return { ...state };
-      case SET_QUESTION:
-          return { ...state, question: action.payload };
-      case GET_QUESTIONS:
-          return { ...state, questions: action.payload };
-      case ANSWER_CHANGED:
-          return { ...state, rating: action.payload  };
-      case TEXT_INPUT_CHANGED:
-          return { ...state, text_input: action.payload  };
       case CHANGE_CONNECTION_STATUS:
           return Object.assign({}, state, { isConnected: action.isConnected });
       default:

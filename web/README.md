@@ -33,11 +33,25 @@ directory. </p>
 <h3 style="text-align: center;" > REST APIs </h3>
 <p> Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.</p>
 
-<h4> _________ POST 'api/register' _________</h4>
-<p> Register a new user. </p>
-<p> URL: http://127.0.0.1:8000/api/register </p>
-<p> curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"john@gmail.com","username":"John10","password":"testPassword"}' http://127.0.0.1:8000/api/register</p>
+<h4> _________ POST 'api/entity' _________</h4>
+<p> Entity Registration. </p>
+<p> URL: http://127.0.0.1:8000/api/entity </p>
+<p> curl -i -X POST -H "Content-Type: application/json" -d '{"name":"Hospital","street":"street","city":"city","state":"state","country":"country"}' http://127.0.0.1:8000/api/entity</p>
 
+<h4> _________ POST 'api/doctor' _________</h4>
+<p> Doctor Registration. </p>
+<p> URL: http://127.0.0.1:8000/api/doctor </p>
+<p> curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"john@gmail.com","username":"John10","password":"testPassword","entity":1}' http://127.0.0.1:8000/api/doctor</p>
+
+<h4> _________ POST 'api/register' _________</h4>
+<p> Patient Registration. </p>
+<p> URL: http://127.0.0.1:8000/api/register </p>
+<p> curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"john@gmail.com","username":"John10","password":"testPassword","diagnosis":"diagnosis","doctor":"John Smith","mobile":"555-5555","street":"street","city":"city","state":"state","country":"country","gender":"male","care_giver":"Mary Smith"}' http://127.0.0.1:8000/api/register</p>
+
+<h4> _________ GET 'api/user' _________</h4>
+<p> Get information on authenticated user. </p>
+<p> URL: http://127.0.0.1:8000/api/user </p>
+<p> curl -i -X GET -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/user </p>
 
 <h4> _________ POST 'api/auth' _________</h4>
 <p> Get authentication token for a given user with username. </p>
@@ -58,16 +72,53 @@ directory. </p>
 <p> curl -i -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/token-refresh </p>
 
 
-<h4> _________ GET 'api/symptoms/get' _________</h4>
-<p> Get symptoms for a particular user. </p>
-<p> URL: http://127.0.0.1:8000/api/symptoms/get </p>
-<p> curl -i -X GET -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/symptoms/get </p>
+<h4>_________ POST 'api/record' _________</h4>
+<p> Create a new record with the score calculated from the front-end. </p>
+<p> URL: http://127.0.0.1:8000/api/record </p>
+<p> curl -i -X POST -H "Content-Type: application/json" -d '{"score":15}' -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/record </p>
 
 
-<h4>_________ POST 'api/symptoms/post' _________</h4>
-<p> Submit symptoms for a particular user. </p>
-<p> URL: http://127.0.0.1:8000/api/symptoms/post </p>
-<p> curl -i -X POST -H "Content-Type: application/json" -d '{"s1":"Domino ", "s2":"Nice day", "s3":"Dude"}' -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/symptoms/post </p>
+<h4>_________ POST 'api/edit_record' _________</h4>
+<p> Delete or update score of a particular record based on its pk (primary key). </p>
+<p> URL: http://127.0.0.1:8000/api/edit_record/(?P<pk>\d+)$ </p>
+<p> curl -i -X PUT -H "Content-Type: application/json" -d '{"score":15}' -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/edit_record/1 </p>
+
+
+<h4>_________ POST 'api/answer' _________</h4>
+<p> Create one or multiple instances of model Answer. </p>
+<p> URL: http://127.0.0.1:8000/api/answer</p>
+<p> curl -i -X POST -H "Content-Type: application/json" -d '{"answer":1,"text":"","question":2,"record":2}' -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/answer </p>
+
+
+<h4>_________ POST 'api/edit_answer' _________</h4>
+<p> Update one instance of model Answer. </p>
+<p> URL: http://127.0.0.1:8000/api/edit_answer/(?P<record>\d+)/(?P<question>\d+)$ </p>
+<p> curl -i -X PUT -H "Content-Type: application/json" -d '{"answer":1,"text":""}' -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/edit_answer/2/2 </p>
+
+
+<h4>_________ POST 'api/symptom' _________</h4>
+<p> Create one or multiple instances of model Symptom. </p>
+<p> URL: http://127.0.0.1:8000/api/symptom </p>
+<p> curl -i -X POST -H "Content-Type: application/json" -d '{"symptom":"pain","answer":1,"record":2}' -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/symptom </p>
+
+
+<h4>_________ POST 'api/edit_symptom' _________</h4>
+<p> Update one instance of model Symptom. </p>
+<p> URL: http://127.0.0.1:8000/api/edit_symptom/(?P<record>\d+)/(?P<symptom>\d+)$ </p>
+<p> curl -i -X PUT -H "Content-Type: application/json" -d '{"symptom":"pain","answer":5}' -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/edit_symptom/2/pain </p>
+
+
+<h4> _________ GET 'api/questions' _________</h4>
+<p> Get questions from the database. </p>
+<p> URL: http://127.0.0.1:8000/api/questions </p>
+<p> curl -i -X GET -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/questions </p>
+
+
+<h4> _________ GET 'api/edit_question' _________</h4>
+<p> Edit a particular question from the backend based on its pk. </p>
+<p> URL: http://127.0.0.1:8000/api/edit_question/(?P<pk>\d+)$ </p>
+<p> curl -i -X PUT -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/edit_question/2 </p>
+
 
 <hr/>
 

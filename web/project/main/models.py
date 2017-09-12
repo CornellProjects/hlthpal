@@ -29,7 +29,8 @@ class Doctor(models.Model):
 # Model to extend User class on the creation of a new patient
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
-    doctor = models.ForeignKey(Doctor)
+    # doctor = models.ForeignKey(Doctor)
+    doctor = models.CharField(max_length=100)
     care_giver = models.CharField(max_length=100)
     diagnosis = models.CharField(max_length=50, blank=True)
     gender = models.CharField(max_length=6, blank=True)
@@ -47,12 +48,6 @@ class Note(models.Model):
     text_field = models.CharField(max_length=255)
 
 
-# Model to store questions and answers from the user
-class Record(models.Model):
-    date = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-
-
 # Model to associate questions with answers
 class Question(models.Model):
     question = models.CharField(
@@ -65,6 +60,13 @@ class Question(models.Model):
         return self.question
 
 
+# Model to store questions and answers from the user
+class Record(models.Model):
+    date = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    score = models.IntegerField()
+
+
 # Model to get answers from the user
 class Answer(models.Model):
     # text field is used to enter answer to first question
@@ -74,15 +76,8 @@ class Answer(models.Model):
     record = models.ForeignKey(Record)
 
     # we only want to accept one answer per question per Record
-    class Meta:
-        unique_together = ["record", "question"]
-
-
-# Model to store calculated score for each record
-class Score(models.Model):
-    ''' Scores are calculated in the front-end '''
-    score = models.IntegerField()
-    record = models.ForeignKey(Record)
+    # class Meta:
+    #     unique_together = ["record", "question"]
 
 
 # Model to store symptoms from the user
@@ -91,5 +86,3 @@ class Symptom(models.Model):
     answer = models.IntegerField()
     record = models.ForeignKey(Record)
 
-    class Meta:
-        unique_together = ["record", "symptom"]

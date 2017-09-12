@@ -249,7 +249,7 @@ class UserSerializer(ModelSerializer):
         model = User
         fields = [
             'first_name',
-            'last_name',
+            'last_name'
         ]
 
 
@@ -272,8 +272,8 @@ class QuestionGetSerializer(ModelSerializer):
 
 class AnswerListSerializer(ListSerializer):
     def create(self, validated_data):
-        additionals = [Answer(**item) for item in validated_data]
-        return Answer.objects.bulk_create(additionals)
+            additionals = [Answer(**item) for item in validated_data]
+            return Answer.objects.bulk_create(additionals)
 
 
 class AnswerSerializer(ModelSerializer):
@@ -296,7 +296,7 @@ class SymptomListSerializer(ListSerializer):
 
 class SymptomSerializer(ModelSerializer):
     class Meta:
-        model = Answer
+        model = Symptom
         fields = [
             'symptom',
             'answer',
@@ -310,5 +310,6 @@ class RecordSerializer(ModelSerializer):
         model = Record
         fields = [
             'id',
-            'date'
+            'date',
+            'score'
         ]

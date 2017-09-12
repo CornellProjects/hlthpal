@@ -31,7 +31,12 @@ class FillInfo extends Component {
         mobile,
         diagnosis,
         doctor,
-        selectedOption
+        selectedOption,
+        care_giver,
+        street,
+        city,
+        my_state,
+        country
       } = this.props;
 
       this.props.registerUser({
@@ -43,6 +48,11 @@ class FillInfo extends Component {
           mobile,
           diagnosis,
           doctor,
+          care_giver,
+          street,
+          city,
+          my_state,
+          country,
           selectedOption: selectedOption || 'Male'
       });
   }
@@ -79,6 +89,50 @@ class FillInfo extends Component {
                         value={this.props.last_name}
                         onChangeText={value => this.props.setUser({
                             prop: 'last_name', value
+                        })}
+                    />
+                </Item>
+
+                <Item regular style={styles.list}>
+                    <TextField
+                        style={styles.input}
+                        placeholder='Street'
+                        value={this.props.street}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'street', value
+                        })}
+                    />
+                </Item>
+
+                <Item regular style={styles.list}>
+                    <TextField
+                        style={styles.input}
+                        placeholder='City'
+                        value={this.props.city}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'city', value
+                        })}
+                    />
+                </Item>
+
+                <Item regular style={styles.list}>
+                    <TextField
+                        style={styles.input}
+                        placeholder='State'
+                        value={this.props.my_state}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'my_state', value
+                        })}
+                    />
+                </Item>
+
+                <Item regular style={styles.list}>
+                    <TextField
+                        style={styles.input}
+                        placeholder='Country'
+                        value={this.props.country}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'country', value
                         })}
                     />
                 </Item>
@@ -149,6 +203,17 @@ class FillInfo extends Component {
                         })}
                     />
                   </Item>
+
+                 <Item regular style={styles.list}>
+                    <TextField
+                        style={styles.input}
+                        placeholder='My Care Giver'
+                        value={this.props.care_giver}
+                        onChangeText={value => this.props.setUser({
+                            prop: 'care_giver', value
+                        })}
+                    />
+                  </Item>
                  
                   <Item regular style={styles.list}>
                     <TextField
@@ -192,7 +257,12 @@ const mapStateToProps = (state) => {
         mobile,
         diagnosis,
         doctor,
-        selectedOption
+        selectedOption,
+        care_giver,
+        street,
+        city,
+        my_state,
+        country
     } = state.registerUser;
 
     return {
@@ -204,7 +274,12 @@ const mapStateToProps = (state) => {
         mobile,
         diagnosis,
         doctor,
-        selectedOption
+        selectedOption,
+        care_giver,
+        street,
+        city,
+        my_state,
+        country
     };
 };
 
