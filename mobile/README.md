@@ -37,15 +37,7 @@
 <p>  5. Double tap R to reload
 <hr/>
 
-<h3>Completed</h3>
-<p>We have made several digital design for this app. I chose the IPOS one to implement. You can find all the screens in our google drive. Below are the screens that I already implemented.</p>
-<p>Login screen</p>
-<p>Home screen(redesign needed)</p>
-<p>Question screen</p>
-<p>Sign up form</p>
-<hr/>
+<h3>Build commands</h3>
 
-<h3>In progress</h3>
-<p>Store data in local database</p>
 
 
