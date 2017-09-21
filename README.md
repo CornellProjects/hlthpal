@@ -5,3 +5,4 @@ Hlthpal is a care application designed to help cancer patients in developing cou
 The technology stack is divided into 2 components:
 * [Web application ](./web/README.md)
 * [Mobile client application ](./mobile/README.md)
+
