@@ -22,7 +22,6 @@ Read more about different database options [here](https://docs.djangoproject.com
 
 <hr/>
 
-<<<<<<< HEAD
 <h3 style="text-align: center;" > REST APIs </h3>
 <p> Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.</p>
 
@@ -216,7 +215,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * Get all patient notes. For privileged users only. 
 * URL: http://127.0.0.1:8000/api/notes 
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes ```
->>>>>>> 0f727d27f9b4c618466ef642e50d23dfd1720178
+
 
 ---
 ####  GET 'api/notes/create'  
