@@ -14,7 +14,6 @@ export const setUser = ({ prop, value }) => {
 
 export const registerUser = ({
         email,
-        username,
         password,
         firstName,
         lastName,
@@ -41,7 +40,7 @@ export const registerUser = ({
                      body: JSON.stringify({
                      first_name: firstName,
                      last_name: lastName,
-                     username: lastName,
+                     username: email,
                      email: email,
                      password: password,
                      patient: {

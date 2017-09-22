@@ -6,7 +6,6 @@ import {
 
 export type State = {
     email: string,
-    username: string,
     password: string,
     firstName: string,
     lastName: string,
@@ -28,7 +27,6 @@ export type State = {
 
 const initialState = {
     email: '',
-    username: '',
     password: '',
     firstName: '',
     lastName: '',

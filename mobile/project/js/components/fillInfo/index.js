@@ -24,7 +24,6 @@ class FillInfo extends Component {
   onButtonPress() {
       const {
         email,
-        username,
         password,
         firstName,
         lastName,
@@ -41,7 +40,6 @@ class FillInfo extends Component {
 
       this.props.registerUser({
           email,
-          username,
           password,
           firstName,
           lastName,
@@ -151,17 +149,6 @@ class FillInfo extends Component {
                   <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='Username'
-                        value={this.props.username}
-                        onChangeText={value => this.props.setUser({
-                            prop: 'username', value
-                        })}
-                    />
-                  </Item>
-
-                  <Item regular style={styles.list}>
-                    <TextField
-                        style={styles.input}
                         placeholder='Email'
                         value={this.props.email}
                         onChangeText={value => this.props.setUser({
@@ -250,7 +237,6 @@ class FillInfo extends Component {
 const mapStateToProps = (state) => {
     const {
         email,
-        username,
         password,
         firstName,
         lastName,
@@ -267,7 +253,6 @@ const mapStateToProps = (state) => {
 
     return {
         email,
-        username,
         password,
         firstName,
         lastName,
