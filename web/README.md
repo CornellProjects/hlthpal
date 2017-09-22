@@ -1,35 +1,28 @@
-<h3> Requirements </h3>
-<p> Must have Django framework installed. </p>
-<a target="_blank" href="https://www.djangoproject.com/start/"> Install Django </a>
+## Requirements 
+Must have Python 2.7 installed. Create a virtual env for this project if you use python 3 for other projects.
 
-<p> Must have Python 2.7 installed. Create a virtual env for this project if you use python 3 for other projects.</p>
-<p> You shoul dbe able to install all dependencies with pip. Install pip and run the following command from "hlthpal/web/"
-directory. </p>
-<p>"pip install -r requirements.txt" in your shell.</p>
-<hr/>
+Must have Django framework installed.
+Visit the offical Django website for details: [Install Django](https://www.djangoproject.com/start/)
 
-<h3> Project setup </h3>
-<p> Clone the repo using the git clone command </p>
+You should be able to install all dependencies with pip. Install pip and run the following command from ``` hlthpal/web/ ```
+directory. 
+``` pip install -r requirements.txt" in your shell.``` 
 
-<p> Run Django application using the following commands </p>
-<p> "cd web/project"</p> 
-<p> "python manage.py runserver"</p>
+## Project setup
+Clone the repo using the git clone command. Run Django application using the following commands.
+```  cd web/project ```
+``` python manage.py runserver ```
 
-<hr/>
+By default django uses a sql-lite database that comes bundeled with the Django framework.
+If you plan to connect your application to a Relational database liek MySql or PostGres you must configure your database first.
 
-<p> If you plan to connect your application to a database you must configure your database first.</p>
-
-<p>
-<a target="_blank" href="https://www.digitalocean.com/community/tutorials/sqlite-vs-mysql-vs-postgresql-a-comparison-of-relational-database-management-systems"> Read more about different database options</a>
-</p>
+Read more about different database options [here](https://docs.djangoproject.com/en/1.10/topics/install/#database-installation).
 
 
-<p>
-<a target="_blank" href="https://docs.djangoproject.com/en/1.10/topics/install/#database-installation" > Django database support </a>
-</p>
 
 <hr/>
 
+<<<<<<< HEAD
 <h3 style="text-align: center;" > REST APIs </h3>
 <p> Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.</p>
 
@@ -119,16 +112,126 @@ directory. </p>
 <p> URL: http://127.0.0.1:8000/api/edit_question/(?P<pk>\d+)$ </p>
 <p> curl -i -X PUT -H "Authorization: JWT --token--"  http://127.0.0.1:8000/api/edit_question/2 </p>
 
+=======
+## REST APIs 
+Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.
+
+---
+#### POST 'api/entity'
+* Entity Registration. For priviliged users only.
+* URL: http://127.0.0.1:8000/api/entity 
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"name":"Hospital","street":"street","city":"city","state":"state","country":"country"}' http://127.0.0.1:8000/api/entity ``` 
+
+---
+#### POST 'api/doctor' 
+* Doctor Registration. For priviliged users only.
+* URL: http://127.0.0.1:8000/api/doctor 
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"john@gmail.com","username":"John10","password":"testPassword","entity":1}' http://127.0.0.1:8000/api/doctor ```
+
+---
+#### POST 'api/register'
+* Patient Registration.
+* URL: http://127.0.0.1:8000/api/register
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"john@gmail.com","username":"John10","password":"testPassword","diagnosis":"diagnosis","doctor":"John Smith","mobile":"555-5555","street":"street","city":"city","state":"state","country":"country","gender":"male","care_giver":"Mary Smith"}' http://127.0.0.1:8000/api/register ```
+
+---
+#### GET 'api/user'
+* Get information on authenticated user.
+* URL: http://127.0.0.1:8000/api/user 
+* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/user ```
+
+---
+#### POST 'api/auth' 
+* Get authentication token for a given user with username.
+* URL: http://127.0.0.1:8000/api/auth 
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John","password":"testPassword"}' http://127.0.0.1:8000/api/auth/ ```
+
+---
+#### POST 'api/login' 
+* Get authentication token for a given user with email or username. Can be used instead of 'api/auth'.
+* URL: http://127.0.0.1:8000/api/login 
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"email":"john@gmail.com","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
+``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John_21","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
+
+---
+####  POST 'api/token-refresh' 
+* Refresh authentication token for particular user.
+* URL: http://127.0.0.1:8000/api/token-refresh 
+* ``` curl -i -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/token-refresh ```
+
+---
+####  POST 'api/record' 
+* Create a new record with the score calculated from the front-end.
+* URL: http://127.0.0.1:8000/api/record 
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"score":15}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/record ```
+
+---
+####  PUT 'api/edit_record' 
+* Delete or update score of a particular record based on its pk (primary key).
+* URL: http://127.0.0.1:8000/api/edit_record/(?P<pk>\d+)$ 
+* ``` curl -i -X PUT -H "Content-Type: application/json" -d '{"score":15}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/edit_record/1  ```
+
+---
+####  POST 'api/answer'
+* Create one or multiple instances of model Answer. 
+* URL: http://127.0.0.1:8000/api/answer
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"answer":1,"text":"","question":2,"record":2}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/answer ```
+
+---
+####  PUT 'api/edit_answer' 
+* Update one instance of model Answer. 
+* URL: http://127.0.0.1:8000/api/edit_answer/(?P<record>\d+)/(?P<question>\d+)$ 
+* ``` curl -i -X PUT -H "Content-Type: application/json" -d '{"answer":1,"text":""}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/edit_answer/2/2 ```
+
+---
+####  POST 'api/symptom' 
+* Create one or multiple instances of model Symptom.
+* URL: http://127.0.0.1:8000/api/symptom 
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"symptom":"pain","answer":1,"record":2}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/symptom ```
+
+---
+####  POST 'api/edit_symptom' 
+* Update one instance of model Symptom.
+* URL: http://127.0.0.1:8000/api/edit_symptom/(?P<record>\d+)/(?P<symptom>\d+)$ 
+* ``` curl -i -X PUT -H "Content-Type: application/json" -d '{"symptom":"pain","answer":5}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/edit_symptom/2/pain ```
+
+---
+####  GET 'api/questions' 
+* Get questions from the database.
+* URL: http://127.0.0.1:8000/api/questions
+* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/questions ```
+
+---
+####  GET 'api/edit_question' 
+* Edit a particular question from the backend based on its pk.
+*  URL: http://127.0.0.1:8000/api/edit_question/(?P<pk>\d+)$ 
+* ```curl -i -X PUT -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/edit_question/2 ```
+
 
 <hr/>
 
-<h3 style="text-align: center;" > Project URLs </h3>
+### Notes API
+---
+####   GET 'api/notes'  
+* Get all patient notes. For privileged users only. 
+* URL: http://127.0.0.1:8000/api/notes 
+* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes ```
+>>>>>>> 0f727d27f9b4c618466ef642e50d23dfd1720178
 
-<h4> _________ '/home' _________</h4>
-<p> Project homepage. </p>
-<p> URL: http://127.0.0.1:8000/home </p>
+---
+####  GET 'api/notes/create'  
+* Create a new note. For privileged users only. 
+* URL: http://127.0.0.1:8000/api/notes/create </p>
+* ``` curl -i -X POST  -H "Content-Type: application/json" -d '{"text": "Some random notes" , "patient" : "Mike Bloomberg"}' -H "Authorization: JWT  __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes/create ```
+
+---
+### Project URLs 
+
+####  '/home' 
+* Project homepage.
+* URL: http://127.0.0.1:8000/home 
 
 
-<h4> _________ '/password-reset' _________</h4>
-<p> Password reset link. </p>
-<p> URL: http://127.0.0.1:8000/password-reset/ </p>
+####  '/password-reset' 
+* Password reset link.
+* URL: http://127.0.0.1:8000/password-reset/ 
