@@ -41,13 +41,6 @@ class Patient(models.Model):
     country = models.CharField(max_length=100)
 
 
-# Model to store notes on patients on the dashboard
-class Note(models.Model):
-    owner = models.ForeignKey(Doctor)
-    patient = models.ManyToManyField(Patient)
-    text_field = models.CharField(max_length=255)
-
-
 # Model to associate questions with answers
 class Question(models.Model):
     question = models.CharField(
@@ -85,4 +78,14 @@ class Symptom(models.Model):
     symptom = models.CharField(max_length=255)
     answer = models.IntegerField()
     record = models.ForeignKey(Record)
+
+
+#########################################################################
+# Models for priviliged user access
+# Model to store notes on patients on the dashboard
+class Notes(models.Model):
+    date = models.DateTimeField(auto_now=True)
+    #patient = models.ForeignKey(Patient);
+    patient = models.CharField(max_length=255)
+    text = models.CharField(max_length=255)
 

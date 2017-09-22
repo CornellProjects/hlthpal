@@ -122,6 +122,24 @@ directory. </p>
 
 <hr/>
 
+<h3 style="text-align: center;" > Notes API </h3>
+<h4 style="color: blue;> _________ GET 'api/notes' _________ </h4>
+<h5 style="color: blue;> For privileged users only. </h5>
+<p> Get all patient notes</p>
+<p> URL: http://127.0.0.1:8000/api/notes </p>
+<p> curl -i -X GET -H "Authorization: JWT --token--" http://127.0.0.1:8000/api/notes </p>
+
+
+<h4 style="color: blue;> _________ GET 'api/notes/create' _________ </h4>
+<h5 style="color: blue;> For privileged users only. </h5>
+<p> Create a new note</p>
+<p> URL: http://127.0.0.1:8000/api/notes/create </p>
+<p> ``` curl -i -X POST  -H "Content-Type: application/json" -d '{"text": "Some random notes" , "patient" : "Mike Bloomberg"}' -H "Authorization: JWT  --token--" http://127.0.0.1:8000/api/notes/create
+    ```
+</p>
+
+<hr/>
+
 <h3 style="text-align: center;" > Project URLs </h3>
 
 <h4> _________ '/home' _________</h4>
