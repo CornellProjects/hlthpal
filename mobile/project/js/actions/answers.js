@@ -17,7 +17,7 @@ export const ADD_SYMPTOM       = 'ADD_SYMPTOM';
 
 export const getQuestions = ({ token }) => {
       return (dispatch) => {
-          fetch('http://0.0.0.0:8000/api/questions', {
+          fetch(myUrl + '/api/questions', {
                 method: 'GET',
                 headers: {
                 'Accept': 'application/json',
