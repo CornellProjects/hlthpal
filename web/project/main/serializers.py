@@ -272,8 +272,8 @@ class QuestionGetSerializer(ModelSerializer):
 
 class AnswerListSerializer(ListSerializer):
     def create(self, validated_data):
-            additionals = [Answer(**item) for item in validated_data]
-            return Answer.objects.bulk_create(additionals)
+        additionals = [Answer(**item) for item in validated_data]
+        return Answer.objects.bulk_create(additionals)
 
 
 class AnswerSerializer(ModelSerializer):
