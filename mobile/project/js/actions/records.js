@@ -3,7 +3,6 @@ import { Actions } from 'react-native-router-flux';
 
 export const SELECT_RECORD       = 'SELECT_RECORD';
 export const SELECT_SYMPTOM      = 'SELECT_SYMPTOM';
-export const SET_RECORDS         = 'SET_RECORDS';
 export const SET_RECORD          = 'SET_RECORD';
 export const CREATE_RECORD       = 'CREATE_RECORD';
 
@@ -79,33 +78,6 @@ export const createRecord = ({ token, answersArray, mySymptoms, score }) => {
             }).then(response => {console.log('SYMPTOMS', response)});
         });
     }
-};
-
-export const displayRecords = ({ token }) => {
-      // Change IP address according to yours
-      // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
-      return (dispatch) => {
-          fetch(myUrl + '/api/record', {
-                method: 'GET',
-                headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'JWT '+token,
-                },
-                })
-                .then(response => {
-                     const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-                     const parsed = JSON.parse(str);
-                     setRecords(dispatch, parsed);
-                 });
-     };
-};
-
-const setRecords = (dispatch, records) => {
-    dispatch({
-        type: SET_RECORDS,
-        payload: records
-    });
 };
 
 export const selectRecord = (selectedRecord) => {
