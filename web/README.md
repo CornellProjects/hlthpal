@@ -25,92 +25,93 @@ Read more about different database options [here](https://docs.djangoproject.com
 ## REST APIs 
 Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.
 
-#### _________ POST 'api/entity' _________ 
+---
+#### POST 'api/entity'
 * Entity Registration. For priviliged users only.
 * URL: http://127.0.0.1:8000/api/entity 
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"name":"Hospital","street":"street","city":"city","state":"state","country":"country"}' http://127.0.0.1:8000/api/entity ``` 
 
-
-#### _________ POST 'api/doctor' _________ 
+---
+#### POST 'api/doctor' 
 * Doctor Registration. For priviliged users only.
 * URL: http://127.0.0.1:8000/api/doctor 
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"john@gmail.com","username":"John10","password":"testPassword","entity":1}' http://127.0.0.1:8000/api/doctor ```
 
-
-#### _________ POST 'api/register' _________
+---
+#### POST 'api/register'
 * Patient Registration.
 * URL: http://127.0.0.1:8000/api/register
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"john@gmail.com","username":"John10","password":"testPassword","diagnosis":"diagnosis","doctor":"John Smith","mobile":"555-5555","street":"street","city":"city","state":"state","country":"country","gender":"male","care_giver":"Mary Smith"}' http://127.0.0.1:8000/api/register ```
 
-
-#### _________ GET 'api/user' _________
+---
+#### GET 'api/user'
 * Get information on authenticated user.
 * URL: http://127.0.0.1:8000/api/user 
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/user ```
 
-
-#### _________ POST 'api/auth' _________
+---
+#### POST 'api/auth' 
 * Get authentication token for a given user with username.
 * URL: http://127.0.0.1:8000/api/auth 
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John","password":"testPassword"}' http://127.0.0.1:8000/api/auth/ ```
 
-
-#### _________ POST 'api/login' _________
+---
+#### POST 'api/login' 
 * Get authentication token for a given user with email or username. Can be used instead of 'api/auth'.
 * URL: http://127.0.0.1:8000/api/login 
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"email":"john@gmail.com","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
 ``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John_21","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
 
-
-#### _________ POST 'api/token-refresh' _________</h4>
+---
+####  POST 'api/token-refresh' 
 * Refresh authentication token for particular user.
 * URL: http://127.0.0.1:8000/api/token-refresh 
 * ``` curl -i -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/token-refresh ```
 
-
-#### _________ POST 'api/record' _________
+---
+####  POST 'api/record' 
 * Create a new record with the score calculated from the front-end.
 * URL: http://127.0.0.1:8000/api/record 
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"score":15}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/record ```
 
-
-#### _________ PUT 'api/edit_record' _________
+---
+####  PUT 'api/edit_record' 
 * Delete or update score of a particular record based on its pk (primary key).
 * URL: http://127.0.0.1:8000/api/edit_record/(?P<pk>\d+)$ 
 * ``` curl -i -X PUT -H "Content-Type: application/json" -d '{"score":15}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/edit_record/1  ```
 
-
-#### _________ POST 'api/answer' _________
+---
+####  POST 'api/answer'
 * Create one or multiple instances of model Answer. 
 * URL: http://127.0.0.1:8000/api/answer
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"answer":1,"text":"","question":2,"record":2}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/answer ```
 
-
-#### _________ PUT 'api/edit_answer' _________
+---
+####  PUT 'api/edit_answer' 
 * Update one instance of model Answer. 
 * URL: http://127.0.0.1:8000/api/edit_answer/(?P<record>\d+)/(?P<question>\d+)$ 
 * ``` curl -i -X PUT -H "Content-Type: application/json" -d '{"answer":1,"text":""}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/edit_answer/2/2 ```
 
-
-#### _________ POST 'api/symptom' _________
+---
+####  POST 'api/symptom' 
 * Create one or multiple instances of model Symptom.
 * URL: http://127.0.0.1:8000/api/symptom 
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"symptom":"pain","answer":1,"record":2}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/symptom ```
 
-
-#### _________ POST 'api/edit_symptom' _________
+---
+####  POST 'api/edit_symptom' 
 * Update one instance of model Symptom.
 * URL: http://127.0.0.1:8000/api/edit_symptom/(?P<record>\d+)/(?P<symptom>\d+)$ 
 * ``` curl -i -X PUT -H "Content-Type: application/json" -d '{"symptom":"pain","answer":5}' -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/edit_symptom/2/pain ```
 
-
-#### _________ GET 'api/questions' _________
+---
+####  GET 'api/questions' 
 * Get questions from the database.
 * URL: http://127.0.0.1:8000/api/questions
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/questions ```
 
-
-#### _________ GET 'api/edit_question' _________
+---
+####  GET 'api/edit_question' 
 * Edit a particular question from the backend based on its pk.
 *  URL: http://127.0.0.1:8000/api/edit_question/(?P<pk>\d+)$ 
 * ```curl -i -X PUT -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/edit_question/2 ```
@@ -118,28 +119,29 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 
 <hr/>
 
-### Notes API 
-####  _________ GET 'api/notes' _________ 
+### Notes API
+---
+####   GET 'api/notes'  
 * Get all patient notes. For privileged users only. 
 * URL: http://127.0.0.1:8000/api/notes 
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes ```
 
-
-#### _________ GET 'api/notes/create' _________ 
+---
+####  GET 'api/notes/create'  
 * Create a new note. For privileged users only. 
 * URL: http://127.0.0.1:8000/api/notes/create </p>
-* ``` curl -i -X POST  -H "Content-Type: application/json" -d '{"text": "Some random notes" , "patient" : "Mike Bloomberg"}' -H "Authorization: JWT  __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes/create
-```
+* ``` curl -i -X POST  -H "Content-Type: application/json" -d '{"text": "Some random notes" , "patient" : "Mike Bloomberg"}' -H "Authorization: JWT  __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes/create ```
 
-<hr/>
 
+
+---
 ### Project URLs 
 
-#### _________ '/home' _________
-Project homepage.
-URL: http://127.0.0.1:8000/home 
+####  '/home' 
+* Project homepage.
+* URL: http://127.0.0.1:8000/home 
 
 
-#### _________ '/password-reset' _________
-Password reset link.
-URL: http://127.0.0.1:8000/password-reset/ 
+####  '/password-reset' 
+* Password reset link.
+* URL: http://127.0.0.1:8000/password-reset/ 
