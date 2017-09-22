@@ -132,8 +132,6 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * URL: http://127.0.0.1:8000/api/notes/create </p>
 * ``` curl -i -X POST  -H "Content-Type: application/json" -d '{"text": "Some random notes" , "patient" : "Mike Bloomberg"}' -H "Authorization: JWT  __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes/create ```
 
-
-
 ---
 ### Project URLs 
 
