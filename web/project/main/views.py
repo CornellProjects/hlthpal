@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.template import loader
 from django.contrib.auth import get_user_model
@@ -8,7 +9,7 @@ from rest_framework.authentication import TokenAuthentication
 from django.core.urlresolvers import reverse_lazy
 
 # Custom models
-from .models import Record, Answer, Entity, Question, Symptom
+from .models import Record, Answer, Entity, Question, Symptom, Notes
 
 # Serializers import
 from .serializers import (
@@ -21,7 +22,8 @@ from .serializers import (
     EntityCreateSerializer,
     QuestionGetSerializer,
     SymptomSerializer,
-    QuestionSerializer)
+    QuestionSerializer,
+    NotesGetSerializer)
 
 # rest_framework imports
 from rest_framework import status
@@ -55,7 +57,7 @@ def index(request):
 
 
 ######################################################################################
-# Class based views
+# Class based user views
 
 User = get_user_model()
 
@@ -63,20 +65,6 @@ User = get_user_model()
 class UserCreateView(CreateAPIView):
     '''API to create a new user '''
     serializer_class = UserCreateSerializer
-    permission_classes = [AllowAny]
-    queryset = User.objects.all()
-
-
-class EntityCreateView(CreateAPIView):
-    '''API to create a new Entity '''
-    serializer_class = EntityCreateSerializer
-    permission_classes = [AllowAny]
-    queryset = Entity.objects.all()
-
-
-class DoctorCreateView(CreateAPIView):
-    '''API to create a new doctor user '''
-    serializer_class = DoctorCreateSerializer
     permission_classes = [AllowAny]
     queryset = User.objects.all()
 
@@ -180,7 +168,6 @@ class MultipleFieldLookupMixin(object):
     Apply this mixin to any view or viewset to get multiple field filtering
     based on a `lookup_fields` attribute, instead of the default single field filtering.
     """
-
     def get_object(self):
         queryset = self.get_queryset()             # Get the base queryset
         queryset = self.filter_queryset(queryset)  # Apply any filter backends
@@ -226,4 +213,40 @@ class CurrentUserView(APIView):
 
     def get(self, request):
         serializer = UserCreateSerializer(self.request.user)
+        return Response(serializer.data)
+
+
+######################################################################################
+# Class based privileged user views
+
+class EntityCreateView(CreateAPIView):
+    '''API to create a new Entity '''
+    serializer_class = EntityCreateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Entity.objects.all()
+
+
+class DoctorCreateView(CreateAPIView):
+    '''API to create a new doctor user '''
+    serializer_class = DoctorCreateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.all()
+
+
+class NotesCreateView(CreateAPIView):
+    '''API to add notes for a patient '''
+    serializer_class = NotesGetSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.all()
+
+
+class NotesGetAPIView(ListAPIView):
+    '''API to get notes for all users'''
+    serializer_class = NotesGetSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Notes.objects.all()
+
+    def get(self, request, format=None):
+        notes = Notes.objects.all()
+        serializer = NotesGetSerializer(notes, many=True)
         return Response(serializer.data)
