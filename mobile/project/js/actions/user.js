@@ -30,7 +30,7 @@ export const loginUser = ({ email, password }) => {
     return (dispatch) => {
         dispatch({ type: LOGIN_USER });
 
-        fetch('http://0.0.0.0:8000/api/login', {
+        fetch(myUrl + '/api/login', {
                    method: 'POST',
                    headers: {
                    'Accept': 'application/json',
@@ -46,6 +46,19 @@ export const loginUser = ({ email, password }) => {
                         if (user.status === 200) {
                             const str = JSON.stringify(eval('(' + user._bodyInit + ')'));
                             loginUserSuccess(dispatch, JSON.parse(str).token);
+                            fetch(myUrl + '/api/user', {
+                                   method: 'GET',
+                                   headers: {
+                                   'Accept': 'application/json',
+                                   'Content-Type': 'application/json',
+                                   'Authorization': 'JWT '+JSON.parse(str).token,
+                                   },
+                                   })
+                                   .then(response => {
+                                        const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
+                                        console.log(str);
+                                        getCurrentUser(dispatch, JSON.parse(str).first_name);
+                                    });
                         }
                         loginUserFail(dispatch);
                     });
@@ -66,29 +79,10 @@ const loginUserSuccess = (dispatch, user) => {
     Actions.home();
 };
 
-export const getUser = ({ token }) => {
-    return (dispatch) => {
-        dispatch({ type: CURRENT_USER });
-
-        fetch('http://0.0.0.0:8000/api/user', {
-                   method: 'GET',
-                   headers: {
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json',
-                   'Authorization': 'JWT '+token,
-                   },
-                   })
-                   .then(response => {
-                        const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-                        getCurrentUser(dispatch, JSON.parse(str).first_name);
-                    });
-    };
-};
-
-const getCurrentUser = (dispatch, first_name) => {
+const getCurrentUser = (dispatch, firstName) => {
     dispatch({
         type: CURRENT_USER,
-        payload: first_name
+        payload: firstName
     });
 };
 
@@ -96,50 +90,5 @@ export const connectionState = ({ status }) => {
     return {
         type: CHANGE_CONNECTION_STATUS,
         isConnected: status
-    };
-};
-
-export const createAnswer = ({ token, rating, question, record }) => {
-    return (dispatch) => {
-        dispatch({ type: SET_QUESTION });
-
-        fetch('http://0.0.0.0:8000/api/questions', {
-                   method: 'GET',
-                   headers: {
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json',
-                   'Authorization': 'JWT '+token,
-                   },
-                   })
-                   .then(response => {
-                        const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-                        const obj = JSON.parse(str);
-                        const arr = [];
-                        for (var i in obj) {
-                            arr.push(obj[i].id);
-                        }
-                        getQuestions(dispatch, arr);
-                        fetch('http://0.0.0.0:8000/api/answer', {
-                                 method: 'POST',
-                                 headers: {
-                                 'Accept': 'application/json',
-                                 'Content-Type': 'application/json',
-                                 'Authorization': 'JWT '+token,
-                                 },
-
-                                 body: JSON.stringify({
-                                 answer: rating,
-                                 question: arr[question],
-                                 record: record
-                                 })
-                                 })
-                                 .then((response) => {
-                                    console.log(response);
-
-                                    if (response.status === 201) {
-                                        dispatch({ type: ANSWER_CREATE });
-                                    }
-                                 });
-                    });
     };
 };
