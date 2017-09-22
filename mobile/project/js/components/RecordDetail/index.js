@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import { Button } from 'native-base';
 import { connect } from 'react-redux';
 import { selectRecord } from '../../actions/records';
+import { Actions } from 'react-native-router-flux';
 
 class RecordDetail extends Component {
     static propTypes = {
@@ -10,14 +11,25 @@ class RecordDetail extends Component {
         selectRecord: React.PropTypes.func,
     }
 
+    getDate(str) {
+        let myDate = new Date(str);
+        let onlyDate = myDate.toLocaleDateString();
+        return onlyDate;
+    }
+
+    // IN-PROGRESS
+    goToEditView(id) {
+        this.props.selectRecord(id);
+    }
+
     render() {
         const { id, date } = this.props.element;
-
+        console.log(this.props.selectedRecord);
         return (
             <Button full bordered
-                onPress={() => this.props.selectRecord(id)}
+                onPress={() => this.goToEditView(id)}
             >
-                <Text>{date}</Text>
+                <Text>{this.getDate(date)}</Text>
             </Button>
         );
     }

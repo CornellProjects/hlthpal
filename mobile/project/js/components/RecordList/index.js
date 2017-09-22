@@ -5,25 +5,27 @@ import { Container, Card, Header, Title, Content, Text, Button, Icon, Left, Body
 import { Grid, Row } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
-import TextField from '../TextField'
-import { SegmentedControls } from 'react-native-radio-buttons';
+import TextField from '../TextField';
 import styles from './styles';
 import { ListView } from 'react-native';
 import RecordDetail from '../RecordDetail';
-import { displayRecords } from '../../actions/records';
 
 class RecordList extends Component {
     componentWillMount() {
-        const ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2
-        });
-
-        this.dataSource = ds.cloneWithRows(this.props.my_records);
+        this.createDataSource(this.props);
     }
 
     // render a single element for the list
     renderRow(element) {
         return <RecordDetail element={element} />;
+    }
+
+    createDataSource({ my_records }) {
+        const ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+        });
+
+        this.dataSource = ds.cloneWithRows(my_records);
     }
 
     render() {
@@ -48,6 +50,7 @@ class RecordList extends Component {
 
                 <Content>
                     <ListView
+                        enableEmptySections
                         dataSource={this.dataSource}
                         renderRow={this.renderRow}
                     />
@@ -60,7 +63,6 @@ class RecordList extends Component {
 function bindAction(dispatch) {
   return {
     openDrawer: () => dispatch(openDrawer()),
-    displayRecords: token => dispatch(displayRecords(token)),
   };
 }
 

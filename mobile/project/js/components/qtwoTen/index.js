@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { answerChanged, setQuestion, createAnswer } from '../../actions/user';
+import { setQuestion, createAnswerObject, setAnswer, answerChanged } from '../../actions/answers';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
@@ -19,9 +19,9 @@ class QtwoTen extends Component {
       setIndex: React.PropTypes.func,
       list: React.PropTypes.arrayOf(React.PropTypes.string),
       openDrawer: React.PropTypes.func,
-      createAnswer: React.PropTypes.func,
       answerChanged: React.PropTypes.func,
       setQuestion: React.PropTypes.func,
+      createAnswerObject: React.PropTypes.func,
   }
 
   newPage(index) {
@@ -30,17 +30,27 @@ class QtwoTen extends Component {
   }
 
   componentWillMount() {
-      this.props.setQuestion(10);
+      this.props.setQuestion(11);
   }
 
   componentDidMount() {
-      const { rating, token, question, record, back } = this.props;
+    const { question, record, rating, answersArray } = this.props;
+  }
+
+  onBackPress() {
+    const { answersArray } = this.props;
+    answersArray.pop();
+    Actions.qtwoNine();
   }
 
   onButtonPress() {
-      const { rating, token, question, record, back } = this.props;
-      this.props.createAnswer({ rating, token, question, record });
-      Actions.otherSymptoms();
+    const { question, record, rating, answersArray } = this.props;
+
+    let text = '';
+
+    answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
+
+    Actions.otherSymptoms();
   }
 
   render() {
@@ -93,7 +103,7 @@ class QtwoTen extends Component {
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button transparent onPress={() => Actions.qtwoNine()} style={styles.center}>
+              <Button transparent onPress={() => this.onBackPress()} style={styles.center}>
                   <Icon name='arrow-back' />
               </Button>
             </Col>
@@ -116,17 +126,17 @@ function bindAction(dispatch) {
     openDrawer: () => dispatch(openDrawer()),
     answerChanged: rating => dispatch(answerChanged(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
-    createAnswer: token => dispatch(createAnswer(token)),
+    setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
   };
 }
 
 const mapStateToProps = state => ({
   name: state.user.name,
   list: state.list.list,
-  rating: state.user.rating,
-  question: state.user.question,
-  record: state.user.record,
-  token: state.user.token,
+  question: state.answers.question,
+  record: state.records.record,
+  rating: state.answers.rating,
+  answersArray: state.records.answersArray,
 });
 
 export default connect(mapStateToProps, bindAction)(QtwoTen);
