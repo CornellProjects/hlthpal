@@ -20,16 +20,16 @@ class RecordList extends Component {
         return <RecordDetail element={element} />;
     }
 
-    createDataSource({ my_records }) {
+    createDataSource({ myRecords }) {
         const ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2
         });
 
-        this.dataSource = ds.cloneWithRows(my_records);
+        this.dataSource = ds.cloneWithRows(myRecords);
     }
 
     render() {
-        console.log(this.props.my_records);
+        console.log(this.props.myRecords);
         return (
             <Container style={styles.container}>
                 <Header style={{backgroundColor:'#F16C00'}}>
@@ -67,7 +67,7 @@ function bindAction(dispatch) {
 }
 
 const mapStateToProps = state => ({
-  my_records: state.records.my_records,
+  myRecords: state.user.myRecords,
   token: state.user.token,
 });
 
