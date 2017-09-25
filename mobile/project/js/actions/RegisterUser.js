@@ -14,24 +14,23 @@ export const setUser = ({ prop, value }) => {
 
 export const registerUser = ({
         email,
-        username,
         password,
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         mobile,
         diagnosis,
         doctor,
         selectedOption,
-        care_giver,
+        caregiver,
         street,
         city,
-        my_state,
+        myState,
         country
     }) => {
           // Change IP address according to yours
           // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
           return (dispatch) => {
-              fetch('http://0.0.0.0:8000/api/register', {
+              fetch(myUrl + '/api/register', {
                      method: 'POST',
                      headers: {
                      'Accept': 'application/json',
@@ -39,20 +38,20 @@ export const registerUser = ({
                      },
 
                      body: JSON.stringify({
-                     first_name: first_name,
-                     last_name: last_name,
-                     username: last_name,
+                     first_name: firstName,
+                     last_name: lastName,
+                     username: email,
                      email: email,
                      password: password,
                      patient: {
                          doctor: doctor,
-                         care_giver: care_giver,
+                         care_giver: caregiver,
                          diagnosis: diagnosis,
                          gender: selectedOption,
                          mobile: mobile,
                          street: street,
                          city: city,
-                         state: my_state,
+                         state: myState,
                          country: country,
                      }
                      })

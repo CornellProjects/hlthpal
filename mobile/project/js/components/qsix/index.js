@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { answerModified, setQuestion, createAnswer } from '../../actions/user';
+import { setQuestion, createAnswerObject, setAnswer, answerModified } from '../../actions/answers';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
@@ -19,22 +19,31 @@ class Qsix extends Component {
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
-    createAnswer: React.PropTypes.func,
     answerModified: React.PropTypes.func,
     setQuestion: React.PropTypes.func,
   }
 
   componentWillMount() {
-    this.props.setQuestion(14);
+    this.props.setQuestion(15);
   }
 
   componentDidMount() {
-    const { token } = this.props;
+    const { question, record, rating, answersArray } = this.props;
+  }
+
+  onBackPress() {
+    const { answersArray } = this.props;
+    answersArray.pop();
+    Actions.qfive();
   }
 
   onButtonPress() {
-    const { rating, token, question, record, back } = this.props;
-    this.props.createAnswer({ rating, token, question, record });
+    const { question, record, rating, answersArray } = this.props;
+
+    let text = '';
+
+    answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
+
     Actions.qseven();
   }
 
@@ -93,7 +102,7 @@ class Qsix extends Component {
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button transparent onPress={() => Actions.qfive()} style={styles.center}>
+              <Button transparent onPress={() => this.onBackPress} style={styles.center}>
                   <Icon name='arrow-back' />
               </Button>
             </Col>
@@ -116,17 +125,17 @@ function bindAction(dispatch) {
     openDrawer: () => dispatch(openDrawer()),
     answerModified: rating => dispatch(answerModified(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
-    createAnswer: token => dispatch(createAnswer(token)),
+    setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
   };
 }
 
 const mapStateToProps = state => ({
   name: state.user.name,
   list: state.list.list,
-  rating: state.user.rating,
-  question: state.user.question,
-  record: state.user.record,
-  token: state.user.token,
+  question: state.answers.question,
+  record: state.records.record,
+  rating: state.answers.rating,
+  answersArray: state.records.answersArray,
 });
 
 export default connect(mapStateToProps, bindAction)(Qsix);

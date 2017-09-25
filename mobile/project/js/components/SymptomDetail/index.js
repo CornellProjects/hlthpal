@@ -2,34 +2,28 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { Button } from 'native-base';
 import { connect } from 'react-redux';
-import { selectRecord } from '../../actions/records';
+import { selectSymptom } from '../../actions/records';
 import { Actions } from 'react-native-router-flux';
 
 class RecordDetail extends Component {
     static propTypes = {
         openDrawer: React.PropTypes.func,
-        selectRecord: React.PropTypes.func,
-    }
-
-    getDate(str) {
-        let myDate = new Date(str);
-        let onlyDate = myDate.toLocaleDateString();
-        return onlyDate;
+        selectSymptom: React.PropTypes.func,
     }
 
     // IN-PROGRESS
-    goToEditView(id) {
-        this.props.selectRecord(id);
+    goToEditView(symptom) {
+        this.props.selectSymptom(symptom);
     }
 
     render() {
-        const { id, date } = this.props.element;
-        console.log(this.props.selectedRecord);
+        const { symptom } = this.props.element;
+
         return (
             <Button full bordered
-                onPress={() => this.goToEditView(id)}
+                onPress={() => this.goToEditView(symptom)}
             >
-                <Text>{this.getDate(date)}</Text>
+                <Text>{symptom}</Text>
             </Button>
         );
     }
@@ -38,12 +32,12 @@ class RecordDetail extends Component {
 function bindAction(dispatch) {
   return {
     openDrawer: () => dispatch(openDrawer()),
-    selectRecord: id => dispatch(selectRecord(id))
+    selectSymptom: symptom => dispatch(selectSymptom(symptom))
   };
 }
 
 const mapStateToProps = state => ({
-  selectedRecord: state.records.selectedRecord,
+  selectedSymptom: state.records.selectedSymptom,
 });
 
 export default connect(mapStateToProps, bindAction)(RecordDetail);

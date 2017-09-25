@@ -6,11 +6,13 @@ import {
     LOGIN_USER_FAIL,
     LOGIN_USER,
     CURRENT_USER,
+    SET_RECORDS,
     CHANGE_CONNECTION_STATUS
 } from '../actions/user';
 
 export type State = {
-    first_name: string,
+    myRecords: string,
+    userName: string,
     email: string,
     password: string,
     user: string,
@@ -21,8 +23,9 @@ export type State = {
 }
 
 const initialState = {
+    myRecords: [],
     email: '',
-    first_name: '',
+    userName: '',
     password: '',
     user: null,
     error: '',
@@ -43,9 +46,11 @@ export default function (state:State = initialState, action:Action): State {
       case LOGIN_USER_SUCCESS:
           return { ...state, error: '', token: action.payload, loading: false };
       case CURRENT_USER:
-          return { ...state, first_name: action.payload };
+          return { ...state, userName: action.payload };
       case LOGIN_USER_FAIL:
           return { ...state, error: 'Authentication Failed.', password: '', loading: false };
+      case SET_RECORDS:
+          return { ...state, myRecords: action.payload };
       case CHANGE_CONNECTION_STATUS:
           return Object.assign({}, state, { isConnected: action.isConnected });
       default:

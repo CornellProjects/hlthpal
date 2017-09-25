@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { createRecord, textChanged, updateAnswer, setQuestion } from '../../actions/user';
+import { textChanged, setQuestion, setAnswer, createAnswerObject } from '../../actions/answers';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import TextField from '../TextField'
@@ -24,13 +24,36 @@ class Qone extends Component {
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
     textChanged: React.PropTypes.func,
-    createRecord: React.PropTypes.func,
-    updateAnswer: React.PropTypes.func,
     setQuestion: React.PropTypes.func,
+    createAnswerObject: React.PropTypes.func,
   }
 
   componentWillMount() {
-    this.props.setQuestion(0);
+    this.props.setQuestion(1);
+  }
+
+  componentDidMount() {
+    const { question, record, answersArray } = this.props;
+  }
+
+  onBackPress() {
+    const { answersArray } = this.props;
+
+    if (answersArray.length != 0) {
+        answersArray.pop();
+    }
+
+    Actions.home();
+  }
+
+  onButtonPress() {
+    const { question, token, record, textInput, answersArray } = this.props;
+
+    let zero = 0;
+
+    answersArray.push(this.props.setAnswer({ record, question, textInput, zero }).payload);
+
+    Actions.qtwo();
   }
 
   newPage(index) {
@@ -38,12 +61,8 @@ class Qone extends Component {
     Actions.blankPage();
   }
 
-  onButtonPress() {
-    const { rating, token, question, record, text_input } = this.props;
-    this.props.createRecord({ token, text_input });
-  }
-
   render() {
+    console.log(this.props.answersArray);
     return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -72,13 +91,13 @@ class Qone extends Component {
           </Text>
           <Item underline style={styles.input}>
               <TextField placeholder="Enter Text Here..."
-                  value={this.props.text_input}
+                  value={this.props.textInput}
                   onChangeText={this.onTextInputChange.bind(this)} />
           </Item>
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button bordered rounded style={styles.center} onPress={() => Actions.home()}>
+              <Button bordered rounded style={styles.center} onPress={() => this.onBackPress()}>
                   <Text>Cancel</Text>
               </Button>
             </Col>
@@ -99,21 +118,21 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
-    createRecord: token => dispatch(createRecord(token)),
-    deleteRecord: token => dispatch(deleteRecord(token)),
     textChanged: text => dispatch(textChanged(text)),
-    updateAnswer: token => dispatch(updateAnswer(token)),
     setQuestion: question => dispatch(setQuestion(question)),
+    setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
   };
 }
 
 const mapStateToProps = state => ({
   name: state.user.name,
+  email: state.user.email,
   list: state.list.list,
   token: state.user.token,
-  record: state.user.record,
-  question: state.user.question,
-  text_input: state.user.text_input,
+  question: state.answers.question,
+  record: state.records.record,
+  textInput: state.answers.textInput,
+  answersArray: state.records.answersArray,
 });
 
 export default connect(mapStateToProps, bindAction)(Qone);

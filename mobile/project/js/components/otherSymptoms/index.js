@@ -7,6 +7,7 @@ import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body
 import { Grid, Row } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
+import SymptomList from '../SymptomList';
 import styles from './styles';
 
 
@@ -51,8 +52,7 @@ class otherSymptoms extends Component {
              they have affected you over the past week.
             </Text>
 
-            <Card style={styles.card}>
-            </Card>
+            <SymptomList />
 
             <Grid style={styles.buttons}>
                 <Row>

@@ -1,36 +1,37 @@
 import type { Action } from '../actions/types';
 import {
     SELECT_RECORD,
-    SET_RECORDS,
-    CALCULATE_SCORE,
+    SELECT_SYMPTOM,
     CREATE_RECORD,
     SET_RECORD
 } from '../actions/records';
 
 export type State = {
-    my_records: string,
-    answers_array: string,
+    mySymptoms: string,
+    answersArray: string,
     selectedRecord: string,
+    selectedSymptom: string,
     record: string,
     score: number
 }
 
 const initialState = {
-    my_records: [],
-    answers_array: [],
+    mySymptoms: [],
+    answersArray: [],
     selectedRecord: '',
+    selectedSymptom: '',
     record: '',
     score: 0
 };
  
 export default function (state:State = initialState, action:Action): State {
     switch(action.type) {
-        case CALCULATE_SCORE:
-          return { score: action.payload  };
-        case SET_RECORDS:
-          return { ...state, my_records: action.payload  };
+        case SET_RECORD:
+          return { ...state, record: action.payload  };
         case SELECT_RECORD:
           return { selectedRecord: action.payload  };
+        case SELECT_SYMPTOM:
+          return { selectedSymptom: action.payload  };
         default:
             return state;
     }

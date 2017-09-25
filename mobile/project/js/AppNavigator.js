@@ -209,12 +209,6 @@ function bindAction(dispatch) {
 const mapStateToProps = state => ({
   drawerState: state.drawer.drawerState,
   navigation: state.cardNavigation,
-  first_name: state.user.first_name,
-  rating: state.user.rating,
-  question: state.user.question,
-  token: state.user.token,
-  my_records: state.records.my_records,
-  selectedRecord: state.records.selectedRecord,
 });
 
 export default connect(mapStateToProps, bindAction)(AppNavigator);

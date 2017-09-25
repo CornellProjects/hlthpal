@@ -24,34 +24,32 @@ class FillInfo extends Component {
   onButtonPress() {
       const {
         email,
-        username,
         password,
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         mobile,
         diagnosis,
         doctor,
         selectedOption,
-        care_giver,
+        caregiver,
         street,
         city,
-        my_state,
+        myState,
         country
       } = this.props;
 
       this.props.registerUser({
           email,
-          username,
           password,
-          first_name,
-          last_name,
+          firstName,
+          lastName,
           mobile,
           diagnosis,
           doctor,
-          care_giver,
+          caregiver,
           street,
           city,
-          my_state,
+          myState,
           country,
           selectedOption: selectedOption || 'Male'
       });
@@ -75,9 +73,9 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='First Name'
-                        value={this.props.first_name}
+                        value={this.props.firstName}
                         onChangeText={value => this.props.setUser({
-                            prop: 'first_name', value
+                            prop: 'firstName', value
                         })}
                     />
                 </Item>
@@ -86,9 +84,9 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='Last Name'
-                        value={this.props.last_name}
+                        value={this.props.lastName}
                         onChangeText={value => this.props.setUser({
-                            prop: 'last_name', value
+                            prop: 'lastName', value
                         })}
                     />
                 </Item>
@@ -119,9 +117,9 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='State'
-                        value={this.props.my_state}
+                        value={this.props.myState}
                         onChangeText={value => this.props.setUser({
-                            prop: 'my_state', value
+                            prop: 'myState', value
                         })}
                     />
                 </Item>
@@ -147,17 +145,6 @@ class FillInfo extends Component {
                         selectedOption={ this.props.selectedOption }
                     />
                 </Item>
-
-                  <Item regular style={styles.list}>
-                    <TextField
-                        style={styles.input}
-                        placeholder='Username'
-                        value={this.props.username}
-                        onChangeText={value => this.props.setUser({
-                            prop: 'username', value
-                        })}
-                    />
-                  </Item>
 
                   <Item regular style={styles.list}>
                     <TextField
@@ -208,9 +195,9 @@ class FillInfo extends Component {
                     <TextField
                         style={styles.input}
                         placeholder='My Care Giver'
-                        value={this.props.care_giver}
+                        value={this.props.caregiver}
                         onChangeText={value => this.props.setUser({
-                            prop: 'care_giver', value
+                            prop: 'caregiver', value
                         })}
                     />
                   </Item>
@@ -250,35 +237,33 @@ class FillInfo extends Component {
 const mapStateToProps = (state) => {
     const {
         email,
-        username,
         password,
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         mobile,
         diagnosis,
         doctor,
         selectedOption,
-        care_giver,
+        caregiver,
         street,
         city,
-        my_state,
+        myState,
         country
     } = state.registerUser;
 
     return {
         email,
-        username,
         password,
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         mobile,
         diagnosis,
         doctor,
         selectedOption,
-        care_giver,
+        caregiver,
         street,
         city,
-        my_state,
+        myState,
         country
     };
 };
