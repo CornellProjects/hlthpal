@@ -18,9 +18,7 @@ If you plan to connect your application to a Relational database liek MySql or P
 
 Read more about different database options [here](https://docs.djangoproject.com/en/1.10/topics/install/#database-installation).
 
-<hr/>
-
-=======
+---
 ## REST APIs 
 Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.
 
@@ -28,7 +26,8 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 #### POST 'api/entity'
 * Entity Registration. For priviliged users only.
 * URL: http://127.0.0.1:8000/api/entity 
-* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"name":"Hospital","street":"street","city":"city","state":"state","country":"country"}' http://127.0.0.1:8000/api/entity ``` 
+* ``` curl -i -X POST -H "Authorization: JWT __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"name":"Hospital","street":"street","city":"city","state":"state","country":"country"}' http://127.0.0.1:8000/api/entity 
+ ``` 
 
 ---
 #### POST 'api/doctor' 
