@@ -49,5 +49,7 @@ Debug build command for development: ``` react-native run-android ```
 
 
 
+### Preparing for release
+You can read more about preparing the android app for for release [here](https://developer.android.com/studio/publish/preparing.html)
 
-
+Lear more about Android app distribution options [here](https://developer.android.com/distribute/marketing-tools/alternative-distribution.html)

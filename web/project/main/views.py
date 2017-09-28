@@ -1,3 +1,5 @@
+import os
+import datetime
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
@@ -5,8 +7,9 @@ from django.template import loader
 from django.contrib.auth import get_user_model
 from django.views.generic import UpdateView
 from rest_framework.authentication import TokenAuthentication
-
+from django.utils.encoding import smart_str
 from django.core.urlresolvers import reverse_lazy
+from wsgiref.util import FileWrapper
 
 # Custom models
 from .models import Record, Answer, Entity, Question, Symptom, Notes
@@ -48,6 +51,12 @@ from rest_framework.permissions import (
 from .permissions import IsOwner
 
 ######################################################################################
+# Build paths
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DOWNLOADS_DIR = BASE_DIR + '/downloads/'
+RELEASE_APK =  'app-release.apk'
+
+######################################################################################
 # Method based views
 # endpoint for '/home'
 def index(request):
@@ -55,6 +64,18 @@ def index(request):
     template = loader.get_template('index.html')
     return HttpResponse(template.render())
 
+
+# Method based views
+# endpoint for '/home'
+def download_android(request):
+    file_name = DOWNLOADS_DIR + RELEASE_APK;
+    #file_size = os.stat(file).st_size
+    file_size = os.path.getsize(file_name)
+    wrapper = FileWrapper(file(file_name))
+    response = HttpResponse(wrapper, content_type='application/vnd.android.package-archive')
+    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(RELEASE_APK)
+    response['Content-Length'] = file_size
+    return response
 
 ######################################################################################
 # Class based user views
