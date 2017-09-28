@@ -37,7 +37,17 @@
 <p>  5. Double tap R to reload
 <hr/>
 
-<h3>Build commands</h3>
+
+### Build commands
+
+
+#### Android debug build
+Debug build command for development: ``` react-native run-android ```
+
+
+#### Android release build
+
+
 
 
 
