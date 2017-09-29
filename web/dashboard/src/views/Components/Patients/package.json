@@ -1,0 +1,6 @@
+{
+  "name": "Patients",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Patients.js"
+}
