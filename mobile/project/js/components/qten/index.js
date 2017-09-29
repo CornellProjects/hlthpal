@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { whoAnswered, setQuestion, createAnswer } from '../../actions/user';
+import { setQuestion, createAnswerObject, setAnswer, whoAnswered } from '../../actions/answers';
+import { createRecord } from '../../actions/records';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
@@ -19,22 +20,33 @@ class Qten extends Component {
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
-    createAnswer: React.PropTypes.func,
     whoAnswered: React.PropTypes.func,
+    createRecord: React.PropTypes.func,
     setQuestion: React.PropTypes.func,
   }
 
   componentWillMount() {
-    this.props.setQuestion(18);
+    this.props.setQuestion(19);
   }
 
   componentDidMount() {
-    const { token } = this.props;
+    const { question, record, rating, answersArray } = this.props;
+  }
+
+  onBackPress() {
+    const { answersArray } = this.props;
+    answersArray.pop();
+    Actions.qnine();
   }
 
   onButtonPress() {
-    const { rating, token, question, record, back } = this.props;
-    this.props.createAnswer({ rating, token, question, record });
+    const { token, question, record, rating, mySymptoms, answersArray, score } = this.props;
+
+    let text = '';
+
+    answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
+
+    this.props.createRecord({ token, answersArray, mySymptoms, score });
     Actions.home();
   }
 
@@ -91,7 +103,7 @@ class Qten extends Component {
 
           <Grid style={styles.buttons}>
             <Col>
-              <Button rounded bordered onPress={() => Actions.qnine()} style={styles.center}>
+              <Button rounded bordered onPress={() => this.onBackPress()} style={styles.center}>
                   <Text>Back</Text>
               </Button>
             </Col>
@@ -114,17 +126,21 @@ function bindAction(dispatch) {
     openDrawer: () => dispatch(openDrawer()),
     whoAnswered: rating => dispatch(whoAnswered(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
-    createAnswer: token => dispatch(createAnswer(token)),
+    createRecord: token => dispatch(createRecord(token)),
+    setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
   };
 }
 
 const mapStateToProps = state => ({
   name: state.user.name,
   list: state.list.list,
-  rating: state.user.rating,
-  question: state.user.question,
-  record: state.user.record,
   token: state.user.token,
+  question: state.answers.question,
+  record: state.records.record,
+  rating: state.answers.rating,
+  score: state.records.score,
+  answersArray: state.records.answersArray,
+  mySymptoms: state.records.mySymptoms,
 });
 
 export default connect(mapStateToProps, bindAction)(Qten);

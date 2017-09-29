@@ -19,7 +19,10 @@ from django.contrib.auth import views as auth_views
 from main import views
 
 urlpatterns = [
+    url(r'^admin', admin.site.urls),
     url(r'^admin/', admin.site.urls),
+    # Dashboard url
+    url(r'^dashboard', admin.site.urls),
     # Password reset
     url(r'^password-reset/$', auth_views.password_reset, name='password_reset'),
     url(r'^password-reset/done/$', auth_views.password_reset_done, name='password_reset_done'),

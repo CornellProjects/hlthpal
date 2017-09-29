@@ -9,7 +9,7 @@ from django.db.models import Q
 
 
 # Custom models
-from .models import Patient, Doctor, Question, Answer, Record, Entity, Symptom
+from .models import Patient, Doctor, Question, Answer, Record, Entity, Symptom, Notes
 
 ######################################################################################
 # Serializers for user object
@@ -313,3 +313,16 @@ class RecordSerializer(ModelSerializer):
             'date',
             'score'
         ]
+
+
+# Priviliged user serializer classes
+# User profile serializer
+class NotesGetSerializer(ModelSerializer):
+    class Meta:
+        model = Notes
+        fields = [
+            'date',
+            'patient',
+            'text'
+        ]
+

@@ -1,58 +1,27 @@
 import type { Action } from './types';
 import { Actions } from 'react-native-router-flux';
 
-export const SELECT_RECORD   = 'SELECT_RECORD';
-export const SET_RECORDS     = 'SET_RECORDS';
-export const CALCULATE_SCORE = 'CALCULATE_SCORE';
-export const CREATE_RECORD   = 'CREATE_RECORD';
+export const SELECT_RECORD       = 'SELECT_RECORD';
+export const SELECT_SYMPTOM      = 'SELECT_SYMPTOM';
+export const SET_RECORD          = 'SET_RECORD';
+export const CREATE_RECORD       = 'CREATE_RECORD';
 
-
-//export const createRecord = ({ token, score, answers_array }) => {
-//    return (dispatch) => {
-//
-//        fetch('http://0.0.0.0:8000/api/record', {
-//                   method: 'POST',
-//                   headers: {
-//                   'Accept': 'application/json',
-//                   'Content-Type': 'application/json',
-//                   'Authorization': 'JWT '+token,
-//                   },
-//
-//                   body: JSON.stringify({
-//                   score: score
-//                   })
-//                   .then(response => {
-//                        fetch('http://0.0.0.0:8000/api/answer', {
-//                               method: 'POST',
-//                               headers: {
-//                               'Accept': 'application/json',
-//                               'Content-Type': 'application/json',
-//                               'Authorization': 'JWT '+token,
-//                               },
-//
-//                               body: JSON.stringify({
-//                               answers_array
-//                               })
-//                        })
-//                        .then(response => {
-//                              console.log(response);
-//                            })
-//                        }
-//           });
-//    };
-//};
-
-export const calculateRecordScore = (myArray) => {
+function calculateRecordScore(myArray) {
     var count = 0;
 
     myArray.forEach(function(item) {
         count += item.answer;
     });
 
-    return {
-        type: CALCULATE_SCORE,
-        payload: count
-    };
+    return count;
+};
+
+function assignRecord(myArray, record) {
+    myArray.forEach(function(item) {
+        item.record = record;
+    });
+
+    return myArray;
 };
 
 const setCurrentRecord = (dispatch, record) => {
@@ -62,10 +31,12 @@ const setCurrentRecord = (dispatch, record) => {
     });
 };
 
-export const createRecord = ({ token, answers }) => {
+export const createRecord = ({ token, answersArray, mySymptoms, score }) => {
     return (dispatch) => {
+        score = calculateRecordScore(answersArray);
+        score += calculateRecordScore(mySymptoms);
 
-        fetch('http://0.0.0.0:8000/api/record', {
+        fetch(myUrl + '/api/record', {
                    method: 'POST',
                    headers: {
                    'Accept': 'application/json',
@@ -73,38 +44,40 @@ export const createRecord = ({ token, answers }) => {
                    'Authorization': 'JWT '+token,
                    },
 
-                   body: JSON.stringify({
-                   answers: answers
-                   })
-                   });
-    };
-};
+                   body: JSON.stringify({
+                        score: score
+                   })
+        })
+        .then(response => {
+            const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
+            const parsed = JSON.parse(str).id;
 
-export const displayRecords = ({ token }) => {
-      // Change IP address according to yours
-      // Make sure to include your IP address in Django settings.py ALLOWED_HOSTS
-      return (dispatch) => {
-          fetch('http://0.0.0.0:8000/api/record', {
-                method: 'GET',
-                headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'JWT '+token,
-                },
-                })
-                .then(response => {
-                     const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-                     const parsed = JSON.parse(str);
-                     setRecords(dispatch, parsed);
-                 });
-     };
-};
+            answersArray = assignRecord(answersArray, parsed);
+            mySymptoms = assignRecord(mySymptoms, parsed);
 
-const setRecords = (dispatch, records) => {
-    dispatch({
-        type: SET_RECORDS,
-        payload: records
-    });
+            fetch(myUrl + '/api/answer', {
+                   method: 'POST',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
+
+                   body: JSON.stringify(answersArray)
+            }).then(response => {console.log('ANSWERS', response)});
+
+            fetch(myUrl + '/api/symptom', {
+                   method: 'POST',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
+
+                   body: JSON.stringify(mySymptoms)
+            }).then(response => {console.log('SYMPTOMS', response)});
+        });
+    }
 };
 
 export const selectRecord = (selectedRecord) => {
@@ -114,10 +87,24 @@ export const selectRecord = (selectedRecord) => {
     };
 };
 
+export const selectSymptom = (selectedSymptom) => {
+    return {
+        type: SELECT_SYMPTOM,
+        payload: selectedSymptom
+    };
+};
+
+export const setRecord = (record) => {
+    return {
+        type: SET_RECORD,
+        payload: record
+    };
+};
+
 export const deleteRecord = ({ token, param }) => {
     return (dispatch) => {
 
-        fetch('http://0.0.0.0:8000/api/questionnaire/delete/' + param, {
+        fetch(myUrl + '/api/edit_record/' + param, {
                    method: 'DELETE',
                    headers: {
                    'Accept': 'application/json',

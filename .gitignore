@@ -1,0 +1,9 @@
+env
+static/
+settings-production.py
+migrations/
+
+*.DS_Store
+*.pyc
+__pycache__
+*.idea
