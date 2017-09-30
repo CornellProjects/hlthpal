@@ -39,7 +39,7 @@
 
 
 ### Developer guidelines
-Please note that REACT NATIVE suffers from dependency issues. To ensure that there no build error please follow these guidelines during development.
+Please note that REACT NATIVE suffers from dependency issues. To ensure that there are no build errors please follow these guidelines during development.
 * Do not directly install packages into the development environment as the package information is not saved and others cloning the repo may have build errors.
 * Always add the required package information to package.json
 * Run the following command and make sure that your react native version matches the version in package.json
