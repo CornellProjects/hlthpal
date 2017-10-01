@@ -38,15 +38,28 @@
 <hr/>
 
 
-### Build commands
+### Developer guidelines
+Please note that REACT NATIVE suffers from dependency issues. To ensure that there are no build errors please follow these guidelines during development.
+* Do not directly install packages into the development environment as the package information is not saved and others cloning the repo may have build errors.
+* Always add the required package information to package.json
+* Run the following command and make sure that your react native version matches the version in package.json
+```  react-native -v  ``` .  If the versions don't match use the following command to install the appropriate version (replace the version number as required).
+```   npm install react-native@0.43.1   ```
+* Once you have ensured that have the right version of react native installed run the following commands to rebuild dependencies.
+``` 
+rm -vrf node_modules/
+npm install
+react-native run-android
+```
 
+
+### Build commands
 
 #### Android debug build
 Debug build command for development: ``` react-native run-android ```
 
 
 #### Android release build
-
 
 
 ### Preparing for release
