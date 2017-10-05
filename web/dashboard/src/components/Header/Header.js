@@ -53,6 +53,7 @@ class Header extends Component {
     return (
       <header className="app-header navbar">
         <NavbarToggler className="d-lg-none" onClick={this.mobileSidebarToggle}>&#9776;</NavbarToggler>
+        <NavbarBrand href="#"></NavbarBrand>
         <NavbarToggler className="d-md-down-none" onClick={this.sidebarMinimize}>&#9776;</NavbarToggler>
         <Nav className="ml-auto" navbar>
           <NavItem className="d-md-down-none">
