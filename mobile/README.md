@@ -57,12 +57,16 @@ react-native run-android
 
 #### Android debug build
 Debug build command for development: ``` react-native run-android ```
-
+More information can be found [here](https://facebook.github.io/react-native/docs/signed-apk-android.html)
 
 #### Android release build
+```  cd android && ./gradlew assembleRelease ```
+The generated APK can be found under android/app/build/outputs/apk/app-release.apk, and is ready to be distributed.
 
+#### Testing release build
+``` react-native run-android --variant=release  ```
 
 ### Preparing for release
 You can read more about preparing the android app for for release [here](https://developer.android.com/studio/publish/preparing.html)
 
-Lear more about Android app distribution options [here](https://developer.android.com/distribute/marketing-tools/alternative-distribution.html)
+Learn more about Android app distribution options [here](https://developer.android.com/distribute/marketing-tools/alternative-distribution.html)
