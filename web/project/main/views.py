@@ -9,6 +9,9 @@ from django.views.generic import UpdateView
 from rest_framework.authentication import TokenAuthentication
 from django.utils.encoding import smart_str
 from django.core.urlresolvers import reverse_lazy
+from django.db.models.signals import post_save
+from django.core.mail import send_mail
+from django.conf import settings
 from wsgiref.util import FileWrapper
 
 # Custom models
@@ -47,8 +50,15 @@ from rest_framework.permissions import (
     IsAdminUser,
 )
 
-# Custom permissions
 from .permissions import IsOwner
+from .emails import send_user_registration_emails
+
+User = get_user_model()
+
+#####################################################################################
+
+# Set up trigger for registration email
+post_save.connect(send_user_registration_emails, sender=User)
 
 ######################################################################################
 # Build paths
@@ -79,9 +89,6 @@ def download_android(request):
 
 ######################################################################################
 # Class based user views
-
-User = get_user_model()
-
 
 class UserCreateView(CreateAPIView):
     '''API to create a new user '''
