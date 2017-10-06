@@ -24,9 +24,20 @@ class Login extends Component {
   }
 
   onButtonPress() {
-      const { email, password } = this.props;
+      const { email, password, loading } = this.props;
 
       this.props.loginUser({ email, password });
+  }
+
+  renderButtons() {
+    return;
+  }
+
+  renderErrorMessage() {
+    const { error } = this.props;
+    if (error != '') {
+        return <Text> { error } </Text>
+    }
   }
 
   render() {
@@ -49,6 +60,9 @@ class Login extends Component {
                     secureTextEntry
                   />
                 </Item>
+
+                {this.renderErrorMessage()}
+
                 <Grid>
                     <Col>
                         <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)}>
@@ -71,9 +85,9 @@ class Login extends Component {
 }
 
 const mapStateToProps = ({ user }) => {
-    const { email, password, error } = user;
+    const { email, password, error, loading } = user;
 
-    return { email, password, error };
+    return { email, password, error, loading };
 };
 
 export default connect(mapStateToProps, {
