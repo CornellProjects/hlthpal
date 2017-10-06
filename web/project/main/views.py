@@ -1,3 +1,5 @@
+import os
+import datetime
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
@@ -5,8 +7,12 @@ from django.template import loader
 from django.contrib.auth import get_user_model
 from django.views.generic import UpdateView
 from rest_framework.authentication import TokenAuthentication
-
+from django.utils.encoding import smart_str
 from django.core.urlresolvers import reverse_lazy
+from django.db.models.signals import post_save
+from django.core.mail import send_mail
+from django.conf import settings
+from wsgiref.util import FileWrapper
 
 # Custom models
 from .models import Record, Answer, Entity, Question, Symptom, Notes
@@ -44,8 +50,21 @@ from rest_framework.permissions import (
     IsAdminUser,
 )
 
-# Custom permissions
 from .permissions import IsOwner
+from .emails import send_user_registration_emails
+
+User = get_user_model()
+
+#####################################################################################
+
+# Set up trigger for registration email
+post_save.connect(send_user_registration_emails, sender=User)
+
+######################################################################################
+# Build paths
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DOWNLOADS_DIR = BASE_DIR + '/downloads/'
+RELEASE_APK =  'app-release.apk'
 
 ######################################################################################
 # Method based views
@@ -53,14 +72,24 @@ from .permissions import IsOwner
 def index(request):
     #get the template 
     template = loader.get_template('index.html')
-    return HttpResponse(template.render())
+    data = {'images' :  settings.MEDIA_URL}
+    return HttpResponse(template.render(data))
 
+
+# Method based views
+# endpoint for '/home'
+def download_android(request):
+    file_name = DOWNLOADS_DIR + RELEASE_APK;
+    #file_size = os.stat(file).st_size
+    file_size = os.path.getsize(file_name)
+    wrapper = FileWrapper(file(file_name))
+    response = HttpResponse(wrapper, content_type='application/vnd.android.package-archive')
+    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(RELEASE_APK)
+    response['Content-Length'] = file_size
+    return response
 
 ######################################################################################
 # Class based user views
-
-User = get_user_model()
-
 
 class UserCreateView(CreateAPIView):
     '''API to create a new user '''

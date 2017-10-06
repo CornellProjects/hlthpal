@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     url(r'^home/', views.index, name='index'),
+    url(r'^downloads/android', views.download_android, name='download-android'),
     # Authentication APIs
     url(r'^api/auth', jwt_views.obtain_jwt_token, name="auth"),
     url(r'^api/token-verify', jwt_views.verify_jwt_token, name="token-verify"),

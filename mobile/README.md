@@ -37,7 +37,36 @@
 <p>  5. Double tap R to reload
 <hr/>
 
-<h3>Build commands</h3>
+
+### Developer guidelines
+Please note that REACT NATIVE suffers from dependency issues. To ensure that there are no build errors please follow these guidelines during development.
+* Do not directly install packages into the development environment as the package information is not saved and others cloning the repo may have build errors.
+* Always add the required package information to package.json
+* Run the following command and make sure that your react native version matches the version in package.json
+```  react-native -v  ``` .  If the versions don't match use the following command to install the appropriate version (replace the version number as required).
+```   npm install react-native@0.43.1   ```
+* Once you have ensured that have the right version of react native installed run the following commands to rebuild dependencies.
+``` 
+rm -vrf node_modules/
+npm install
+react-native run-android
+```
 
 
+### Build commands
 
+#### Android debug build
+Debug build command for development: ``` react-native run-android ```
+More information can be found [here](https://facebook.github.io/react-native/docs/signed-apk-android.html)
+
+#### Android release build
+```  cd android && ./gradlew assembleRelease ```
+The generated APK can be found under android/app/build/outputs/apk/app-release.apk, and is ready to be distributed.
+
+#### Testing release build
+``` react-native run-android --variant=release  ```
+
+### Preparing for release
+You can read more about preparing the android app for for release [here](https://developer.android.com/studio/publish/preparing.html)
+
+Learn more about Android app distribution options [here](https://developer.android.com/distribute/marketing-tools/alternative-distribution.html)
