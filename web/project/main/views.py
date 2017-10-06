@@ -72,7 +72,8 @@ RELEASE_APK =  'app-release.apk'
 def index(request):
     #get the template 
     template = loader.get_template('index.html')
-    return HttpResponse(template.render())
+    data = {'images' :  settings.MEDIA_URL}
+    return HttpResponse(template.render(data))
 
 
 # Method based views
