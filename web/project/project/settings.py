@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'main',
+    'webpack_loader'
 ]
 
 MIDDLEWARE = [
@@ -134,8 +135,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATIC_URL = '/static/'
-
-
+STATICFILES_DIRS = (
+    #This lets Django's collectstatic store our bundles
+    os.path.join(BASE_DIR, 'dashboard'),
+)
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'build/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'dashboard/webpack-stats.json'),
+    }
+}
 # Login redirect URL
 # default url is /accounts/profile/
 #LOGIN_REDIRECT_URL = '/'
@@ -179,6 +188,3 @@ EMAIL_HOST_PASSWORD = '_MY_PASSWORD_'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'EMAIL@DOMAIN.com'
 SERVER_EMAIL = 'EMAIL@DOMAIN.com'
-
-
-
