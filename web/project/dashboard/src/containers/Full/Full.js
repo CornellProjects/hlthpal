@@ -11,14 +11,7 @@ import Charts from '../../views/Charts/';
 import Widgets from '../../views/Widgets/';
 
 // Components
-import Buttons from '../../views/Components/Buttons/';
-import Cards from '../../views/Components/Cards/';
 import Forms from '../../views/Components/Forms/';
-import Modals from '../../views/Components/Modals/';
-import SocialButtons from '../../views/Components/SocialButtons/';
-import Switches from '../../views/Components/Switches/';
-import Tables from '../../views/Components/Tables/';
-import Tabs from '../../views/Components/Tabs/';
 import Patients from '../../views/Components/Patients/';
 
 // Icons
