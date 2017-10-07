@@ -3,7 +3,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
+const BundleTracker = require('webpack-bundle-tracker');
 const extractCSS = new ExtractTextPlugin('[name].fonts.css');
 const extractSCSS = new ExtractTextPlugin('[name].styles.css');
 
@@ -106,7 +106,14 @@ module.exports = (env = {}) => {
           {from: './public/img', to: 'img'}
         ],
         {copyUnmodified: false}
-      )
-    ]
+      ),
+      new BundleTracker({filename: './webpack-stats.json'}),
+    ],
+    resolve: {
+        //tells webpack where to look for modules
+        modulesDirectories: ['node_modules'],
+        //extensions that should be used to resolve modules
+        extensions: ['', '.js', '.jsx']
+    }
   }
 };
