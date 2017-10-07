@@ -14,13 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import include, url
+from django.conf import settings
+from django.views.static import serve
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from main import views
 
+
 urlpatterns = [
     url(r'^admin', admin.site.urls),
     url(r'^admin/', admin.site.urls),
+    # media url
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,}),
     # Dashboard url
     url(r'^dashboard', admin.site.urls),
     # Password reset
