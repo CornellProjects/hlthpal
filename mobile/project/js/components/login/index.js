@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Item, Button, Icon, View, Text } from 'native-base';
+import { Container, Content, Item, Button, Icon, View, Text, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
 
@@ -30,7 +30,7 @@ class Login extends Component {
   }
 
   renderButtons() {
-    return;
+      return;
   }
 
   renderErrorMessage() {
@@ -65,7 +65,7 @@ class Login extends Component {
 
                 <Grid>
                     <Col>
-                        <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)}>
+                        <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)} active={!this.props.loading}>
                           <Text>Login</Text>
                         </Button>
                     </Col>
