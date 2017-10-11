@@ -1,4 +1,4 @@
-package com.nativestarterkit;
+package com.hlthpal;
 
 import android.app.Application;
 
