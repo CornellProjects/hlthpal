@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Container, Content, Item, Button, Icon, View, Text, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../../actions/user';
 import styles from './styles';
 import TextField from '../TextField'
@@ -30,20 +30,38 @@ class Login extends Component {
   }
 
   renderButtons() {
-      return;
+      const { loading } = this.props;
+
+      if (loading) {
+          return <Spinner color='orange'/>;
+      }
+      else {
+          return <Grid>
+             <Col>
+                 <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)} active={!this.props.loading}>
+                   <Text>Login</Text>
+                 </Button>
+             </Col>
+             <Col>
+                 <Button rounded bordered style={styles.center} onPress={() => Actions.fillInfo()}>
+                   <Text>Sign up</Text>
+                 </Button>
+             </Col>
+          </Grid>;
+      }
   }
 
   renderErrorMessage() {
     const { error } = this.props;
     if (error != '') {
-        return <Text> { error } </Text>
+        return <Text style={styles.text}> { error } </Text>
     }
   }
 
   render() {
     return (
       <Container>
-        <View style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
           <Content>
             <Image source={background} style={styles.shadow}>
               <View style={styles.bg}>
@@ -62,23 +80,12 @@ class Login extends Component {
                 </Item>
 
                 {this.renderErrorMessage()}
+                {this.renderButtons()}
 
-                <Grid>
-                    <Col>
-                        <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)} active={!this.props.loading}>
-                          <Text>Login</Text>
-                        </Button>
-                    </Col>
-                    <Col>
-                        <Button rounded bordered style={styles.center} onPress={() => Actions.fillInfo()}>
-                          <Text>Sign up</Text>
-                        </Button>
-                    </Col>
-                </Grid>
               </View>
             </Image>
           </Content>
-        </View>
+        </KeyboardAwareScrollView>
       </Container>
     );
   }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Container, Content, Item, Button, Icon, View, Text, Radio, InputGroup} from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setUser, registerUser } from '../../actions/RegisterUser';
 import styles from './styles';
 import TextField from '../TextField'
@@ -63,7 +63,7 @@ class FillInfo extends Component {
 
     return (
       <Container>
-        <View style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
           <Content>
             <Text style={styles.title}>
               Account Information
@@ -228,7 +228,7 @@ class FillInfo extends Component {
                     </Col>
                 </Grid>
           </Content>
-        </View>
+        </KeyboardAwareScrollView>
       </Container>
     );
   }

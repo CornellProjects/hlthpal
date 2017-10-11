@@ -74,8 +74,9 @@ export const loginUser = ({ email, password }) => {
                                         const parsed = JSON.parse(str);
                                         setRecords(dispatch, parsed);
                                     });
+                        } else {
+                            loginUserFail(dispatch);
                         }
-                        loginUserFail(dispatch);
                     });
     };
 };
