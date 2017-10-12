@@ -141,7 +141,7 @@ export const whoAnswered = (rating) => {
     };
 };
 
-export const setAnswer = ({ record, question, text_input, rating }) => {
+export const setAnswer = ({ record, question, textInput, rating }) => {
     return {
         type: SET_ANSWER,
         payload: { prop, value }

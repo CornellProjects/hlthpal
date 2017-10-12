@@ -41,7 +41,7 @@ export default function (state:State = initialState, action:Action): State {
         case ANSWER_CHANGED:
             return { ...state, rating: action.payload  };
         case TEXT_INPUT_CHANGED:
-            return { ...state, text_input: action.payload  };
+            return { ...state, textInput: action.payload  };
         case SYMPTOM_INPUT_CHANGED:
             return { ...state, symptom: action.payload  };
         case ADD_SYMPTOM:

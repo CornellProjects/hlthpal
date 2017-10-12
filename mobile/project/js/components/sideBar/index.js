@@ -30,9 +30,6 @@ class SideBar extends Component {
         <ListItem button onPress={() => { Actions.RecordList(); this.props.closeDrawer(); }} >
           <Text>List View</Text>
         </ListItem>
-        <ListItem button onPress={() => { Actions.blankPage(); this.props.closeDrawer(); }} >
-          <Text>Blank Page</Text>
-        </ListItem>
       </Content>
     );
   }

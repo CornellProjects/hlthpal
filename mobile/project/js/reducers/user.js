@@ -48,7 +48,7 @@ export default function (state:State = initialState, action:Action): State {
       case CURRENT_USER:
           return { ...state, userName: action.payload };
       case LOGIN_USER_FAIL:
-          return { ...state, error: 'Authentication Failed.', password: '', loading: false };
+          return { ...state, error: 'Wrong email or password. Please try again.', password: '', loading: false };
       case SET_RECORDS:
           return { ...state, myRecords: action.payload };
       case CHANGE_CONNECTION_STATUS:
