@@ -1,7 +1,6 @@
 const routes = {
-  '/': 'Home',
   '/addPatients':'Forms',
-  '/dashboard': 'Dashboard',
+  '/': 'Homw',
   '/patients':'Patients'
 };
 export default routes;

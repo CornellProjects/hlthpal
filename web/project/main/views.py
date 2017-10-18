@@ -70,11 +70,15 @@ RELEASE_APK =  'app-release.apk'
 # Method based views
 # endpoint for '/home'
 def index(request):
-    #get the template 
+    #get the template
     template = loader.get_template('index.html')
     data = {'images' :  settings.MEDIA_URL}
     return HttpResponse(template.render(data))
-
+# endpoint for '/dashboard'
+def dashboard(request):
+    #get the template
+    template = loader.get_template('dashboard.html')
+    return HttpResponse(template.render())
 
 # Method based views
 # endpoint for '/home'
@@ -87,6 +91,7 @@ def download_android(request):
     response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(RELEASE_APK)
     response['Content-Length'] = file_size
     return response
+
 
 ######################################################################################
 # Class based user views

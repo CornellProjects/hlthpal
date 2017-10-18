@@ -4,19 +4,13 @@ import {Container} from 'reactstrap';
 import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
-import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 import Dashboard from '../../views/Dashboard/';
 import Charts from '../../views/Charts/';
-import Widgets from '../../views/Widgets/';
 
 // Components
 import Forms from '../../views/Components/Forms/';
 import Patients from '../../views/Components/Patients/';
-
-// Icons
-import FontAwesome from '../../views/Icons/FontAwesome/';
-import SimpleLineIcons from '../../views/Icons/SimpleLineIcons/';
 
 class Full extends Component {
   render() {
@@ -29,14 +23,13 @@ class Full extends Component {
             <Breadcrumb />
             <Container fluid>
               <Switch>
-                <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                <Route path="/home" name="Home" component={Dashboard}/>
                 <Route path="/addPatients" name="Add Patients" component={Forms}/>
                 <Route path="/patients" name="My Patients" component={Patients}/>
-                <Redirect from="/" to="/dashboard"/>
+                <Redirect from="/" to="/home"/>
               </Switch>
             </Container>
           </main>
-          <Aside />
         </div>
         <Footer />
       </div>
