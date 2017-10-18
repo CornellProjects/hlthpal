@@ -4,14 +4,16 @@ This is the dashboard built for the cancer project
 ## How to run it using npm:
 In the dashboard directory, run
 
-```npm start
+```
+npm start
 ```
 
 ## How to run it within Django:
 First of all, you need to create a bundle for Django to find React:
 In the dashboard directory, run
 
-```webpack --config webpack.config.js
+```
+webpack --config webpack.config.js
 ```
 
 Webpack will help us build a bundle for Django. If you make some changes, make
