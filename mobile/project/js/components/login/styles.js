@@ -33,5 +33,8 @@ export default {
   },
   center:{
     alignSelf: 'center',
+  },
+  text:{
+    marginBottom: 20,
   }
 };

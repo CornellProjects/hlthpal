@@ -55,7 +55,6 @@ class Home extends Component {
 
         <Content>
           <View style={styles.mt}>
-          <Thumbnail size={80} style={styles.center} source={require('../../../images/avatar.png')} />
             <Text style={styles.text}>
               Hi {this.props.userName}, how are you today?
             </Text>

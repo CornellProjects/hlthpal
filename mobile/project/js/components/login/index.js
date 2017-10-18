@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Item, Button, Icon, View, Text } from 'native-base';
+import { Container, Content, Item, Button, Icon, View, Text, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { emailChanged, passwordChanged, loginUser } from '../../actions/user';
 import styles from './styles';
 import TextField from '../TextField'
@@ -24,15 +24,44 @@ class Login extends Component {
   }
 
   onButtonPress() {
-      const { email, password } = this.props;
+      const { email, password, loading } = this.props;
 
       this.props.loginUser({ email, password });
+  }
+
+  renderButtons() {
+      const { loading } = this.props;
+
+      if (loading) {
+          return <Spinner color='orange'/>;
+      }
+      else {
+          return <Grid>
+             <Col>
+                 <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)} active={!this.props.loading}>
+                   <Text>Login</Text>
+                 </Button>
+             </Col>
+             <Col>
+                 <Button rounded bordered style={styles.center} onPress={() => Actions.fillInfo()}>
+                   <Text>Sign up</Text>
+                 </Button>
+             </Col>
+          </Grid>;
+      }
+  }
+
+  renderErrorMessage() {
+    const { error } = this.props;
+    if (error != '') {
+        return <Text style={styles.text}> { error } </Text>
+    }
   }
 
   render() {
     return (
       <Container>
-        <View style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
           <Content>
             <Image source={background} style={styles.shadow}>
               <View style={styles.bg}>
@@ -49,31 +78,23 @@ class Login extends Component {
                     secureTextEntry
                   />
                 </Item>
-                <Grid>
-                    <Col>
-                        <Button rounded style={styles.center} onPress={this.onButtonPress.bind(this)}>
-                          <Text>Login</Text>
-                        </Button>
-                    </Col>
-                    <Col>
-                        <Button rounded bordered style={styles.center} onPress={() => Actions.fillInfo()}>
-                          <Text>Sign up</Text>
-                        </Button>
-                    </Col>
-                </Grid>
+
+                {this.renderErrorMessage()}
+                {this.renderButtons()}
+
               </View>
             </Image>
           </Content>
-        </View>
+        </KeyboardAwareScrollView>
       </Container>
     );
   }
 }
 
 const mapStateToProps = ({ user }) => {
-    const { email, password, error } = user;
+    const { email, password, error, loading } = user;
 
-    return { email, password, error };
+    return { email, password, error, loading };
 };
 
 export default connect(mapStateToProps, {

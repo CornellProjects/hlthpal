@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Container, Content, Item, Button, Icon, View, Text, Radio, InputGroup} from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setUser, registerUser } from '../../actions/RegisterUser';
 import styles from './styles';
 import TextField from '../TextField'
@@ -63,7 +63,7 @@ class FillInfo extends Component {
 
     return (
       <Container>
-        <View style={styles.container}>
+        <KeyboardAwareScrollView style={styles.container}>
           <Content>
             <Text style={styles.title}>
               Account Information
@@ -72,7 +72,7 @@ class FillInfo extends Component {
                 <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='First Name'
+                        placeholder='First Name *'
                         value={this.props.firstName}
                         onChangeText={value => this.props.setUser({
                             prop: 'firstName', value
@@ -83,7 +83,7 @@ class FillInfo extends Component {
                 <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='Last Name'
+                        placeholder='Last Name *'
                         value={this.props.lastName}
                         onChangeText={value => this.props.setUser({
                             prop: 'lastName', value
@@ -94,7 +94,7 @@ class FillInfo extends Component {
                 <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='Street'
+                        placeholder='Street *'
                         value={this.props.street}
                         onChangeText={value => this.props.setUser({
                             prop: 'street', value
@@ -105,7 +105,7 @@ class FillInfo extends Component {
                 <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='City'
+                        placeholder='City *'
                         value={this.props.city}
                         onChangeText={value => this.props.setUser({
                             prop: 'city', value
@@ -116,7 +116,7 @@ class FillInfo extends Component {
                 <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='State'
+                        placeholder='State *'
                         value={this.props.myState}
                         onChangeText={value => this.props.setUser({
                             prop: 'myState', value
@@ -127,7 +127,7 @@ class FillInfo extends Component {
                 <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='Country'
+                        placeholder='Country *'
                         value={this.props.country}
                         onChangeText={value => this.props.setUser({
                             prop: 'country', value
@@ -149,7 +149,7 @@ class FillInfo extends Component {
                   <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='Email'
+                        placeholder='Email *'
                         value={this.props.email}
                         onChangeText={value => this.props.setUser({
                             prop: 'email', value
@@ -161,7 +161,7 @@ class FillInfo extends Component {
                     <TextField
                         secureTextEntry
                         style={styles.input}
-                        placeholder='Password'
+                        placeholder='Password *'
                         value={this.props.password}
                         onChangeText={value => this.props.setUser({
                             prop: 'password', value
@@ -172,7 +172,7 @@ class FillInfo extends Component {
                   <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='Mobile'
+                        placeholder='Mobile *'
                         value={this.props.mobile}
                         onChangeText={value => this.props.setUser({
                             prop: 'mobile', value
@@ -183,7 +183,7 @@ class FillInfo extends Component {
                  <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='My diagnosis'
+                        placeholder='My diagnosis *'
                         value={this.props.diagnosis}
                         onChangeText={value => this.props.setUser({
                             prop: 'diagnosis', value
@@ -194,7 +194,7 @@ class FillInfo extends Component {
                  <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='My Care Giver'
+                        placeholder='My Care Giver *'
                         value={this.props.caregiver}
                         onChangeText={value => this.props.setUser({
                             prop: 'caregiver', value
@@ -205,7 +205,7 @@ class FillInfo extends Component {
                   <Item regular style={styles.list}>
                     <TextField
                         style={styles.input}
-                        placeholder='My doctor name'
+                        placeholder='My doctor name *'
                         value={this.props.doctor}
                         onChangeText={value => this.props.setUser({
                             prop: 'doctor', value
@@ -228,7 +228,7 @@ class FillInfo extends Component {
                     </Col>
                 </Grid>
           </Content>
-        </View>
+        </KeyboardAwareScrollView>
       </Container>
     );
   }

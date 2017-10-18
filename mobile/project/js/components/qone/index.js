@@ -50,7 +50,7 @@ class Qone extends Component {
     const { question, token, record, textInput, answersArray } = this.props;
 
     let zero = 0;
-
+    console.log(textInput);
     answersArray.push(this.props.setAnswer({ record, question, textInput, zero }).payload);
 
     Actions.qtwo();

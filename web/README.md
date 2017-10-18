@@ -18,7 +18,9 @@ If you plan to connect your application to a Relational database liek MySql or P
 
 Read more about different database options [here](https://docs.djangoproject.com/en/1.10/topics/install/#database-installation).
 
----
+<hr/>
+
+
 ## REST APIs 
 Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.
 
