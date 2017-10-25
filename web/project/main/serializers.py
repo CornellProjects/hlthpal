@@ -326,3 +326,14 @@ class NotesGetSerializer(ModelSerializer):
             'text'
         ]
 
+
+
+# Get Patient Serializer
+class PatientGetSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+        ]

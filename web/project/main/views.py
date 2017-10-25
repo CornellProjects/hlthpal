@@ -29,7 +29,8 @@ from .serializers import (
     QuestionGetSerializer,
     SymptomSerializer,
     QuestionSerializer,
-    NotesGetSerializer)
+    NotesGetSerializer,
+    PatientGetSerializer)
 
 # rest_framework imports
 from rest_framework import status
@@ -260,6 +261,12 @@ class DoctorCreateView(CreateAPIView):
     serializer_class = DoctorCreateSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.all()
+
+class PatientGetView(ListAPIView):
+    '''API to Get a list of all patients '''
+    serializer_class = PatientGetSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
 
 
 class NotesCreateView(CreateAPIView):
