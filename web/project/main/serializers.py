@@ -316,6 +316,13 @@ class RecordSerializer(ModelSerializer):
             'score'
         ]
 
+class AnswerGetSerializer(ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = [
+            'text',
+            'answer',
+        ]
 
 # Priviliged user serializer classes
 # User profile serializer
@@ -340,7 +347,7 @@ class PatientGetSerializer(ModelSerializer):
             'email',
         ]
 
-class PatientRecordGetSerializer(ModelSerializer):
+class PatientScoreGetSerializer(ModelSerializer):
     # Get user data and include it
     user = UserSerializer(read_only=True)
     class Meta:
@@ -350,4 +357,20 @@ class PatientRecordGetSerializer(ModelSerializer):
             'user',
             'date',
             'score',
+        ]
+
+
+class PatientRecordGetSerializer(ModelSerializer):
+    # Get user data and include it
+    #user = UserSerializer(read_only=True)
+    #record = RecordSerializer(read_only=True)
+    class Meta:
+        model = Answer
+        #fields = '__all__'
+        fields = [
+            #'user',
+            #'record',
+            'question',
+            'answer',
+            'text',
         ]

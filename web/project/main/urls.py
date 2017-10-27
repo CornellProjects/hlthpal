@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^api/doctor', views.DoctorCreateView.as_view(), name="doctor"),
     url(r'^api/patients$', views.PatientGetView.as_view(), name="patients"),
     url(r'^api/patients/record$', views.PatientRecordGetView.as_view(), name="patient_record"),
+    url(r'^api/patients/score$', views.PatientScoreGetView.as_view(), name="patient_score"),
     url(r'^api/notes/create', views.NotesCreateView.as_view(), name="create_notes"),
     url(r'^api/notes', views.NotesGetAPIView.as_view(), name="view_notes"),
     url(r'^api/notes/(?P<pk>\d+)$', views.NotesGetAPIView.as_view(), name="view_user_notes"),
