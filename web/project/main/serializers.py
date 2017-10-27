@@ -6,7 +6,7 @@ from rest_framework.serializers import (ModelSerializer, EmailField, CharField, 
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-
+from itertools import chain
 
 # Custom models
 from .models import Patient, Doctor, Question, Answer, Record, Entity, Symptom, Notes
@@ -243,11 +243,13 @@ class UserProfileSerializer(ModelSerializer):
             'last_name',
         ]
 
-
+# User serializer with user fname and lname
+# Used with patient record serializer
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = [
+            'id',
             'first_name',
             'last_name'
         ]
@@ -336,4 +338,16 @@ class PatientGetSerializer(ModelSerializer):
             'first_name',
             'last_name',
             'email',
+        ]
+
+class PatientRecordGetSerializer(ModelSerializer):
+    # Get user data and include it
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = Record
+        #fields = '__all__'
+        fields = [
+            'user',
+            'date',
+            'score',
         ]

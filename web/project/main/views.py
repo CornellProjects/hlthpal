@@ -1,5 +1,6 @@
 import os
 import datetime
+import collections
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
@@ -30,7 +31,8 @@ from .serializers import (
     SymptomSerializer,
     QuestionSerializer,
     NotesGetSerializer,
-    PatientGetSerializer)
+    PatientGetSerializer,
+    PatientRecordGetSerializer)
 
 # rest_framework imports
 from rest_framework import status
@@ -262,12 +264,40 @@ class DoctorCreateView(CreateAPIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.all()
 
+
 class PatientGetView(ListAPIView):
     '''API to Get a list of all patients '''
     serializer_class = PatientGetSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.filter(is_staff=False)
 
+
+class PatientRecordGetView(ListAPIView):
+    '''API to Get a list of all patients data '''
+    #permission_classes = [IsAuthenticated, IsAdminUser]
+    #queryset = User.objects.filter(is_staff=False)
+    #serializer_class = PatientRecordGetSerializer
+    queryset =  Record.objects.all().order_by('-date')
+
+    # def get(self, request, format=None):
+    #     records = Record.objects.all().order_by('-date')
+    #     serializer = PatientRecordGetSerializer(records, many=True)
+    #     print serializer.data
+    #     for item in serializer.data:
+    #         print item
+
+    def get(self, request, format=None):
+        records = User.objects.filter(is_staff=False)
+        result = []
+        for user in records:
+            # query = Record.objects.filter(user=user).order_by('-date').first()
+            # Get last submission for each patient
+            query = Record.objects.filter(user=user).last()
+            if query is not None:
+                result.append(query)
+
+        serializer = PatientRecordGetSerializer(result, many=True)
+        return Response(serializer.data)
 
 class NotesCreateView(CreateAPIView):
     '''API to add notes for a patient '''
