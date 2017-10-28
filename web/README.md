@@ -23,7 +23,8 @@ Read more about different database options [here](https://docs.djangoproject.com
 
 ## REST APIs 
 Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.
-
+---
+### Authentication APIs
 ---
 #### POST 'api/auth'
 * Get authentication token for a given user with username.
@@ -38,11 +39,19 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John_21","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
 
 ---
+####  POST 'api/token-refresh'
+* Refresh authentication token for particular user.
+* URL: http://127.0.0.1:8000/api/token-refresh
+* ``` curl -i -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/token-refresh ```
+
+---
 #### GET 'api/user'
 * Get information on authenticated user.
 * URL: http://127.0.0.1:8000/api/user
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/user ```
 
+---
+### Registration and data submission APIs
 ---
 #### POST 'api/register'
 * API for patient Registration.
@@ -60,13 +69,6 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * API for Doctor Registration. Every doctor must be associated with an entity - hospital/organization. For priviliged users only.
 * URL: http://127.0.0.1:8000/api/doctor 
 * ``` curl -i -X POST -H "Authorization: JWT __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"patrick@gmail.com","username":"patrick", "password":"testPassword", "doctor": {"entity": 1} }' http://127.0.0.1:8000/api/doctor  ```
-
-
----
-####  POST 'api/token-refresh' 
-* Refresh authentication token for particular user.
-* URL: http://127.0.0.1:8000/api/token-refresh 
-* ``` curl -i -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/token-refresh ```
 
 ---
 ####  POST 'api/record' 
