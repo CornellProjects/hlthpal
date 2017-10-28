@@ -119,22 +119,23 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 <hr/>
 
 ### Patients API
-curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients
+---
+####  GET 'api/patients'
 * Get all patient names. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
 
-
-curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/score
-* Get list all patients with their latest score. For privileged users only.
+---
+####  GET 'api/patients/score'
+* Get list all patients and their latest score. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/score
-* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
+* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/score ```
 
-
-curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/data
+---
+####  GET 'api/patients/data'
 * Get list all patients with their latest score and answer data.  For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/data
-* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
+* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/data```
 
 
 ### Notes API
