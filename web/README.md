@@ -25,41 +25,42 @@ Read more about different database options [here](https://docs.djangoproject.com
 Here is a brief description of the supported APIs. You can test the APIs using your browser or using commandline if you have curl installed.
 
 ---
+#### POST 'api/auth'
+* Get authentication token for a given user with username.
+* URL: http://127.0.0.1:8000/api/auth
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John","password":"testPassword"}' http://127.0.0.1:8000/api/auth/ ```
+
+---
+#### POST 'api/login'
+* Get authentication token for a given user with email or username. Can be used instead of 'api/auth'.
+* URL: http://127.0.0.1:8000/api/login
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"email":"john@gmail.com","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
+``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John_21","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
+
+---
+#### GET 'api/user'
+* Get information on authenticated user.
+* URL: http://127.0.0.1:8000/api/user
+* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/user ```
+
+---
+#### POST 'api/register'
+* API for patient Registration.
+* URL: http://127.0.0.1:8000/api/register
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John", "last_name":"Misod","email":"mike@gmail.com","username":"mike@gmail.com","password":"testPassword", "patient" : { "diagnosis":"diagnosis","care_giver":"Mary Smith", "doctor":"John Smith", "gender":"male", "mobile":"555-5555", "street":"street", "city":"city", "state":"state", "country":"country"} }' http://127.0.0.1:8000/api/register ```
+
+---
 #### POST 'api/entity'
-* Entity Registration. For priviliged users only.
+* API for Hospital/organization Registration. Required to register a doctor. For priviliged users only.
 * URL: http://127.0.0.1:8000/api/entity 
 * ``` curl -i -X POST -H "Authorization: JWT __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"name":"Hospital","street":"street","city":"city","state":"state","country":"country"}' http://127.0.0.1:8000/api/entity ```
 
 ---
 #### POST 'api/doctor' 
-* Doctor Registration. For priviliged users only.
+* API for Doctor Registration. Every doctor must be associated with an entity - hospital/organization. For priviliged users only.
 * URL: http://127.0.0.1:8000/api/doctor 
 * ``` curl -i -X POST -H "Authorization: JWT __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"John","email":"patrick@gmail.com","username":"patrick", "password":"testPassword", "doctor": {"entity": 1} }' http://127.0.0.1:8000/api/doctor  ```
 
----
-#### POST 'api/register'
-* Patient Registration.
-* URL: http://127.0.0.1:8000/api/register
-* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John", "last_name":"Misod","email":"mike@gmail.com","username":"mike@gmail.com","password":"testPassword", "patient" : { "diagnosis":"diagnosis","care_giver":"Mary Smith", "doctor":"John Smith", "gender":"male", "mobile":"555-5555", "street":"street", "city":"city", "state":"state", "country":"country"} }' http://127.0.0.1:8000/api/register ```
-
----
-#### GET 'api/user'
-* Get information on authenticated user.
-* URL: http://127.0.0.1:8000/api/user 
-* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__"  http://127.0.0.1:8000/api/user ```
-
----
-#### POST 'api/auth' 
-* Get authentication token for a given user with username.
-* URL: http://127.0.0.1:8000/api/auth 
-* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John","password":"testPassword"}' http://127.0.0.1:8000/api/auth/ ```
-
----
-#### POST 'api/login' 
-* Get authentication token for a given user with email or username. Can be used instead of 'api/auth'.
-* URL: http://127.0.0.1:8000/api/login 
-* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"email":"john@gmail.com","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
-``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John_21","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
 
 ---
 ####  POST 'api/token-refresh' 
