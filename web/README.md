@@ -121,9 +121,20 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ### Patients API
 curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients
 * Get all patient names. For privileged users only.
-* URL: http://127.0.0.1:8000/api/notes
+* URL: http://127.0.0.1:8000/api/patients
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
 
+
+curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/score
+* Get list all patients with their latest score. For privileged users only.
+* URL: http://127.0.0.1:8000/api/patients/score
+* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
+
+
+curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/data
+* Get list all patients with their latest score and answer data.  For privileged users only.
+* URL: http://127.0.0.1:8000/api/patients/data
+* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
 
 
 ### Notes API
