@@ -13,9 +13,7 @@ from .models import Patient, Doctor, Question, Answer, Record, Entity, Symptom, 
 
 ######################################################################################
 # Serializers for user object
-
 User = get_user_model()
-
 
 # Create Patient Serializer
 class PatientCreateSerializer(ModelSerializer):
@@ -324,7 +322,8 @@ class AnswerGetSerializer(ModelSerializer):
             'answer',
         ]
 
-# Priviliged user serializer classes
+######################################################################################
+# privileged user serializer classes
 # User profile serializer
 class NotesGetSerializer(ModelSerializer):
     class Meta:
@@ -336,17 +335,19 @@ class NotesGetSerializer(ModelSerializer):
         ]
 
 
-
 # Get Patient Serializer
 class PatientGetSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = [
+            'id',
             'first_name',
             'last_name',
             'email',
         ]
 
+
+# Serializer to return patient fname ,lname along with the score
 class PatientScoreGetSerializer(ModelSerializer):
     # Get user data and include it
     user = UserSerializer(read_only=True)
@@ -361,15 +362,10 @@ class PatientScoreGetSerializer(ModelSerializer):
 
 
 class PatientRecordGetSerializer(ModelSerializer):
-    # Get user data and include it
-    #user = UserSerializer(read_only=True)
-    #record = RecordSerializer(read_only=True)
+    # Get answers associated with each record
     class Meta:
         model = Answer
-        #fields = '__all__'
         fields = [
-            #'user',
-            #'record',
             'question',
             'answer',
             'text',

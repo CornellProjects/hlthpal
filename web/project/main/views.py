@@ -1,6 +1,6 @@
 import os
 import datetime
-import collections
+import collections, json
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
@@ -24,6 +24,7 @@ from .serializers import (
     UserLoginSerializer,
     UserProfileSerializer,
     AnswerSerializer,
+    AnswerGetSerializer,
     RecordSerializer,
     DoctorCreateSerializer,
     EntityCreateSerializer,
@@ -32,6 +33,7 @@ from .serializers import (
     QuestionSerializer,
     NotesGetSerializer,
     PatientGetSerializer,
+    PatientScoreGetSerializer,
     PatientRecordGetSerializer)
 
 # rest_framework imports
@@ -272,32 +274,68 @@ class PatientGetView(ListAPIView):
     queryset = User.objects.filter(is_staff=False)
 
 
-class PatientRecordGetView(ListAPIView):
-    '''API to Get a list of all patients data '''
-    #permission_classes = [IsAuthenticated, IsAdminUser]
-    #queryset = User.objects.filter(is_staff=False)
-    #serializer_class = PatientRecordGetSerializer
-    queryset =  Record.objects.all().order_by('-date')
-
-    # def get(self, request, format=None):
-    #     records = Record.objects.all().order_by('-date')
-    #     serializer = PatientRecordGetSerializer(records, many=True)
-    #     print serializer.data
-    #     for item in serializer.data:
-    #         print item
+class PatientDataGetView(ListAPIView):
+    '''API to get all patients latest data '''
+    queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        records = User.objects.filter(is_staff=False)
+        patients = User.objects.filter(is_staff=False)
         result = []
-        for user in records:
+        for user in patients:
             # query = Record.objects.filter(user=user).order_by('-date').first()
             # Get last submission for each patient
+            entry = collections.OrderedDict()
+            user_serial = PatientGetSerializer(user)
+            entry['user'] = user_serial.data;
             query = Record.objects.filter(user=user).last()
             if query is not None:
-                result.append(query)
+                rec = RecordSerializer(query)
+                entry['record'] = rec.data;
+                query = Answer.objects.filter(record=rec.data['id'])
+                ans = PatientRecordGetSerializer(query,  many=True);
+                entry['data'] = ans.data;
+                result.append(entry)
 
-        serializer = PatientRecordGetSerializer(result, many=True)
-        return Response(serializer.data)
+        return Response(result)
+
+
+# class PatientScoreGetView(ListAPIView):
+#     '''API to get all patient latest scores '''
+#     queryset = Record.objects.all().order_by('-date')
+#
+#     def get(self, request, format=None):
+#         records = User.objects.filter(is_staff=False)
+#         result = []
+#         for user in records:
+#             # query = Record.objects.filter(user=user).order_by('-date').first()
+#             # Get last submission for each patient
+#             query = Record.objects.filter(user=user).last()
+#             if query is not None:
+#                 result.append(query)
+#
+#         serializer = PatientScoreGetSerializer(result, many=True)
+#         return Response(serializer.data)
+
+class PatientScoreGetView(ListAPIView):
+    '''API to get all patients latest score '''
+    queryset = User.objects.filter(is_staff=False)
+
+    def get(self, request, format=None):
+        patients = User.objects.filter(is_staff=False)
+        result = []
+        for user in patients:
+            # query = Record.objects.filter(user=user).order_by('-date').first()
+            # Get last submission for each patient
+            entry = collections.OrderedDict()
+            user_serial = PatientGetSerializer(user)
+            entry['user'] = user_serial.data;
+            query = Record.objects.filter(user=user).last()
+            if query is not None:
+                rec = RecordSerializer(query)
+                entry['record'] = rec.data;
+                result.append(entry)
+        return Response(result)
+
 
 class NotesCreateView(CreateAPIView):
     '''API to add notes for a patient '''
