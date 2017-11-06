@@ -63,7 +63,8 @@ User = get_user_model()
 #####################################################################################
 
 # Set up trigger for registration email
-post_save.connect(send_user_registration_emails, sender=User)
+if os.environ.get('DJANGO_SEND_EMAIL'):
+    post_save.connect(send_user_registration_emails, sender=User)
 
 ######################################################################################
 # Build paths
