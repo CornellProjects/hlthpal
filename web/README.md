@@ -35,8 +35,9 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 #### POST 'api/login'
 * Get authentication token for a given user with email or username. Can be used instead of 'api/auth'.
 * URL: http://127.0.0.1:8000/api/login
+* Two variants available for this API. Either login using email or username.
 * ``` curl -i -X POST -H "Content-Type: application/json" -d '{"email":"john@gmail.com","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
-``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John_21","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"username":"John_21","password":"testPassword"}' http://127.0.0.1:8000/api/login/ ```
 
 ---
 ####  POST 'api/token-refresh'
