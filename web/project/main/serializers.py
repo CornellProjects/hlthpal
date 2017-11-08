@@ -6,16 +6,14 @@ from rest_framework.serializers import (ModelSerializer, EmailField, CharField, 
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-
+from itertools import chain
 
 # Custom models
 from .models import Patient, Doctor, Question, Answer, Record, Entity, Symptom, Notes
 
 ######################################################################################
 # Serializers for user object
-
 User = get_user_model()
-
 
 # Create Patient Serializer
 class PatientCreateSerializer(ModelSerializer):
@@ -167,6 +165,7 @@ class DoctorCreateSerializer(ModelSerializer):
                             password=password,
                             first_name=first_name,
                             last_name=last_name,
+                            is_staff=1
                             )
             user_obj.set_password(password)
             user_obj.save()
@@ -243,11 +242,13 @@ class UserProfileSerializer(ModelSerializer):
             'last_name',
         ]
 
-
+# User serializer with user fname and lname
+# Used with patient record serializer
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = [
+            'id',
             'first_name',
             'last_name'
         ]
@@ -314,8 +315,16 @@ class RecordSerializer(ModelSerializer):
             'score'
         ]
 
+class AnswerGetSerializer(ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = [
+            'text',
+            'answer',
+        ]
 
-# Priviliged user serializer classes
+######################################################################################
+# privileged user serializer classes
 # User profile serializer
 class NotesGetSerializer(ModelSerializer):
     class Meta:
@@ -326,3 +335,39 @@ class NotesGetSerializer(ModelSerializer):
             'text'
         ]
 
+
+# Get Patient Serializer
+class PatientGetSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+        ]
+
+
+# Serializer to return patient fname ,lname along with the score
+class PatientScoreGetSerializer(ModelSerializer):
+    # Get user data and include it
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = Record
+        #fields = '__all__'
+        fields = [
+            'user',
+            'date',
+            'score',
+        ]
+
+
+class PatientRecordGetSerializer(ModelSerializer):
+    # Get answers associated with each record
+    class Meta:
+        model = Answer
+        fields = [
+            'question',
+            'answer',
+            'text',
+        ]

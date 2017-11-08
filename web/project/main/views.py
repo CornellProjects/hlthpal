@@ -1,5 +1,6 @@
 import os
 import datetime
+import collections, json
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
@@ -23,13 +24,17 @@ from .serializers import (
     UserLoginSerializer,
     UserProfileSerializer,
     AnswerSerializer,
+    AnswerGetSerializer,
     RecordSerializer,
     DoctorCreateSerializer,
     EntityCreateSerializer,
     QuestionGetSerializer,
     SymptomSerializer,
     QuestionSerializer,
-    NotesGetSerializer)
+    NotesGetSerializer,
+    PatientGetSerializer,
+    PatientScoreGetSerializer,
+    PatientRecordGetSerializer)
 
 # rest_framework imports
 from rest_framework import status
@@ -58,7 +63,8 @@ User = get_user_model()
 #####################################################################################
 
 # Set up trigger for registration email
-post_save.connect(send_user_registration_emails, sender=User)
+if os.environ.get('DJANGO_SEND_EMAIL'):
+    post_save.connect(send_user_registration_emails, sender=User)
 
 ######################################################################################
 # Build paths
@@ -265,6 +271,79 @@ class DoctorCreateView(CreateAPIView):
     serializer_class = DoctorCreateSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.all()
+
+
+class PatientGetView(ListAPIView):
+    '''API to Get a list of all patients '''
+    serializer_class = PatientGetSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
+
+
+class PatientDataGetView(ListAPIView):
+    '''API to get all patients latest data '''
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
+
+    def get(self, request, format=None):
+        patients = User.objects.filter(is_staff=False)
+        result = []
+        for user in patients:
+            # query = Record.objects.filter(user=user).order_by('-date').first()
+            # Get last submission for each patient
+            entry = collections.OrderedDict()
+            user_serial = PatientGetSerializer(user)
+            entry['user'] = user_serial.data;
+            query = Record.objects.filter(user=user).last()
+            if query is not None:
+                rec = RecordSerializer(query)
+                entry['record'] = rec.data;
+                query = Answer.objects.filter(record=rec.data['id'])
+                ans = PatientRecordGetSerializer(query,  many=True);
+                entry['data'] = ans.data;
+                result.append(entry)
+
+        return Response(result)
+
+
+# class PatientScoreGetView(ListAPIView):
+#     '''API to get all patient latest scores '''
+#     queryset = Record.objects.all().order_by('-date')
+#
+#     def get(self, request, format=None):
+#         records = User.objects.filter(is_staff=False)
+#         result = []
+#         for user in records:
+#             # query = Record.objects.filter(user=user).order_by('-date').first()
+#             # Get last submission for each patient
+#             query = Record.objects.filter(user=user).last()
+#             if query is not None:
+#                 result.append(query)
+#
+#         serializer = PatientScoreGetSerializer(result, many=True)
+#         return Response(serializer.data)
+
+
+class PatientScoreGetView(ListAPIView):
+    '''API to get all patients latest score '''
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
+
+    def get(self, request, format=None):
+        patients = User.objects.filter(is_staff=False)
+        result = []
+        for user in patients:
+            # query = Record.objects.filter(user=user).order_by('-date').first()
+            # Get last submission for each patient
+            entry = collections.OrderedDict()
+            user_serial = PatientGetSerializer(user)
+            entry['user'] = user_serial.data;
+            query = Record.objects.filter(user=user).last()
+            if query is not None:
+                rec = RecordSerializer(query)
+                entry['record'] = rec.data;
+                result.append(entry)
+        return Response(result)
 
 
 class NotesCreateView(CreateAPIView):
