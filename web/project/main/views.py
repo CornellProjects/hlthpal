@@ -316,7 +316,7 @@ class PatientGetView(ListAPIView):
     '''API to Get a list of all patients '''
     serializer_class = PatientGetSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = User.objects.filter(is_staff=False)
+    queryset = User.objects.filter(is_staff=False, is_active=True)
 
 
 class PatientDataGetView(ListAPIView):
@@ -325,7 +325,7 @@ class PatientDataGetView(ListAPIView):
     queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        patients = User.objects.filter(is_staff=False)
+        patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
         for user in patients:
             # query = Record.objects.filter(user=user).order_by('-date').first()
@@ -369,7 +369,7 @@ class PatientScoreGetView(ListAPIView):
     queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        patients = User.objects.filter(is_staff=False)
+        patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
         for user in patients:
             # query = Record.objects.filter(user=user).order_by('-date').first()
