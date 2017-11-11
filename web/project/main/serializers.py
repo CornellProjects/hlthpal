@@ -325,6 +325,20 @@ class AnswerGetSerializer(ModelSerializer):
 
 ######################################################################################
 # privileged user serializer classes
+######################################################################################
+
+# New user register serializer
+class PatientActivateSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'is_active'
+        ]
+
+
+
+
 # User profile serializer
 class NotesGetSerializer(ModelSerializer):
     class Meta:
