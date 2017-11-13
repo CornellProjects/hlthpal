@@ -26,6 +26,7 @@ urlpatterns = [
     # Privileged user APIs
     url(r'^api/entity', views.EntityCreateView.as_view(), name="entity"),
     url(r'^api/doctor', views.DoctorCreateView.as_view(), name="doctor"),
+    url(r'^api/patient/history$', views.PatientHistoryView.as_view(), name="patient_history"),
     url(r'^api/patient/activate$', views.PatientActivateView.as_view(), name="patient_activate"),
     url(r'^api/patient/deactivate$', views.PatientGetView.as_view(), name="patient_deactivate"),
     url(r'^api/patients$', views.PatientGetView.as_view(), name="patients"),
