@@ -357,7 +357,46 @@ class PatientActivateView(APIView):
             result['error'] = error
             return Response(result, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PatientDeactivateView(APIView):
+    '''API to activate patient account'''
+    serializer_class = PatientActivateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
+
+    def post(self, request, *args, **kwargs):
+        print " @@@@ PatientDeactivateView "
+        data = request.data
+
+        # Check if request contains username
+        username = data.get("username", None)
+        result = {}
+        if not username:
+            error = "username is required"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            print "username found", data['username']
+
+        # Check if username is valid
+        if User.objects.filter(username=username).exists():
+            user = User.objects.filter(username=username).first()
+
+            if user.is_staff:
+                error = "user is not a patient"
+                result['error'] = error
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+            user.is_active = False
+            user.save()
+            user_serial = PatientActivateSerializer(user)
+            print "user found:", user_serial.data
+            return Response(user_serial.data, status=status.HTTP_200_OK)
+        else:
+            error = "username does not exist"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EntityCreateView(CreateAPIView):
