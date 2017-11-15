@@ -319,8 +319,9 @@ class AnswerGetSerializer(ModelSerializer):
     class Meta:
         model = Answer
         fields = [
-            'text',
+            'question',
             'answer',
+            'text',
         ]
 
 ######################################################################################
@@ -361,6 +362,16 @@ class PatientGetSerializer(ModelSerializer):
             'last_name'
         ]
 
+class PatientStatusGetSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'is_active'
+            ]
 
 # Serializer to return patient fname ,lname along with the score
 class PatientScoreGetSerializer(ModelSerializer):

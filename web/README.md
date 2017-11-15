@@ -129,18 +129,44 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * URL: http://127.0.0.1:8000/api/patients
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
 
+* Response
+* ```  [
+        {"id":13,"username":"rand1","first_name":"John","last_name":"Misod","is_active":true},
+        {"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage","is_active":true},
+        {"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn","is_active":true},
+        {"id":16,"username":"pat3@gmail.com","first_name":"Pat3","last_name":"More","is_active":true}
+       ]
+  ```
+
 ---
 ####  GET 'api/patients/score'
 * Get list of all patients and their latest score. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/score
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/score ```
 
+* Response
+* ```  [
+        {
+        "user":{"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage"},
+        "record":{"id":3,"date":"2017-11-13T05:58:47.209686Z","score":18}
+        }
+       ]
+  ```
 ---
 ####  GET 'api/patients/data'
 * Get list of all patients with their latest score and answer data.  For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/data
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/data```
 
+* Response
+* ```  [
+        {
+        "user":{"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn"},
+        "record":{"id":6,"date":"2017-11-13T06:00:10.231919Z","score":17},
+        "data":[{"question":1,"answer":1,"text":"The ans is"},{"question":2,"answer":1,"text":"The ans is"},{"question":3,"answer":1,"text":"The ans is"}]
+        }
+       ]
+  ```
 
 ### Notes API
 ---

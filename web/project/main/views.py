@@ -34,6 +34,7 @@ from .serializers import (
     NotesGetSerializer,
     PatientActivateSerializer,
     PatientGetSerializer,
+    PatientStatusGetSerializer,
     PatientScoreGetSerializer,
     PatientRecordGetSerializer)
 
@@ -319,13 +320,12 @@ class PatientHistoryView(APIView):
 
 
 class PatientActivateView(APIView):
-    '''API to activate patient account'''
+    ''' API to activate patient account '''
     serializer_class = PatientActivateSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.filter(is_staff=False)
 
     def post(self, request, *args, **kwargs):
-        print " @@@@ PatientActivateView "
         data = request.data
 
         # Check if request contains username
@@ -366,7 +366,6 @@ class PatientDeactivateView(APIView):
     queryset = User.objects.filter(is_staff=False)
 
     def post(self, request, *args, **kwargs):
-        print " @@@@ PatientDeactivateView "
         data = request.data
 
         # Check if request contains username
@@ -415,9 +414,9 @@ class DoctorCreateView(CreateAPIView):
 
 class PatientGetView(ListAPIView):
     '''API to Get a list of all patients '''
-    serializer_class = PatientGetSerializer
+    serializer_class = PatientStatusGetSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = User.objects.filter(is_staff=False, is_active=True)
+    queryset = User.objects.filter(is_staff=False)
 
 
 class PatientDataGetView(ListAPIView):
