@@ -320,7 +320,7 @@ class PatientHistoryView(APIView):
 
 
 class PatientActivateView(APIView):
-    ''' API to activate patient account '''
+    ''' API to activate a patient account '''
     serializer_class = PatientActivateSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.filter(is_staff=False)
@@ -336,7 +336,8 @@ class PatientActivateView(APIView):
             result['error'] = error
             return Response(result, status=status.HTTP_400_BAD_REQUEST)
         else:
-            print "username found", data['username']
+            pass
+            #print "username found", data['username']
 
         # Check if username is valid
         if User.objects.filter(username=username).exists():
@@ -350,7 +351,6 @@ class PatientActivateView(APIView):
             user.is_active = True
             user.save()
             user_serial = PatientActivateSerializer(user)
-            print "user found:", user_serial.data
             return Response(user_serial.data, status=status.HTTP_200_OK)
         else:
             error = "username does not exist"
@@ -360,7 +360,7 @@ class PatientActivateView(APIView):
 
 
 class PatientDeactivateView(APIView):
-    '''API to activate patient account'''
+    '''API to deactivate a patient account '''
     serializer_class = PatientActivateSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.filter(is_staff=False)
@@ -376,7 +376,8 @@ class PatientDeactivateView(APIView):
             result['error'] = error
             return Response(result, status=status.HTTP_400_BAD_REQUEST)
         else:
-            print "username found", data['username']
+            pass
+            #print "username found", data['username']
 
         # Check if username is valid
         if User.objects.filter(username=username).exists():
@@ -390,7 +391,6 @@ class PatientDeactivateView(APIView):
             user.is_active = False
             user.save()
             user_serial = PatientActivateSerializer(user)
-            print "user found:", user_serial.data
             return Response(user_serial.data, status=status.HTTP_200_OK)
         else:
             error = "username does not exist"
