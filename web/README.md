@@ -168,6 +168,46 @@ Here is a brief description of the supported APIs. You can test the APIs using y
        ]
   ```
 
+---
+####  GET 'api/patient/activate'
+* Activate a patient account. For privileged users only.
+* URL: http://127.0.0.1:8000/api/patient/activate
+* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/activate```
+
+* Response
+* ``` {"username":"pat3@gmail.com","is_active":true}
+  ```
+
+
+---
+####  GET 'api/patient/deactivate'
+* Deactivate a patient account. For privileged users only.
+* URL: http://127.0.0.1:8000/api/patient/deactivate
+* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/deactivate```
+
+* Response
+* ``` {"username":"pat3@gmail.com","is_active":false}
+  ```
+
+
+---
+####  GET '/api/patient/history'
+* Deactivate a patient account. For privileged users only.
+* URL: http://127.0.0.1:8000/api/patient/history
+* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/history```
+
+* Response
+* ``` [
+        {
+         "record":{"id":1,"date":"2017-11-13T05:58:16.339366Z","score":15},
+         "data":[{"question":1,"answer":1,"text":"The ans is 2"},{"question":2,"answer":1,"text":"The ans is 2"}]
+         }
+      ]
+  ```
+
+
+
+
 ### Notes API
 ---
 ####   GET 'api/notes'  

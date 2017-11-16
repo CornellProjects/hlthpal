@@ -265,7 +265,6 @@ class PatientHistoryView(APIView):
     queryset = User.objects.filter(is_staff=False)
 
     def post(self, request, *args, **kwargs):
-        print " @@@@ PatientHistoryView "
         data = request.data
 
         # Check if request contains username
@@ -276,27 +275,26 @@ class PatientHistoryView(APIView):
             result['error'] = error
             return Response(result, status=status.HTTP_400_BAD_REQUEST)
         else:
-            print "username found", data['username']
+            pass
+            #print "username found", data['username']
 
         # Check if username is valid
         if User.objects.filter(username=username).exists():
             user = User.objects.filter(username=username).first()
 
             if user.is_staff:
-                error = "user is not a patient"
+                error = "user is not a patient!"
                 result['error'] = error
                 return Response(result, status=status.HTTP_400_BAD_REQUEST)
 
             user_serial = PatientActivateSerializer(user)
-            print "user found:", user_serial.data
 
             query = Record.objects.filter(user=user)
             result = []
-            print 'records=',len(query)
+
             for record in query:
                 clean_result = {}
                 record_serial = RecordSerializer(record)
-                print "->", record_serial.data
 
                 clean_result['record'] = record_serial.data
 
@@ -306,15 +304,13 @@ class PatientHistoryView(APIView):
                 for ans in answers:
                     ans_serial = AnswerGetSerializer(ans);
                     ans_result.append(ans_serial.data)
-                    print ans_serial.data
 
                 clean_result['data'] = ans_result
                 result.append(clean_result)
-                print result
             return Response(result, status=status.HTTP_200_OK)
 
         else:
-            error = "username does not exist"
+            error = "username does not exist!"
             result['error'] = error
             return Response(result, status=status.HTTP_400_BAD_REQUEST)
 
@@ -443,24 +439,6 @@ class PatientDataGetView(ListAPIView):
                 result.append(entry)
 
         return Response(result)
-
-
-# class PatientScoreGetView(ListAPIView):
-#     '''API to get all patient latest scores '''
-#     queryset = Record.objects.all().order_by('-date')
-#
-#     def get(self, request, format=None):
-#         records = User.objects.filter(is_staff=False)
-#         result = []
-#         for user in records:
-#             # query = Record.objects.filter(user=user).order_by('-date').first()
-#             # Get last submission for each patient
-#             query = Record.objects.filter(user=user).last()
-#             if query is not None:
-#                 result.append(query)
-#
-#         serializer = PatientScoreGetSerializer(result, many=True)
-#         return Response(serializer.data)
 
 
 class PatientScoreGetView(ListAPIView):
