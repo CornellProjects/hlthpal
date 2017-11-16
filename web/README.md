@@ -57,13 +57,13 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 #### POST 'api/register'
 * API for patient Registration.
 * URL: http://127.0.0.1:8000/api/register
-* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John", "last_name":"Misod","email":"mike@gmail.com","username":"mike@gmail.com","password":"testPassword", "patient" : { "diagnosis":"diagnosis","care_giver":"Mary Smith", "doctor":"John Smith", "gender":"male", "mobile":"555-5555", "street":"street", "city":"city", "state":"state", "country":"country"} }' http://127.0.0.1:8000/api/register ```
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John", "last_name":"Misod","email":"mike@gmail.com","username":"mike@gmail.com","password":"testPassword", "patient" : { "diagnosis":"diagnosis","care_giver":"Mary Smith", "doctor":"John Smith", "gender":"male", "mobile":"555-5555", "street":"street", "city":"city", "sector":"Gisenyi", "state":"state", "country":"country"} }' http://127.0.0.1:8000/api/register ```
 
 ---
 #### POST 'api/entity'
 * API for Hospital/organization Registration. Required to register a doctor. For priviliged users only.
 * URL: http://127.0.0.1:8000/api/entity 
-* ``` curl -i -X POST -H "Authorization: JWT __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"name":"Hospital","street":"street","city":"city","sector":"Gisenyi","state":"state","country":"country"}' http://127.0.0.1:8000/api/entity ```
+* ``` curl -i -X POST -H "Authorization: JWT __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"name":"Hospital","street":"street","city":"city","state":"state","country":"country"}' http://127.0.0.1:8000/api/entity ```
 
 ---
 #### POST 'api/doctor' 
