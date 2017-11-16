@@ -130,12 +130,13 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
 
 * Response
-* ```  [
-        {"id":13,"username":"rand1","first_name":"John","last_name":"Misod","is_active":true},
-        {"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage","is_active":true},
-        {"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn","is_active":true},
-        {"id":16,"username":"pat3@gmail.com","first_name":"Pat3","last_name":"More","is_active":true}
-       ]
+ ```  
+ [
+     {"id":13,"username":"rand1","first_name":"John","last_name":"Misod","is_active":true},
+     {"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage","is_active":true},
+     {"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn","is_active":true},
+     {"id":16,"username":"pat3@gmail.com","first_name":"Pat3","last_name":"More","is_active":true}
+ ]
   ```
 
 ---
@@ -145,12 +146,13 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/score ```
 
 * Response
-* ```  [
-        {
+```
+[
+    {
         "user":{"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage"},
         "record":{"id":3,"date":"2017-11-13T05:58:47.209686Z","score":18}
-        }
-       ]
+    }
+]
   ```
 ---
 ####  GET 'api/patients/data'
@@ -159,13 +161,18 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/data```
 
 * Response
-* ```  [
-        {
+```  
+[
+    {
         "user":{"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn"},
         "record":{"id":6,"date":"2017-11-13T06:00:10.231919Z","score":17},
-        "data":[{"question":1,"answer":1,"text":"The ans is"},{"question":2,"answer":1,"text":"The ans is"},{"question":3,"answer":1,"text":"The ans is"}]
-        }
-       ]
+        "data":[
+                   {"question":1,"answer":1,"text":"The ans is"},
+                   {"question":2,"answer":1,"text":"The ans is"},                  
+                   {"question":3,"answer":1,"text":"The ans is"}
+               ]
+    }
+]
   ```
 
 ---
@@ -175,8 +182,9 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/activate```
 
 * Response
-* ``` {"username":"pat3@gmail.com","is_active":true}
-  ```
+``` 
+    {"username":"pat3@gmail.com","is_active":true}
+```
 
 
 ---
@@ -186,8 +194,9 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/deactivate```
 
 * Response
-* ``` {"username":"pat3@gmail.com","is_active":false}
-  ```
+``` 
+{"username":"pat3@gmail.com","is_active":false}
+```
 
 
 ---
@@ -197,15 +206,17 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/history```
 
 * Response
-* ``` [
-        {
-         "record":{"id":1,"date":"2017-11-13T05:58:16.339366Z","score":15},
-         "data":[{"question":1,"answer":1,"text":"The ans is 2"},{"question":2,"answer":1,"text":"The ans is 2"}]
-         }
-      ]
-  ```
-
-
+``` 
+[
+    {
+        "record":{"id":1,"date":"2017-11-13T05:58:16.339366Z","score":15},
+        "data":[
+                {"question":1,"answer":1,"text":"The ans is 2"},
+                {"question":2,"answer":1,"text":"The ans is 2"}
+                ]
+    }
+]
+```
 
 
 ### Notes API
