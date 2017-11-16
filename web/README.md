@@ -176,7 +176,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
   ```
 
 ---
-####  GET 'api/patient/activate'
+####  POST 'api/patient/activate'
 * Activate a patient account. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patient/activate
 * ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/activate```
@@ -188,7 +188,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 
 
 ---
-####  GET 'api/patient/deactivate'
+####  POST 'api/patient/deactivate'
 * Deactivate a patient account. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patient/deactivate
 * ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/deactivate```
@@ -200,7 +200,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 
 
 ---
-####  GET '/api/patient/history'
+####  POST '/api/patient/history'
 * Deactivate a patient account. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patient/history
 * ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/history```
