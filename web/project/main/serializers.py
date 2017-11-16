@@ -327,6 +327,14 @@ class AnswerGetSerializer(ModelSerializer):
 ######################################################################################
 # privileged user serializer classes
 ######################################################################################
+# Patient serializer
+class PatientSectorSerializer(ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = [
+            'sector',
+        ]
+
 
 # New user register serializer
 class PatientActivateSerializer(ModelSerializer):
@@ -351,7 +359,7 @@ class NotesGetSerializer(ModelSerializer):
         ]
 
 
-# Get Patient Serializer
+# Get Patient Serializer used for data and score
 class PatientGetSerializer(ModelSerializer):
     class Meta:
         model = User
@@ -359,9 +367,10 @@ class PatientGetSerializer(ModelSerializer):
             'id',
             'username',
             'first_name',
-            'last_name'
+            'last_name',
         ]
 
+# Get Patient Serializer used for get all patients
 class PatientStatusGetSerializer(ModelSerializer):
     class Meta:
         model = User

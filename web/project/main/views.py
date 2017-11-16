@@ -16,7 +16,7 @@ from django.conf import settings
 from wsgiref.util import FileWrapper
 
 # Custom models
-from .models import Record, Answer, Entity, Question, Symptom, Notes
+from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient
 
 # Serializers import
 from .serializers import (
@@ -34,6 +34,7 @@ from .serializers import (
     NotesGetSerializer,
     PatientActivateSerializer,
     PatientGetSerializer,
+    PatientSectorSerializer,
     PatientStatusGetSerializer,
     PatientScoreGetSerializer,
     PatientRecordGetSerializer)
@@ -429,6 +430,14 @@ class PatientDataGetView(ListAPIView):
             entry = collections.OrderedDict()
             user_serial = PatientGetSerializer(user)
             entry['user'] = user_serial.data;
+            patient = Patient.objects.filter(user=user).first()
+
+            if patient is not None:
+                sector_serial = PatientSectorSerializer(patient)
+                entry['location'] = sector_serial.data
+            else:
+                entry['location'] = { 'sector': ''}
+
             query = Record.objects.filter(user=user).last()
             if query is not None:
                 rec = RecordSerializer(query)
@@ -455,6 +464,14 @@ class PatientScoreGetView(ListAPIView):
             entry = collections.OrderedDict()
             user_serial = PatientGetSerializer(user)
             entry['user'] = user_serial.data;
+
+            patient = Patient.objects.filter(user=user).first()
+            if patient is not None:
+                sector_serial = PatientSectorSerializer(patient)
+                entry['location'] = sector_serial.data
+            else:
+                entry['location'] = { 'sector': ''}
+
             query = Record.objects.filter(user=user).last()
             if query is not None:
                 rec = RecordSerializer(query)

@@ -150,6 +150,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 [
     {
         "user":{"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage"},
+        "location":{"sector":"Kigali"},
         "record":{"id":3,"date":"2017-11-13T05:58:47.209686Z","score":18}
     }
 ]
@@ -165,6 +166,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 [
     {
         "user":{"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn"},
+        "location":{"sector":"Kigali"},
         "record":{"id":6,"date":"2017-11-13T06:00:10.231919Z","score":17},
         "data":[
                    {"question":1,"answer":1,"text":"The ans is"},
