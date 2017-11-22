@@ -433,11 +433,21 @@ class PatientDataGetView(ListAPIView):
             entry['user'] = user_serial.data;
             patient = Patient.objects.filter(user=user).first()
 
+            # Get sector data
             if patient is not None:
                 sector_serial = PatientSectorSerializer(patient)
                 entry['location'] = sector_serial.data
             else:
                 entry['location'] = { 'sector': ''}
+
+            # Get latest score
+            notes = Notes.objects.filter(patient=user).last()
+            if notes is not None:
+                notes_serial = NotesGetSerializer(notes)
+                entry['notes'] = notes_serial.data
+            else:
+                entry['notes'] = {}
+
 
             query = Record.objects.filter(user=user).last()
             if query is not None:
@@ -529,13 +539,28 @@ class NotesCreateView(APIView):
         return Response(result)
 
 
+
 class NotesGetAPIView(ListAPIView):
     '''API to get notes for all users'''
-    serializer_class = NotesGetSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Notes.objects.all()
 
     def get(self, request, format=None):
-        notes = Notes.objects.all()
-        serializer = NotesGetSerializer(notes, many=True)
-        return Response(serializer.data)
+        patients = User.objects.filter(is_staff=False, is_active=True)
+        result = []
+        for patient in patients:
+            # query = Record.objects.filter(user=user).order_by('-date').first()
+            # Get last submission for each patient
+            entry = collections.OrderedDict()
+            user_serial = PatientGetSerializer(patient)
+            entry['patient'] = user_serial.data;
+
+            notes = Notes.objects.filter(patient=patient).last()
+            if notes is not None:
+                notes_serial = NotesGetSerializer(notes)
+                entry['notes'] = notes_serial.data
+            else:
+                entry['notes'] = {}
+
+            result.append(entry)
+        return Response(result)

@@ -364,8 +364,8 @@ class NotesGetSerializer(ModelSerializer):
         model = Notes
         fields = [
             'date',
-            'patient',
-            'notes'
+            'notes',
+            'dosage'
         ]
 
 
