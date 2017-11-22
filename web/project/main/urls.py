@@ -33,6 +33,6 @@ urlpatterns = [
     url(r'^api/patients/data$', views.PatientDataGetView.as_view(), name="patient_record"),
     url(r'^api/patients/score$', views.PatientScoreGetView.as_view(), name="patient_score"),
     url(r'^api/notes/create$', views.NotesCreateView.as_view(), name="create_notes"),
-    url(r'^api/notes', views.NotesGetAPIView.as_view(), name="view_notes"),
+    url(r'^api/notes$', views.NotesGetAPIView.as_view(), name="view_notes"),
     url(r'^api/notes/(?P<pk>\d+)$', views.NotesGetAPIView.as_view(), name="view_user_notes"),
 ]

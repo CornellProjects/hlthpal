@@ -31,6 +31,7 @@ from .serializers import (
     QuestionGetSerializer,
     SymptomSerializer,
     QuestionSerializer,
+    NotesCreateSerializer,
     NotesGetSerializer,
     PatientActivateSerializer,
     PatientGetSerializer,
@@ -480,11 +481,52 @@ class PatientScoreGetView(ListAPIView):
         return Response(result)
 
 
-class NotesCreateView(CreateAPIView):
+class NotesCreateView(APIView):
     '''API to add notes for a patient '''
-    serializer_class = NotesGetSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = User.objects.all()
+    queryset = User.objects.filter(is_staff=False)
+
+    def post(self, request, format=None):
+        data = request.data
+        result = {}
+
+        # Check if request contains notes username
+        notes = data.get("notes", None)
+        if not notes:
+            error = "notes is required!"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+        username = data.get("username", None)
+        if not username:
+            error = "username is required!"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if requested user is a patient
+        if User.objects.filter(username=username).exists():
+            user = User.objects.filter(username=username).first()
+
+            if user.is_staff:
+                error = "user is not a patient"
+                result['error'] = error
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+            # Dosage is optional
+            dosage = data.get("dosage", None)
+            if not dosage:
+                saved_notes = Notes.objects.create(patient=user, notes=notes)
+            else:
+                saved_notes = Notes.objects.create(patient=user, notes=notes, dosage=dosage)
+
+            notes_serial =  NotesCreateSerializer(saved_notes)
+            print notes_serial.data
+            return Response(notes_serial.data, status=status.HTTP_201_CREATED)
+        else:
+            error = "username does not exist!"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        return Response(result)
 
 
 class NotesGetAPIView(ListAPIView):

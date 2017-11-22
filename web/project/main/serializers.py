@@ -346,6 +346,16 @@ class PatientActivateSerializer(ModelSerializer):
         ]
 
 
+# User profile serializer
+class NotesCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Notes
+        fields = [
+            'id',
+            'date',
+            'notes',
+            'dosage'
+        ]
 
 
 # User profile serializer
@@ -355,7 +365,7 @@ class NotesGetSerializer(ModelSerializer):
         fields = [
             'date',
             'patient',
-            'text'
+            'notes'
         ]
 
 

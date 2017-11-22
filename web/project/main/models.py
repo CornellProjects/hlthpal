@@ -96,7 +96,9 @@ class Symptom(models.Model):
 # Model to store notes on patients on the dashboard
 class Notes(models.Model):
     date = models.DateTimeField(auto_now=True)
-    #patient = models.ForeignKey(Patient);
-    patient = models.CharField(max_length=255)
-    text = models.CharField(max_length=255)
+    patient = models.ForeignKey(User);
+    notes = models.CharField(max_length=255)
+    # Track morphine medication
+    dosage = models.IntegerField(null=True)
+
 
