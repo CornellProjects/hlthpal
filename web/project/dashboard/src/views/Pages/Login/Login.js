@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Container, Row, Col, CardGroup, Card, CardBlock, Button, Input, InputGroup, InputGroupAddon} from "reactstrap";
 import {connect} from 'react-redux';
-import {login} from '../../../actions/login';
+import {login} from '../../../actions/authActions';
 import {browserHistory} from 'react-router';
 import PropTypes from 'prop-types';
 

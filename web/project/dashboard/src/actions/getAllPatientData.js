@@ -1,5 +1,6 @@
 import axios from 'axios';
+
 export function getAllPatientData(){
   return dispatch => {
-      return axios.get('api/patients')
+      return axios.get('api/patients/score')
 }}

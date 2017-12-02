@@ -14,6 +14,7 @@ import '../scss/core/_dropdown-menu-right.scss'
 // Containers
 import Full from './containers/Full/Full'
 
+
 // Views
 import Login from './views/Pages/Login/'
 import Register from './views/Pages/Register/'
@@ -23,11 +24,18 @@ import Page500 from './views/Pages/Page500/'
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {createStore, applyMiddleware} from 'redux';
+import setAuthorizationToken from './utils/setAuthorizationToken';
+import refreshToken from './utils/refreshToken';
 
 const store = createStore(
   (state = {}) => state,
   applyMiddleware(thunk)
 );
+setAuthorizationToken(localStorage.jwtToken);
+refreshToken();
+
+
+
 ReactDOM.render((
   <Provider store={store}>
     <HashRouter history={browserHistory}>

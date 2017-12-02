@@ -4,43 +4,26 @@ class PatientCard extends Component{
   constructor(props){
     super(props)
     this.state = {
-      patientName: '',
-      pain: '',
-      weakness:'',
-      nausea: '',
-      vomitting: ''
+      firstname: props.firstname,
+      lastname: props.lastname,
+      sector: props.sector,
+      pain: props.pain,
+      weakness:props.weakness,
+      nausea:props.nausea,
+      vomitting:props.vomitting
     };
   }
   render(){
-    const {patientName, pain, weakness, nausea, vomitting} = this.state;
+    const {firstname, lastname, sector, pain, weakness, nausea, vomitting} = this.state;
     return(
-        <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
           <tr>
-           <div>
-            {patientName}
-           </div>
+          <td>{firstname + " " + lastname}</td>
+          <td>{sector}</td>
+          <td>{pain}</td>
+          <td>{weakness}</td>
+          <td>{nausea}</td>
+          <td>{vomitting}</td>
           </tr>
-          <tr>
-            <div>
-              {pain}
-            </div>
-          </tr>
-          <tr>
-            <div>
-              {weakness}
-            </div>
-          </tr>
-          <tr>
-             <div>
-               {nausea}
-             </div>
-          </tr>
-          <tr>
-            <div>
-              {vomitting}
-            </div>
-          </tr>
-        </Table>
     );
   }
 }

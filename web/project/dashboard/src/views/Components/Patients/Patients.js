@@ -22,24 +22,44 @@ import {
   Table
 } from "reactstrap";
 import PatientCard from "../PatientCard/PatientCard"
+import {getAllPatientName} from "../../../actions/getAllPatientName"
 import {getAllPatientData} from "../../../actions/getAllPatientData"
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+
 
 
 class Patients extends Component {
   constructor(props){
     super(props)
     this.state = {
-      patients: []
+      patients: [],
     };
   }
   componentWillMount(){
-    this.props.getAllPatientData().then(
-      (res) => console.log(res)
+    axios.get('api/patients/data').then(
+      (res) => this.setState({
+        patients:res.data
+      })
     );
   }
+
   render(){
+    var {patients} = this.state;
+    var renderPatients = () => {
+      return patients.map((patient) => {
+        return (
+          <PatientCard key={patient.user.id}
+                       firstname={patient.user.first_name}
+                       lastname={patient.user.last_name}
+                       sector="Gisenyi"
+                       pain={patient.data[0].answer}
+                       weakness={patient.data[1].answer}
+                       nausea={patient.data[2].answer}></PatientCard>
+        );
+      })
+    };
     return (
       <Row>
           <Col>
@@ -60,7 +80,7 @@ class Patients extends Component {
                   </tr>
                   </thead>
                   <tbody>
-
+                    { renderPatients() }
                   </tbody>
                 </Table>
               </CardBlock>
@@ -72,5 +92,4 @@ class Patients extends Component {
 }
 
 
-
-export default connect(null, {getAllPatientData}) (Patients);
+export default (Patients);
