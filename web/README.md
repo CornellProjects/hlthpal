@@ -57,7 +57,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 #### POST 'api/register'
 * API for patient Registration.
 * URL: http://127.0.0.1:8000/api/register
-* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John", "last_name":"Misod","email":"mike@gmail.com","username":"mike@gmail.com","password":"testPassword", "patient" : { "diagnosis":"diagnosis","care_giver":"Mary Smith", "doctor":"John Smith", "gender":"male", "mobile":"555-5555", "street":"street", "city":"city", "state":"state", "country":"country"} }' http://127.0.0.1:8000/api/register ```
+* ``` curl -i -X POST -H "Content-Type: application/json" -d '{"first_name":"John", "last_name":"Misod","email":"mike@gmail.com","username":"mike@gmail.com","password":"testPassword", "patient" : { "diagnosis":"diagnosis","care_giver":"Mary Smith", "doctor":"John Smith", "gender":"male", "mobile":"555-5555", "street":"street", "city":"city", "sector":"Gisenyi", "state":"state", "country":"country"} }' http://127.0.0.1:8000/api/register ```
 
 ---
 #### POST 'api/entity'
@@ -129,17 +129,96 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 * URL: http://127.0.0.1:8000/api/patients
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
 
+* Response
+ ```  
+ [
+     {"id":13,"username":"rand1","first_name":"John","last_name":"Misod","is_active":true},
+     {"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage","is_active":true},
+     {"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn","is_active":true},
+     {"id":16,"username":"pat3@gmail.com","first_name":"Pat3","last_name":"More","is_active":true}
+ ]
+  ```
+
 ---
 ####  GET 'api/patients/score'
 * Get list of all patients and their latest score. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/score
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/score ```
 
+* Response
+```
+[
+    {
+        "user":{"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage"},
+        "location":{"sector":"Kigali"},
+        "record":{"id":3,"date":"2017-11-13T05:58:47.209686Z","score":18}
+    }
+]
+  ```
 ---
 ####  GET 'api/patients/data'
 * Get list of all patients with their latest score and answer data.  For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/data
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/data```
+
+* Response
+```  
+[
+    {
+        "user":{"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn"},
+        "location":{"sector":"Kigali"},
+        "record":{"id":6,"date":"2017-11-13T06:00:10.231919Z","score":17},
+        "data":[
+                   {"question":1,"answer":1,"text":"The ans is"},
+                   {"question":2,"answer":1,"text":"The ans is"},                  
+                   {"question":3,"answer":1,"text":"The ans is"}
+               ]
+    }
+]
+  ```
+
+---
+####  POST 'api/patient/activate'
+* Activate a patient account. For privileged users only.
+* URL: http://127.0.0.1:8000/api/patient/activate
+* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/activate```
+
+* Response
+``` 
+    {"username":"pat3@gmail.com","is_active":true}
+```
+
+
+---
+####  POST 'api/patient/deactivate'
+* Deactivate a patient account. For privileged users only.
+* URL: http://127.0.0.1:8000/api/patient/deactivate
+* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/deactivate```
+
+* Response
+``` 
+{"username":"pat3@gmail.com","is_active":false}
+```
+
+
+---
+####  POST '/api/patient/history'
+* get individual patient history. Returns all data submitted by a patient. For privileged users only.
+* URL: http://127.0.0.1:8000/api/patient/history
+* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/history```
+
+* Response
+``` 
+[
+    {
+        "record":{"id":1,"date":"2017-11-13T05:58:16.339366Z","score":15},
+        "data":[
+                {"question":1,"answer":1,"text":"The ans is 2"},
+                {"question":2,"answer":1,"text":"The ans is 2"}
+                ]
+    }
+]
+```
 
 
 ### Notes API

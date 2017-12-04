@@ -1,7 +1,7 @@
 import os
 import datetime
 import collections, json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.template import loader
@@ -16,7 +16,7 @@ from django.conf import settings
 from wsgiref.util import FileWrapper
 
 # Custom models
-from .models import Record, Answer, Entity, Question, Symptom, Notes
+from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient
 
 # Serializers import
 from .serializers import (
@@ -32,7 +32,10 @@ from .serializers import (
     SymptomSerializer,
     QuestionSerializer,
     NotesGetSerializer,
+    PatientActivateSerializer,
     PatientGetSerializer,
+    PatientSectorSerializer,
+    PatientStatusGetSerializer,
     PatientScoreGetSerializer,
     PatientRecordGetSerializer)
 
@@ -258,6 +261,144 @@ class CurrentUserView(APIView):
 
 ######################################################################################
 # Class based privileged user views
+######################################################################################
+
+
+class PatientHistoryView(APIView):
+    '''API to get patient history '''
+    serializer_class = PatientActivateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+
+        # Check if request contains username
+        username = data.get("username", None)
+        result = {}
+        if not username:
+            error = "username is required"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            pass
+            #print "username found", data['username']
+
+        # Check if username is valid
+        if User.objects.filter(username=username).exists():
+            user = User.objects.filter(username=username).first()
+
+            if user.is_staff:
+                error = "user is not a patient!"
+                result['error'] = error
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+            user_serial = PatientActivateSerializer(user)
+
+            query = Record.objects.filter(user=user)
+            result = []
+
+            for record in query:
+                clean_result = {}
+                record_serial = RecordSerializer(record)
+
+                clean_result['record'] = record_serial.data
+
+                answers = Answer.objects.filter(record=record_serial.data['id'])
+
+                ans_result = []
+                for ans in answers:
+                    ans_serial = AnswerGetSerializer(ans);
+                    ans_result.append(ans_serial.data)
+
+                clean_result['data'] = ans_result
+                result.append(clean_result)
+            return Response(result, status=status.HTTP_200_OK)
+
+        else:
+            error = "username does not exist!"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PatientActivateView(APIView):
+    ''' API to activate a patient account '''
+    serializer_class = PatientActivateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+
+        # Check if request contains username
+        username = data.get("username", None)
+        result = {}
+        if not username:
+            error = "username is required"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            pass
+            #print "username found", data['username']
+
+        # Check if username is valid
+        if User.objects.filter(username=username).exists():
+            user = User.objects.filter(username=username).first()
+
+            if user.is_staff:
+                error = "user is not a patient"
+                result['error'] = error
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+            user.is_active = True
+            user.save()
+            user_serial = PatientActivateSerializer(user)
+            return Response(user_serial.data, status=status.HTTP_200_OK)
+        else:
+            error = "username does not exist"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class PatientDeactivateView(APIView):
+    '''API to deactivate a patient account '''
+    serializer_class = PatientActivateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+
+        # Check if request contains username
+        username = data.get("username", None)
+        result = {}
+        if not username:
+            error = "username is required"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            pass
+            #print "username found", data['username']
+
+        # Check if username is valid
+        if User.objects.filter(username=username).exists():
+            user = User.objects.filter(username=username).first()
+
+            if user.is_staff:
+                error = "user is not a patient"
+                result['error'] = error
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+            user.is_active = False
+            user.save()
+            user_serial = PatientActivateSerializer(user)
+            return Response(user_serial.data, status=status.HTTP_200_OK)
+        else:
+            error = "username does not exist"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
 
 class EntityCreateView(CreateAPIView):
     '''API to create a new Entity '''
@@ -275,7 +416,7 @@ class DoctorCreateView(CreateAPIView):
 
 class PatientGetView(ListAPIView):
     '''API to Get a list of all patients '''
-    serializer_class = PatientGetSerializer
+    serializer_class = PatientStatusGetSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.filter(is_staff=False)
 
@@ -286,7 +427,7 @@ class PatientDataGetView(ListAPIView):
     queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        patients = User.objects.filter(is_staff=False)
+        patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
         for user in patients:
             # query = Record.objects.filter(user=user).order_by('-date').first()
@@ -294,6 +435,14 @@ class PatientDataGetView(ListAPIView):
             entry = collections.OrderedDict()
             user_serial = PatientGetSerializer(user)
             entry['user'] = user_serial.data;
+            patient = Patient.objects.filter(user=user).first()
+
+            if patient is not None:
+                sector_serial = PatientSectorSerializer(patient)
+                entry['location'] = sector_serial.data
+            else:
+                entry['location'] = { 'sector': ''}
+
             query = Record.objects.filter(user=user).last()
             if query is not None:
                 rec = RecordSerializer(query)
@@ -306,31 +455,13 @@ class PatientDataGetView(ListAPIView):
         return Response(result)
 
 
-# class PatientScoreGetView(ListAPIView):
-#     '''API to get all patient latest scores '''
-#     queryset = Record.objects.all().order_by('-date')
-#
-#     def get(self, request, format=None):
-#         records = User.objects.filter(is_staff=False)
-#         result = []
-#         for user in records:
-#             # query = Record.objects.filter(user=user).order_by('-date').first()
-#             # Get last submission for each patient
-#             query = Record.objects.filter(user=user).last()
-#             if query is not None:
-#                 result.append(query)
-#
-#         serializer = PatientScoreGetSerializer(result, many=True)
-#         return Response(serializer.data)
-
-
 class PatientScoreGetView(ListAPIView):
     '''API to get all patients latest score '''
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        patients = User.objects.filter(is_staff=False)
+        patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
         for user in patients:
             # query = Record.objects.filter(user=user).order_by('-date').first()
@@ -338,6 +469,14 @@ class PatientScoreGetView(ListAPIView):
             entry = collections.OrderedDict()
             user_serial = PatientGetSerializer(user)
             entry['user'] = user_serial.data;
+
+            patient = Patient.objects.filter(user=user).first()
+            if patient is not None:
+                sector_serial = PatientSectorSerializer(patient)
+                entry['location'] = sector_serial.data
+            else:
+                entry['location'] = { 'sector': ''}
+
             query = Record.objects.filter(user=user).last()
             if query is not None:
                 rec = RecordSerializer(query)

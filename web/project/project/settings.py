@@ -171,7 +171,7 @@ REST_FRAMEWORK = {
 
 # JSON Web Token settings
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=600),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=600 * 6),
 
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),

@@ -17,6 +17,16 @@ class Entity(models.Model):
         return self.name
 
 
+# Model to map sectors
+# class Sector(models.Model):
+#         sector = models.CharField(
+#             max_length=255,
+#         )
+#
+#         def __str__(self):
+#             return self.question
+
+
 # Model to extend User class on the creation of a new doctor
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor')
@@ -36,6 +46,7 @@ class Patient(models.Model):
     gender = models.CharField(max_length=6, blank=True)
     mobile = models.CharField(max_length=10, blank=True)
     street = models.CharField(max_length=200)
+    sector = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
