@@ -6,11 +6,11 @@ export default function refreshToken(){
     axios.post('api/token-refresh',{token:localStorage.jwtToken}).then(
           res => {
             const token = res.data.token;
-            localStorage.clear();
             localStorage.setItem('jwtToken', token);
+            console.log(token)
             setAuthorizationToken(token);
           }
         )
   }
-  setInterval(fetchToken, 600000)
+  setInterval(fetchToken, 60000)
 }

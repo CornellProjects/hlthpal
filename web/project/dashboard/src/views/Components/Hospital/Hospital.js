@@ -42,62 +42,62 @@ class Forms extends Component {
                 <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
                   <FormGroup row>
                     <Col md="3">
-                      <Label>Patient ID</Label>
+                      <Label>Hospital</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="text-input" name="text-input" placeholder="Enter Patient ID"/>
-                      <FormText color="muted">Please enter patient id</FormText>
+                      <Input type="text" id="text-input" name="text-input" placeholder="Enter hospital name"/>
+                      <FormText color="muted">Please enter your hospital name</FormText>
                     </Col>
                   </FormGroup>
 
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="email-input">Email Address</Label>
+                      <Label htmlFor="email-input">Street</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="email" id="email-input" name="email-input" placeholder="Enter Email"/>
-                      <FormText className="help-block">Please enter patinet email</FormText>
+                      <Input type="email" id="email-input" name="email-input" placeholder="Enter street"/>
+                      <FormText className="help-block">Please enter the street</FormText>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="password-input">Password</Label>
+                      <Label htmlFor="password-input">City</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="password" id="password-input" name="password-input" placeholder="Password"/>
-                      <FormText className="help-block">Please enter a complex password</FormText>
+                      <Input type="password" id="password-input" name="password-input" placeholder="Enter city"/>
+                      <FormText className="help-block">Please enter the city</FormText>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="address-input">Address</Label>
+                      <Label htmlFor="address-input">State</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="address" id="address-input" name="address-input" placeholder="Enter patient address"/>
-                      <FormText className="help-block">Please enter patient address</FormText>
+                      <Input type="address" id="address-input" name="address-input" placeholder="Enter state"/>
+                      <FormText className="help-block">Please enter state</FormText>
                     </Col>
                   </FormGroup>
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="age-input">Age</Label>
+                      <Label htmlFor="age-input">Country</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="age" id="age-input" name="age-input" placeholder="Enter patient age"/>
-                      <FormText className="help-block">Please enter patient age</FormText>
+                      <Input type="age" id="age-input" name="age-input" placeholder="Enter country"/>
+                      <FormText className="help-block">Please enter country</FormText>
                     </Col>
                   </FormGroup>
 
                 </Form>
               </CardBlock>
               <CardFooter>
-              <Row>
-              <Col md="1">
-              <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-              </Col>
-              <Col md="1">
-              <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
-              </Col>
-              </Row>
+                <Row>
+                <Col md="1">
+                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                </Col>
+                <Col md="1">
+                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                </Col>
+                </Row>
               </CardFooter>
             </Card>
 

@@ -42,23 +42,46 @@ class Forms extends Component {
                 <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
                   <FormGroup row>
                     <Col md="3">
-                      <Label>Patient ID</Label>
+                      <Label>Firstname</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="text-input" name="text-input" placeholder="Enter Patient ID"/>
-                      <FormText color="muted">Please enter patient id</FormText>
+                      <Input type="text" id="text-input" name="text-input" placeholder="Enter firstname"/>
+                      <FormText color="muted">Please enter firstname</FormText>
                     </Col>
                   </FormGroup>
+
+                  <FormGroup row>
+                    <Col md="3">
+                      <Label>Lastname</Label>
+                    </Col>
+                    <Col xs="12" md="9">
+                      <Input type="text" id="text-input" name="text-input" placeholder="Enter lastname"/>
+                      <FormText color="muted">Please enter lastname</FormText>
+                    </Col>
+                  </FormGroup>
+
+                  <FormGroup row>
+                    <Col md="3">
+                      <Label htmlFor="email-input">Username</Label>
+                    </Col>
+                    <Col xs="12" md="9">
+                      <Input type="email" id="email-input" name="email-input" placeholder="Enter username"/>
+                      <FormText className="help-block">Please enter username</FormText>
+                    </Col>
+                  </FormGroup>
+
 
                   <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="email-input">Email Address</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="email" id="email-input" name="email-input" placeholder="Enter Email"/>
-                      <FormText className="help-block">Please enter patinet email</FormText>
+                      <Input type="email" id="email-input" name="email-input" placeholder="Enter email"/>
+                      <FormText className="help-block">Please enter email</FormText>
                     </Col>
                   </FormGroup>
+
+
                   <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="password-input">Password</Label>
@@ -66,24 +89,6 @@ class Forms extends Component {
                     <Col xs="12" md="9">
                       <Input type="password" id="password-input" name="password-input" placeholder="Password"/>
                       <FormText className="help-block">Please enter a complex password</FormText>
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="address-input">Address</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="address" id="address-input" name="address-input" placeholder="Enter patient address"/>
-                      <FormText className="help-block">Please enter patient address</FormText>
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="age-input">Age</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="age" id="age-input" name="age-input" placeholder="Enter patient age"/>
-                      <FormText className="help-block">Please enter patient age</FormText>
                     </Col>
                   </FormGroup>
 

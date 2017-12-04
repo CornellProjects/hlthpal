@@ -29,6 +29,16 @@ export default {
       icon: 'icon-calculator',
     },
     {
+      name: 'Add Doctors',
+      url: '/addDoctors',
+      icon: 'icon-calculator',
+    },
+    {
+      name: 'Add Hospitals',
+      url: '/addHopistals',
+      icon: 'icon-calculator',
+    },
+    {
       divider: true
     }
   ]

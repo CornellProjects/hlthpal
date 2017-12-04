@@ -11,6 +11,9 @@ import Charts from '../../views/Charts/';
 // Components
 import Forms from '../../views/Components/Forms/';
 import Patients from '../../views/Components/Patients/';
+import Doctor from '../../views/Components/Doctor/';
+import Hospital from '../../views/Components/Hospital/';
+
 
 class Full extends Component {
   render() {
@@ -26,6 +29,8 @@ class Full extends Component {
                 <Route path="/home" name="Home" component={Dashboard}/>
                 <Route path="/addPatients" name="Add Patients" component={Forms}/>
                 <Route path="/patients" name="My Patients" component={Patients}/>
+                <Route path="/addDoctors" name="Add Doctors" component={Doctor}/>
+                <Route path="/addHopistals" name="Add Hospitals" component={Hospital}/>
                 <Redirect from="/" to="/home"/>
               </Switch>
             </Container>

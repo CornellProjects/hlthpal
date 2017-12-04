@@ -51,6 +51,7 @@ class Patients extends Component {
       return patients.map((patient) => {
         return (
           <PatientCard key={patient.user.id}
+                       username={patient.user.username}
                        firstname={patient.user.first_name}
                        lastname={patient.user.last_name}
                        sector="Gisenyi"
@@ -74,13 +75,15 @@ class Patients extends Component {
                     <th>Patient Name</th>
                     <th>Sector</th>
                     <th>Pain</th>
-                    <th>Weakness</th>
-                    <th>Nausea</th>
-                    <th>Vomitting</th>
+                    <th>Shortness of breath</th>
+                    <th>Nausea and Vomitting</th>
+                    <th>Fatigue</th>
+                    <th>Constipation</th>
+                    <th>More info</th>
                   </tr>
                   </thead>
                   <tbody>
-                    { renderPatients() }
+                   { renderPatients() }
                   </tbody>
                 </Table>
               </CardBlock>

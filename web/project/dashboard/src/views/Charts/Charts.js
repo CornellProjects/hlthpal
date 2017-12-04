@@ -212,7 +212,7 @@ class Charts extends Component {
               </div>
             </CardBlock>
           </Card>
-          
+
           <Card>
             <CardHeader>
               Pie Chart
