@@ -20,23 +20,44 @@ import {
   InputGroupAddon,
   InputGroupButton
 } from "reactstrap";
+import axios from 'axios';
 
 class Forms extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
+  constructor(props){
+    super(props)
+    this.state = {
+      doctor:
+           { entity: 1},
+      first_name:'',
+      last_name:'',
+      password: '',
+      username:'',
+      email:''
+    };
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
-
+  onChange(e){
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+  onSubmit(e) {
+    e.preventDefault();
+    var headers = {
+      'Content-Type':'application/json'
+    }
+    axios.post('api/doctor', this.state, headers);
+  }
   render() {
+    const {first_name, last_name, doctor, password, username, email} = this.state;
     return (
       <div className="animated fadeIn">
-
         <Row>
           <Col xs="12" md="12">
             <Card>
               <CardHeader>
-                <strong>Patient Info</strong>
+                <strong>Doctor Info</strong>
               </CardHeader>
               <CardBlock className="card-body">
                 <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
@@ -45,8 +66,12 @@ class Forms extends Component {
                       <Label>Firstname</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="text-input" name="text-input" placeholder="Enter firstname"/>
-                      <FormText color="muted">Please enter firstname</FormText>
+                      <Input type="firstname"
+                             name="first_name"
+                             value={first_name}
+                             placeholder="Enter firstname"
+                             onChange={this.onChange}/>
+                      <FormText color="muted">Please enter doctor firstname</FormText>
                     </Col>
                   </FormGroup>
 
@@ -55,8 +80,26 @@ class Forms extends Component {
                       <Label>Lastname</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="text" id="text-input" name="text-input" placeholder="Enter lastname"/>
-                      <FormText color="muted">Please enter lastname</FormText>
+                      <Input type="lastname"
+                             name="last_name"
+                             value={last_name}
+                             placeholder="Enter lastname"
+                             onChange={this.onChange}/>
+                      <FormText color="muted">Please enter doctor lastname</FormText>
+                    </Col>
+                  </FormGroup>
+
+                  <FormGroup row>
+                    <Col md="3">
+                      <Label>Doctor entity</Label>
+                    </Col>
+                    <Col xs="12" md="9">
+                      <Input type="entity"
+                             name="entity"
+                             value={doctor.entity}
+                             placeholder="Enter entity"
+                             onChange={this.onChange}/>
+                      <FormText color="muted">Please enter doctor entity</FormText>
                     </Col>
                   </FormGroup>
 
@@ -65,7 +108,11 @@ class Forms extends Component {
                       <Label htmlFor="email-input">Username</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="email" id="email-input" name="email-input" placeholder="Enter username"/>
+                      <Input type="username"
+                             name="username"
+                             value={username}
+                             placeholder="Enter username"
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter username</FormText>
                     </Col>
                   </FormGroup>
@@ -76,7 +123,11 @@ class Forms extends Component {
                       <Label htmlFor="email-input">Email Address</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="email" id="email-input" name="email-input" placeholder="Enter email"/>
+                      <Input type="email"
+                             name="email"
+                             value={email}
+                             placeholder="Enter email"
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter email</FormText>
                     </Col>
                   </FormGroup>
@@ -87,7 +138,11 @@ class Forms extends Component {
                       <Label htmlFor="password-input">Password</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="password" id="password-input" name="password-input" placeholder="Password"/>
+                      <Input type="password"
+                             name="password"
+                             value={password}
+                             placeholder="Password"
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter a complex password</FormText>
                     </Col>
                   </FormGroup>
@@ -97,7 +152,7 @@ class Forms extends Component {
               <CardFooter>
               <Row>
               <Col md="1">
-              <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
+              <Button type="submit" size="sm" color="primary" onClick={this.onSubmit}><i className="fa fa-dot-circle-o"></i> Submit</Button>
               </Col>
               <Col md="1">
               <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>

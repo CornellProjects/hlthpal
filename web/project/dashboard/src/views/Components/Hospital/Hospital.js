@@ -36,7 +36,7 @@ class Forms extends Component {
           <Col xs="12" md="12">
             <Card>
               <CardHeader>
-                <strong>Patient Info</strong>
+                <strong>Hospital Info</strong>
               </CardHeader>
               <CardBlock className="card-body">
                 <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">

@@ -11,12 +11,14 @@ import {
   NavbarBrand,
   DropdownToggle
 } from 'reactstrap';
+import PropTypes from 'prop-types';
+import {browserHistory} from 'react-router';
 
 class Header extends Component {
 
-  constructor(props) {
-    super(props);
-
+  constructor(props, contexts) {
+    super(props, contexts);
+    this.onSubmit = this.onSubmit.bind(this);
     this.toggle = this.toggle.bind(this);
     this.state = {
       dropdownOpen: false
@@ -48,7 +50,11 @@ class Header extends Component {
     e.preventDefault();
     document.body.classList.toggle('aside-menu-hidden');
   }
-
+  onSubmit(e) {
+    e.preventDefault();
+    localStorage.clear();
+    this.context.router.history.push('/login');
+  }
   render() {
     return (
       <header className="app-header navbar">
@@ -62,7 +68,7 @@ class Header extends Component {
           <NavItem>
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle className="nav-link dropdown-toggle">
-                <img src={'img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com"/>
+                <img src={'img/avatars/6.jpg'} className="img-avatar" alt="admin@cornell.edu"/>
                 <span className="d-md-down-none">admin</span>
               </DropdownToggle>
               <DropdownMenu right className={this.state.dropdownOpen ? 'show' : ''}>
@@ -72,7 +78,7 @@ class Header extends Component {
                 <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
                 <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
                 <DropdownItem divider/>
-                <DropdownItem><i className="fa fa-lock"></i> Logout</DropdownItem>
+                <DropdownItem onClick={this.onSubmit}><i className="fa fa-lock"></i> Logout</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </NavItem>
@@ -84,4 +90,7 @@ class Header extends Component {
   }
 }
 
+Header.contextTypes = {
+    router: PropTypes.object.isRequired
+}
 export default Header;

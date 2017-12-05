@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {login} from '../../../actions/authActions';
 import {browserHistory} from 'react-router';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+
 
 class Login extends Component {
   constructor(props){
@@ -16,6 +18,7 @@ class Login extends Component {
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.reset = this.reset.bind(this);
   }
   onChange(e){
     this.setState({
@@ -29,6 +32,10 @@ class Login extends Component {
       (res) => this.context.router.history.push('/'),
       (err) => this.setState({isLoading:false})
     );
+  }
+  reset(e){
+    e.preventDefault();
+    this.context.router.history.push('/password-reset');
   }
   render() {
     const { errors, username, password, isLoading } = this.state;
@@ -65,7 +72,7 @@ class Login extends Component {
                         <Button color="primary" className="px-4" onClick={this.onSubmit} disabled={isLoading}>Login</Button>
                       </Col>
                       <Col xs="6" className="text-right">
-                        <Button color="link" className="px-0">Forgot password?</Button>
+                        <Button color="link" className="px-0" onClick={this.reset} >Forgot password?</Button>
                       </Col>
                     </Row>
                   </CardBlock>
