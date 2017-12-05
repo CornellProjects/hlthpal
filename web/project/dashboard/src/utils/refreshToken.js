@@ -7,10 +7,9 @@ export default function refreshToken(){
           res => {
             const token = res.data.token;
             localStorage.setItem('jwtToken', token);
-            console.log(token)
             setAuthorizationToken(token);
           }
         )
   }
-  setInterval(fetchToken, 60000)
+  setInterval(fetchToken, 600000)
 }
