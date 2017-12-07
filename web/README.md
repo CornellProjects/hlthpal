@@ -224,7 +224,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ### Notes API
 ---
 ####   GET 'api/notes'  
-* Get all patient notes. For privileged users only. 
+* Get all patient notes latest notes. For privileged users only. 
 * URL: http://127.0.0.1:8000/api/notes 
 * ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes ```
 
