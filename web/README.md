@@ -127,7 +127,8 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ####  GET 'api/patients'
 * Get all patient names. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients
-* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
+* Request:
+``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients ```
 
 * Response
  ```  
@@ -143,7 +144,8 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ####  GET 'api/patients/score'
 * Get list of all patients and their latest score. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/score
-* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/score ```
+* Request: 
+``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/score ```
 
 * Response
 ```
@@ -159,7 +161,8 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ####  GET 'api/patients/data'
 * Get list of all patients with their latest score and answer data.  For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/data
-* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/data```
+* Request:
+``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/patients/data```
 
 * Response
 ```  
@@ -181,7 +184,8 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ####  POST 'api/patient/activate'
 * Activate a patient account. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patient/activate
-* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/activate```
+* Request:
+``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/activate```
 
 * Response
 ``` 
@@ -193,7 +197,8 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ####  POST 'api/patient/deactivate'
 * Deactivate a patient account. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patient/deactivate
-* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/deactivate```
+* Request:
+``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/deactivate```
 
 * Response
 ``` 
@@ -205,8 +210,31 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ####  POST '/api/patient/history'
 * get individual patient history. Returns all data submitted by a patient. For privileged users only.
 * URL: http://127.0.0.1:8000/api/patient/history
-* ``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/history```
+* Request:
+``` curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat3@gmail.com"}' http://127.0.0.1:8000/api/patient/history```
 
+* Response
+``` 
+[
+    {
+        "patient": {"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage"},
+        "notes": {"date":"2017-12-07T01:20:06.371950Z","notes":"Some random notes","dosage":18}
+    },
+    {
+        "patient": {"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn"},
+        "notes": {"date":"2017-12-07T01:47:25.855913Z","notes":"This is important","dosage":null}
+    },
+]
+```
+
+
+### Notes API
+---
+####   GET 'api/notes'  
+* Get all patient notes latest notes. For privileged users only. 
+* URL: http://127.0.0.1:8000/api/notes 
+* Request: 
+``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes ```
 * Response
 ``` 
 [
@@ -220,20 +248,35 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ]
 ```
 
-
-### Notes API
----
-####   GET 'api/notes'  
-* Get all patient notes latest notes. For privileged users only. 
-* URL: http://127.0.0.1:8000/api/notes 
-* ``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes ```
-
-
 ---
 ####  GET 'api/notes/create'  
-* Create a new note. For privileged users only. 
+* Create a new note. For privileged users only. The dosage parameter is optional. All other parameters are required. 
 * URL: http://127.0.0.1:8000/api/notes/create </p>
-* ``` curl -i -X POST  -H "Content-Type: application/json" -d '{"text": "Some random notes" , "patient" : "Mike Bloomberg"}' -H "Authorization: JWT  __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes/create ```
+* Request
+```curl -i -X POST  -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"notes": "This is important" , "dosage":18, "username" : "pat1@gmail.com"}' http://127.0.0.1:8000/api/notes/create ```
+
+OR
+```
+curl -i -X POST  -H "Authorization: JWT __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"notes": "This is important" , "username" : "pat2@gmail.com"}' http://127.0.0.1:8000/api/notes/create
+```
+
+* Response
+``` 
+{ 
+    "id":19, 
+    "date":"2017-12-07T01:41:36.562356Z", 
+    "notes":"This is important", 
+    "dosage":20
+ }
+```
+OR
+```
+{ "id":20,
+  "date":"2017-12-07T01:47:25.855913Z", 
+  "notes":"This is important", 
+  "dosage":null
+}
+```
 
 ---
 ### Project URLs 
