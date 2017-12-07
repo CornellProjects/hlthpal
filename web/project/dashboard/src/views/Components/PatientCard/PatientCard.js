@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { Table, Button, Card, CardBody, CardHeader, CardFooter, Row, Col, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Table, Button, Card, CardBody, CardHeader, CardFooter, Row, Col, Label, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup } from "reactstrap";
 import axios from 'axios';
 import PatientDetail from "../PatientDetail/PatientDetail"
 
@@ -8,6 +8,8 @@ class PatientCard extends Component{
   constructor(props){
     super(props);
     this.toggle = this.toggle.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.state = {
       username: props.username,
       firstname: props.firstname,
@@ -19,7 +21,8 @@ class PatientCard extends Component{
       fatigue: props.fatigue,
       constipation: props.constipation,
       modal: false,
-      records:[]
+      records:[],
+      note:''
     };
   }
 
@@ -34,10 +37,25 @@ class PatientCard extends Component{
   toggle(){
     this.setState({modal: !this.state.modal});
   }
-
+  onSubmit(e) {
+    e.preventDefault();
+    var headers = {
+      'Content-Type':'application/json'
+    }
+    var data = {
+      text: this.state.note,
+      patient:this.state.firstname + this.state.lastname
+    }
+    axios.post('api/notes/create',data, headers);
+  }
+  onChange(e){
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
   render(){
     var { records } = this.state;
-    const {firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal} = this.state;
+    const {firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, note} = this.state;
     var renderPatients = () => {
       return records.map((record) => {
         return (
@@ -97,6 +115,37 @@ class PatientCard extends Component{
                                   </tbody>
                                 </Table>
                             </Col>
+                        </Row>
+                        <Row>
+                        <Col xs="12" md="12">
+                        <Card>
+                            <CardHeader>
+                              Create Note for {firstname}
+                            </CardHeader>
+                            <CardBody>
+                                <FormGroup row>
+                                    <Col md="3">
+                                      <Label>Note</Label>
+                                    </Col>
+                                    <Col xs="12" md="9">
+                                      <Input type="note"
+                                             name="note"
+                                             value={note}
+                                             placeholder="Enter your note"
+                                             onChange={this.onChange}/>
+                                    </Col>
+                                </FormGroup>
+                            </CardBody>
+
+                          <CardFooter>
+                          <Row>
+                          <Col md="1">
+                            <Button color="primary" size="sm" onClick={this.onSubmit}>Submit</Button>
+                          </Col>
+                          </Row>
+                          </CardFooter>
+                        </Card>
+                        </Col>
                         </Row>
                       </ModalBody>
                     <ModalFooter>
