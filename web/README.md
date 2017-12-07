@@ -223,15 +223,23 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ``` 
 [
     {
-        "patient": {"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage"},
-        "notes": {"date":"2017-12-07T01:20:06.371950Z","notes":"Some random notes","dosage":18}
+       "record":{"id":7,"date":"2017-11-13T06:00:44.418184Z","score":8},
+       "data":[
+                  {"question":1,"answer":1,"text":"The ans is"},
+                  {"question":2,"answer":1,"text":"The ans is"}
+              ]
     },
     {
-        "patient": {"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn"},
-        "notes": {"date":"2017-12-07T01:47:25.855913Z","notes":"This is important","dosage":null}
-    },
+      "record":{"id":8,"date":"2017-11-13T06:00:52.025034Z","score":17},
+       "data":[
+                  {"question":1,"answer":1,"text":"The ans is"},
+                  {"question":2,"answer":1,"text":"The ans is"},
+                  {"question":3,"answer":1,"text":"The ans is"}
+               ]
+    }
 ]
 ```
+
 
 
 ### Notes API
@@ -246,12 +254,13 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ``` 
 [
     {
-        "record":{"id":1,"date":"2017-11-13T05:58:16.339366Z","score":15},
-        "data":[
-                {"question":1,"answer":1,"text":"The ans is 2"},
-                {"question":2,"answer":1,"text":"The ans is 2"}
-                ]
-    }
+        "patient": {"id":14,"username":"pat1@gmail.com","first_name":"Pat1","last_name":"Cage"},
+        "notes": {"date":"2017-12-07T01:20:06.371950Z","notes":"Some random notes","dosage":18}
+    },
+    {
+        "patient": {"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn"},
+        "notes": {"date":"2017-12-07T01:47:25.855913Z","notes":"This is important","dosage":null}
+    },
 ]
 ```
 
