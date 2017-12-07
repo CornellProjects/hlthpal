@@ -161,7 +161,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
   ```
 ---
 ####  GET 'api/patients/data'
-* Get list of all patients with their latest score and answer data.  For privileged users only.
+* Get list of all patients with their latest score, notes, answer data and sector data.  For privileged users only.
 * URL: http://127.0.0.1:8000/api/patients/data
 * Request:
 
@@ -173,6 +173,7 @@ Here is a brief description of the supported APIs. You can test the APIs using y
     {
         "user":{"id":15,"username":"pat2@gmail.com","first_name":"Pat2","last_name":"Flynn"},
         "location":{"sector":"Kigali"},
+        "notes":{"date":"2017-12-07T01:20:06.371950Z","notes":"Some random notes","dosage":18},
         "record":{"id":6,"date":"2017-11-13T06:00:10.231919Z","score":17},
         "data":[
                    {"question":1,"answer":1,"text":"The ans is"},
@@ -244,12 +245,12 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 
 ### Notes API
 ---
-####   GET 'api/notes'  
-* Get all patient notes latest notes. For privileged users only. 
-* URL: http://127.0.0.1:8000/api/notes 
+####   GET 'api/notes/latest'  
+* Get all patient latest notes. Gives the latest notes in the system for every patient. For privileged users only. 
+* URL: http://127.0.0.1:8000/api/notes/latest
 * Request: 
 
-``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes ```
+``` curl -i -X GET -H "Authorization: JWT __YOUR_TOKEN__" http://127.0.0.1:8000/api/notes/latest ```
 * Response
 ``` 
 [
