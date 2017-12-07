@@ -265,6 +265,27 @@ Here is a brief description of the supported APIs. You can test the APIs using y
 ]
 ```
 
+####   POST '/api/notes/history'  
+* Get a individual patient all notes. Gives historical data  of all notes entered into the system for a patient. For privileged users only. 
+* URL: http://127.0.0.1:8000/api/notes/history
+* Request: 
+
+``` 
+curl -i -X POST -H "Authorization: JWT  __YOUR_TOKEN__" -H "Content-Type: application/json" -d '{"username":"pat1@gmail.com"}' http://127.0.0.1:8000/api/notes/history
+
+```
+* Response
+``` 
+[
+    {"date":"2017-11-22T04:51:46.835407Z","notes":"Some random notes","dosage":17},
+    {"date":"2017-11-22T04:54:25.621580Z","notes":"Some good notes","dosage":null},
+    {"date":"2017-11-22T04:55:35.011297Z","notes":"Some bad notes","dosage":12},
+    {"date":"2017-11-22T05:42:24.566858Z","notes":"Some better notes","dosage":null},
+    {"date":"2017-11-22T05:42:43.336761Z","notes":"Some ok notes","dosage":23},
+    {"date":"2017-12-07T01:20:06.371950Z","notes":"Some great notes","dosage":18}
+]
+```
+
 ---
 ####  GET 'api/notes/create'  
 * Create a new note. For privileged users only. The dosage parameter is optional. All other parameters are required. 
