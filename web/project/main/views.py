@@ -23,6 +23,7 @@ from .serializers import (
     UserCreateSerializer,
     UserLoginSerializer,
     UserProfileSerializer,
+    UserGetSerializer,
     AnswerSerializer,
     AnswerGetSerializer,
     RecordSerializer,
@@ -499,6 +500,11 @@ class NotesCreateView(APIView):
     def post(self, request, format=None):
         data = request.data
         result = {}
+        # Check who posted
+        auth_user = None
+        if request and request.user:
+            auth_user = request.user
+            #print "Auth user: ", str(auth_user)
 
         # Check if request contains notes username
         notes = data.get("notes", None)
@@ -525,9 +531,9 @@ class NotesCreateView(APIView):
             # Dosage is optional
             dosage = data.get("dosage", None)
             if not dosage:
-                saved_notes = Notes.objects.create(patient=user, notes=notes)
+                saved_notes = Notes.objects.create(author=auth_user, patient=user, notes=notes)
             else:
-                saved_notes = Notes.objects.create(patient=user, notes=notes, dosage=dosage)
+                saved_notes = Notes.objects.create(author=auth_user, patient=user, notes=notes, dosage=dosage)
 
             notes_serial =  NotesCreateSerializer(saved_notes)
             print notes_serial.data
@@ -564,3 +570,47 @@ class NotesGetAPIView(ListAPIView):
 
             result.append(entry)
         return Response(result)
+
+
+class NotesHistoryGetView(APIView):
+    '''API to get patient history '''
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(is_staff=False)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+
+        # Check if request contains username
+        username = data.get("username", None)
+        result = {}
+        if not username:
+            error = "username is required"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            pass
+            #print "username found", data['username']
+
+        # Check if username is valid
+        if User.objects.filter(username=username).exists():
+            user = User.objects.filter(username=username).first()
+
+            if user.is_staff:
+                error = "user is not a patient!"
+                result['error'] = error
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
+
+            user_serial = UserGetSerializer(user)
+
+            query = Notes.objects.filter(patient=user)
+            result = []
+
+            for record in query:
+                notes_serial = NotesGetSerializer(record)
+                result.append(notes_serial.data)
+            return Response(result, status=status.HTTP_200_OK)
+
+        else:
+            error = "username does not exist!"
+            result['error'] = error
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)

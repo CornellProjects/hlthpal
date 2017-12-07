@@ -254,6 +254,18 @@ class UserSerializer(ModelSerializer):
         ]
 
 
+# User GET serializer with user fname and lname and username
+class UserGetSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username'
+            'first_name',
+            'last_name'
+        ]
+
+
 class QuestionSerializer(ModelSerializer):
     class Meta:
         model = Question
