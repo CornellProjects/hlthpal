@@ -59,6 +59,14 @@ class PatientCard extends Component{
     const {date, firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, note} = this.state;
     var renderPatients = () => {
       return records.map((record) => {
+        var data = [];
+        var length = 10;
+        for (var i=0; i < record.data.length; i++){
+          data.push(record.data[i].answer);
+        }
+        while (data.length < length){
+          data.push(null);
+        }
         return (
           <PatientDetail
                        key={record.record.id}
@@ -66,8 +74,16 @@ class PatientCard extends Component{
                        lastname={lastname}
                        sector={sector}
                        date={record.record.date.substring(0,10)}
-                       pain={record.data[0].answer}
-                       breath={record.data[1].answer}
+                       pain={data[0]}
+                       breath={data[1]}
+                       nausea={data[2]}
+                       fatigue={data[3]}
+                       constipation={data[4]}
+                       q3={data[5]}
+                       q4={data[6]}
+                       q5={data[7]}
+                       q6={data[8]}
+                       q7={data[9]}
                        ></PatientDetail>
         );
       })
