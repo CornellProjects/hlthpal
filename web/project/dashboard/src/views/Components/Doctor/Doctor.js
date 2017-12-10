@@ -26,8 +26,7 @@ class Forms extends Component {
   constructor(props){
     super(props)
     this.state = {
-      doctor:
-           { entity: 1},
+      entity:'',
       first_name:'',
       last_name:'',
       password: '',
@@ -47,10 +46,20 @@ class Forms extends Component {
     var headers = {
       'Content-Type':'application/json'
     }
-    axios.post('api/doctor', this.state, headers);
+    var data = {
+      doctor:{
+        entity: this.state.entity
+      },
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      password: this.state.password,
+      username: this.state.username,
+      email: this.state.email
+    }
+    axios.post('api/doctor', data, headers);
   }
   render() {
-    const {first_name, last_name, doctor, password, username, email} = this.state;
+    const {first_name, last_name, entity, password, username, email} = this.state;
     return (
       <div className="animated fadeIn">
         <Row>
@@ -96,7 +105,7 @@ class Forms extends Component {
                     <Col xs="12" md="9">
                       <Input type="entity"
                              name="entity"
-                             value={doctor.entity}
+                             value={entity}
                              placeholder="Enter entity"
                              onChange={this.onChange}/>
                       <FormText color="muted">Please enter doctor entity</FormText>
