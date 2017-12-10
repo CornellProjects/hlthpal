@@ -44,8 +44,8 @@ class PatientCard extends Component{
       'Content-Type':'application/json'
     }
     var data = {
-      text: this.state.note,
-      patient:this.state.firstname + this.state.lastname
+      notes: this.state.note,
+      username:this.state.username
     }
     axios.post('api/notes/create', data, headers);
   }

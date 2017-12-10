@@ -35,7 +35,7 @@ export default {
     },
     {
       name: 'Add Hospitals',
-      url: '/addHopistals',
+      url: '/addHospitals',
       icon: 'icon-calculator',
     },
     {

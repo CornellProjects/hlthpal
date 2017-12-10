@@ -57,8 +57,9 @@ class Forms extends Component {
         modal: !this.state.modal
       })
     ).catch(
+      (err) => console.log(err.response.data),
       (err) => this.setState({
-        errors:err.response.data
+        errors:err.response.data,
       })
     );
   }
@@ -92,7 +93,8 @@ class Forms extends Component {
                              name="name"
                              placeholder="Enter hospital name"
                              value={name}
-                             onChange={this.onChange}/>
+                             onChange={this.onChange}
+                             valid={this.validForm}/>
                       <FormFeedback>{errors.name}</FormFeedback>
                       <FormText color="muted">Please enter your hospital name</FormText>
                     </Col>
