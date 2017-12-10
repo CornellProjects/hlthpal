@@ -85,6 +85,7 @@ def index(request):
     template = loader.get_template('index.html')
     data = {'images' :  settings.MEDIA_URL}
     return HttpResponse(template.render(data))
+
 # endpoint for '/dashboard'
 def dashboard(request):
     #get the template
@@ -125,6 +126,7 @@ class UserLoginView(APIView):
         serializer = UserLoginSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             result = serializer.data
+
             # Only return token
             if result.has_key('username'):
                 result.pop('username')
