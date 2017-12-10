@@ -1,0 +1,6 @@
+{
+  "name": "Hospital",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Hospital.js"
+}
