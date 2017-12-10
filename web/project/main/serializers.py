@@ -254,6 +254,18 @@ class UserSerializer(ModelSerializer):
         ]
 
 
+# User GET serializer with user fname and lname and username
+class UserGetSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username'
+            'first_name',
+            'last_name'
+        ]
+
+
 class QuestionSerializer(ModelSerializer):
     class Meta:
         model = Question
@@ -346,6 +358,16 @@ class PatientActivateSerializer(ModelSerializer):
         ]
 
 
+# User profile serializer
+class NotesCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Notes
+        fields = [
+            'id',
+            'date',
+            'notes',
+            'dosage'
+        ]
 
 
 # User profile serializer
@@ -354,8 +376,8 @@ class NotesGetSerializer(ModelSerializer):
         model = Notes
         fields = [
             'date',
-            'patient',
-            'text'
+            'notes',
+            'dosage'
         ]
 
 
