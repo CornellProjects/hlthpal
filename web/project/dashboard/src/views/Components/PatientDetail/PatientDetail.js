@@ -32,14 +32,17 @@ class PatientDetail extends Component {
 
     return(
             <tr>
-                <td>{pain}</td>
                 <td>{date}</td>
+                <td>{pain}</td>
                 <td>{breath}</td>
                 <td>{nausea}</td>
                 <td>{fatigue}</td>
                 <td>{constipation}</td>
                 <td>{q3}</td>
                 <td>{q4}</td>
+                <td>{q5}</td>
+                <td>{q6}</td>
+                <td>{q7}</td>
            </tr>
     );
   }

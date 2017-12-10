@@ -51,12 +51,13 @@ class Patients extends Component {
       return patients.map((patient) => {
         return (
           <PatientCard key={patient.user.id}
+                       date={patient.record.date.substring(0,10)}
                        username={patient.user.username}
                        firstname={patient.user.first_name}
                        lastname={patient.user.last_name}
-                       sector="Gisenyi"
+                       sector={patient.location.sector}
                        pain={patient.data[0].answer}
-                       weakness={patient.data[1].answer}
+                       breath={patient.data[1].answer}
                        nausea={patient.data[2].answer}></PatientCard>
         );
       })
@@ -72,6 +73,7 @@ class Patients extends Component {
                 <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                   <thead className="thead-default">
                   <tr>
+                    <th>Last Submission</th>
                     <th>Patient Name</th>
                     <th>Sector</th>
                     <th>Pain</th>

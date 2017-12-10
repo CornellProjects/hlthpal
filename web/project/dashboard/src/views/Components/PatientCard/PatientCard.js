@@ -11,12 +11,13 @@ class PatientCard extends Component{
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.state = {
+      date: props.date,
       username: props.username,
       firstname: props.firstname,
       lastname: props.lastname,
       sector: props.sector,
       pain: props.pain,
-      breath: props.weakness,
+      breath: props.breath,
       nausea: props.nausea,
       fatigue: props.fatigue,
       constipation: props.constipation,
@@ -46,7 +47,7 @@ class PatientCard extends Component{
       text: this.state.note,
       patient:this.state.firstname + this.state.lastname
     }
-    axios.post('api/notes/create',data, headers);
+    axios.post('api/notes/create', data, headers);
   }
   onChange(e){
     this.setState({
@@ -55,16 +56,16 @@ class PatientCard extends Component{
   }
   render(){
     var { records } = this.state;
-    const {firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, note} = this.state;
+    const {date, firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, note} = this.state;
     var renderPatients = () => {
       return records.map((record) => {
         return (
           <PatientDetail
-                       key={record.id}
+                       key={record.record.id}
                        firstname={firstname}
                        lastname={lastname}
-                       sector="Gisenyi"
-                       date={record.date}
+                       sector={sector}
+                       date={record.record.date.substring(0,10)}
                        pain={record.data[0].answer}
                        breath={record.data[1].answer}
                        ></PatientDetail>
@@ -73,6 +74,7 @@ class PatientCard extends Component{
     };
     return(
           <tr>
+              <td>{date}</td>
               <td>{firstname + " " + lastname}</td>
               <td>{sector}</td>
               <td>{pain}</td>
@@ -98,6 +100,7 @@ class PatientCard extends Component{
                                 <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                                   <thead className="thead-default">
                                       <tr>
+                                        <th>Last Submission</th>
                                         <th>Pain</th>
                                         <th>Shortness of breath</th>
                                         <th>Nausea and Vomitting</th>
