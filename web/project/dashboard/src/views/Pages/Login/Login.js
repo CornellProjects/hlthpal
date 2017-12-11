@@ -114,7 +114,7 @@ class Login extends Component {
                   <Modal isOpen={this.state.modal}>
                     <ModalHeader toggle={this.toggle}>Sorry</ModalHeader>
                     <ModalBody>
-                      Only stuff can login!
+                      Only staff can login!
                     </ModalBody>
                     <ModalFooter>
                       <Button color="primary" onClick={this.toggle}>Go back</Button>{' '}
