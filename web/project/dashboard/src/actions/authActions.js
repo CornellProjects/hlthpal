@@ -8,9 +8,13 @@ export function login(data){
   return dispatch => {
       return axios.post('api/login', data, headers).then(
         res => {
-          const token = res.data.token;
-          localStorage.setItem('jwtToken', token);
-          setAuthorizationToken(token);
+          const is_staff = res.data.is_staff;
+          if (is_staff){
+            const token = res.data.token;
+            localStorage.setItem('jwtToken', token);
+            localStorage.setItem('is_staff', is_staff);
+            setAuthorizationToken(token);
+          }
         }
       )
 }}

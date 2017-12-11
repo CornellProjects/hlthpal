@@ -1,5 +1,18 @@
 import React, {Component} from "react";
-import {Container, Row, Col, CardGroup, Card, CardBlock, Button, Input, InputGroup, InputGroupAddon} from "reactstrap";
+import {Container,
+        Row,
+        Col,
+        CardGroup,
+        Card,
+        CardBlock,
+        Button,
+        Input,
+        InputGroup,
+        InputGroupAddon,
+        Modal,
+        ModalHeader,
+        ModalBody,
+        ModalFooter} from "reactstrap";
 import {connect} from 'react-redux';
 import {login} from '../../../actions/authActions';
 import {browserHistory} from 'react-router';
@@ -14,11 +27,16 @@ class Login extends Component {
       username: '',
       password: '',
       isLoading: false,
-      errors: {}
+      errors: {},
+      modal: false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.reset = this.reset.bind(this);
+    this.toggle = this.toggle.bind(this);
+  }
+  componentWillMount(){
+    localStorage.clear();
   }
   onChange(e){
     this.setState({
@@ -29,9 +47,26 @@ class Login extends Component {
     e.preventDefault();
     this.setState({isLoading:true});
     this.props.login(this.state).then(
-      (res) => this.context.router.history.push('/'),
-      (err) => this.setState({isLoading:false})
+      (res) => {
+        const is_staff = localStorage.getItem('is_staff');
+        if (is_staff){
+          this.context.router.history.push('/');
+        }
+        else{
+          this.setState({
+            modal:true,
+            isLoading:false
+          })
+        }
+        },
+      (err) => this.setState(
+        {isLoading:false})
     );
+  }
+  toggle(){
+    this.setState({
+      modal: !this.state.modal
+    });
   }
   reset(e){
     e.preventDefault();
@@ -76,6 +111,15 @@ class Login extends Component {
                       </Col>
                     </Row>
                   </CardBlock>
+                  <Modal isOpen={this.state.modal}>
+                    <ModalHeader toggle={this.toggle}>Sorry</ModalHeader>
+                    <ModalBody>
+                      Only stuff can login!
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="primary" onClick={this.toggle}>Go back</Button>{' '}
+                    </ModalFooter>
+                  </Modal>
                 </Card>
               </CardGroup>
             </Col>
