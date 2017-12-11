@@ -29,18 +29,16 @@ class Forms extends Component {
       last_name:'',
       username:'',
       password:'',
-      patient:{
-        diagonosis:'',
-        care_giver:'',
-        doctor:'',
-        gender:'',
-        mobile:'',
-        street:'',
-        city:'',
-        sector:'',
-        state:'',
-        country:''
-      }
+      diagonosis:'',
+      care_giver:'',
+      doctor:'',
+      gender:'',
+      mobile:'',
+      street:'',
+      city:'',
+      sector:'',
+      state:'',
+      country:''
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);

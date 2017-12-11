@@ -34,8 +34,6 @@ const store = createStore(
 setAuthorizationToken(localStorage.jwtToken);
 refreshToken();
 
-
-
 ReactDOM.render((
   <Provider store={store}>
     <HashRouter history={browserHistory}>

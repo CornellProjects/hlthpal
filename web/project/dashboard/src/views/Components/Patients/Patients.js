@@ -49,6 +49,14 @@ class Patients extends Component {
     var {patients} = this.state;
     var renderPatients = () => {
       return patients.map((patient) => {
+        var data = [];
+        var length = 5;
+        for (var i = 0; i < patient.data.length; i++){
+          data.push(patient.data[i].answer)
+        }
+        while (data.length < length){
+          data.push(null)
+        }
         return (
           <PatientCard key={patient.user.id}
                        date={patient.record.date.substring(0,10)}
@@ -56,9 +64,11 @@ class Patients extends Component {
                        firstname={patient.user.first_name}
                        lastname={patient.user.last_name}
                        sector={patient.location.sector}
-                       pain={patient.data[0].answer}
-                       breath={patient.data[1].answer}
-                       nausea={patient.data[2].answer}></PatientCard>
+                       pain={data[0]}
+                       breath={data[1]}
+                       nausea={data[2]}
+                       fatigue={data[3]}
+                       constipation={data[4]}></PatientCard>
         );
       })
     };
