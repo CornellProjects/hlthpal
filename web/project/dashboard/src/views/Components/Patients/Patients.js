@@ -38,6 +38,10 @@ class Patients extends Component {
     };
   }
   componentWillMount(){
+    const token = localStorage.getItem('jwtToken');
+    if (!token){
+      this.props.history.push('/login');
+    }
     axios.get('api/patients/data').then(
       (res) => this.setState({
         patients:res.data

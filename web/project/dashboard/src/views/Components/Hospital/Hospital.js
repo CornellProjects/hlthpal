@@ -42,6 +42,12 @@ class Forms extends Component {
     this.onChange = this.onChange.bind(this);
     this.toggle = this.toggle.bind(this);
   }
+  componentWillMount(){
+    const token = localStorage.getItem('jwtToken');
+    if (!token){
+      this.props.history.push('/login');
+    }
+  }
   onChange(e){
     this.setState({
       [e.target.name]: e.target.value

@@ -456,7 +456,12 @@ class Dashboard extends Component {
       dropdownOpen: false
     };
   }
-
+  componentWillMount(){
+    const token = localStorage.getItem('jwtToken');
+    if (!token){
+      this.props.history.push('/login');
+    }
+  }
   toggle() {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
