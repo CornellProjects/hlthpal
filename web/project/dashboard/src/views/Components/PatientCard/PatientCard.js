@@ -23,7 +23,7 @@ class PatientCard extends Component{
       constipation: props.constipation,
       modal: false,
       records:[],
-      note:''
+      note:props.note
     };
   }
 
@@ -98,6 +98,7 @@ class PatientCard extends Component{
               <td>{nausea}</td>
               <td>{fatigue}</td>
               <td>{constipation}</td>
+              <td>{note}</td>
             <td>
                 <Button color="primary" size="sm" onClick={this.toggle} > More </Button>
                 <Modal isOpen={modal} size="lg" toggle={this.toggle} className={this.props.className}>

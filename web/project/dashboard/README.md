@@ -25,7 +25,7 @@ python manage.py runserver
 Go to http://localhost:8000/dashboard, you will see the dashboard running.
 
 ## Progress so far
-Functions implemented:
+Features implemented:
 * Login & logout
 * Only staff can login, patient's credential is not valid at Dashboard.
 * All patients page & individual patient's page
@@ -33,3 +33,4 @@ Functions implemented:
 * Adding patient
 * Adding doctor
 * Adding hospital
+Features to be added

@@ -72,7 +72,8 @@ class Patients extends Component {
                        breath={data[1]}
                        nausea={data[2]}
                        fatigue={data[3]}
-                       constipation={data[4]}></PatientCard>
+                       constipation={data[4]}
+                       note={patient.notes.notes}></PatientCard>
         );
       })
     };
@@ -95,6 +96,7 @@ class Patients extends Component {
                     <th>Nausea and Vomitting</th>
                     <th>Fatigue</th>
                     <th>Constipation</th>
+                    <th>Note</th>
                     <th>More info</th>
                   </tr>
                   </thead>

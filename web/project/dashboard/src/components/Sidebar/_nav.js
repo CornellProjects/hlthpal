@@ -14,13 +14,8 @@ export default {
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },
     {
-      name: 'Overview',
-      url: '/dashboard',
-      icon: 'icon-puzzle',
-    },
-    {
       name: 'My Patients',
-      url: '/patients',
+      url: '/home',
       icon: 'icon-star',
     },
     {
