@@ -10,6 +10,7 @@ class PatientDetail extends Component {
   constructor(props){
     super(props);
     this.state = {
+      username: props.username,
       firstname: props.firstname,
       lastname: props.lastname,
       date: props.date,
@@ -23,13 +24,15 @@ class PatientDetail extends Component {
       q4: props.q4,
       q5: props.q5,
       q6: props.q6,
-      q7: props.q7
+      q7: props.q7,
+      notes:[]
     };
   }
+  componentWillMount(){
 
+  }
   render(){
     const {firstname, lastname, sector, date, pain, breath, nausea, fatigue, constipation, q3, q4, q5, q6, q7} = this.state;
-
     return(
             <tr>
                 <td>{date}</td>

@@ -23,15 +23,28 @@ class PatientCard extends Component{
       constipation: props.constipation,
       modal: false,
       records:[],
-      note:props.note
+      note:props.note,
+      notes:[]
     };
   }
 
   componentWillMount(){
-    axios.post('api/patient/history', {username:this.state.username}).then(
+    var headers = {
+      'Content-Type':'application/json'
+    }
+    var data = {
+      username:this.state.username
+    }
+
+    axios.post('api/patient/history', data).then(
       (res) => this.setState({
         records: res.data
       })
+    );
+    axios.post('api/notes/history', data, headers).then(
+      (res) => this.setState(
+        {notes:res.data}
+      )
     );
   }
 
@@ -56,7 +69,7 @@ class PatientCard extends Component{
   }
   render(){
     var { records } = this.state;
-    const {date, firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, note} = this.state;
+    const {date, username, firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, note} = this.state;
     var renderPatients = () => {
       return records.map((record) => {
         var data = [];
@@ -70,6 +83,7 @@ class PatientCard extends Component{
         return (
           <PatientDetail
                        key={record.record.id}
+                       username={username}
                        firstname={firstname}
                        lastname={lastname}
                        sector={sector}
@@ -85,6 +99,17 @@ class PatientCard extends Component{
                        q6={data[8]}
                        q7={data[9]}
                        ></PatientDetail>
+        );
+      })
+    };
+    var {notes} = this.state;
+    var renderNotes = () => {
+      return notes.reverse().map((note) => {
+        return (
+          <tr>
+            <th scope="row">{note.date.substring(0,10)}</th>
+            <td>{note.notes}</td>
+          </tr>
         );
       })
     };
@@ -133,6 +158,18 @@ class PatientCard extends Component{
                                   <tbody>
                                     { renderPatients() }
                                   </tbody>
+
+                                </Table>
+                                <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+                                    <thead className="thead-default">
+                                      <tr>
+                                        <th>Date</th>
+                                        <th>Note</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      { renderNotes() }
+                                    </tbody>
                                 </Table>
                             </Col>
                         </Row>
