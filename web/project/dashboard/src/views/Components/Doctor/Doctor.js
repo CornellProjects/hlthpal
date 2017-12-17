@@ -18,7 +18,11 @@ import {
   Input,
   InputGroup,
   InputGroupAddon,
-  InputGroupButton
+  InputGroupButton,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from "reactstrap";
 import axios from 'axios';
 
@@ -31,10 +35,13 @@ class Forms extends Component {
       last_name:'',
       password: '',
       username:'',
-      email:''
+      email:'',
+      modal:false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.onReset = this.onReset.bind(this);
   }
   componentWillMount(){
     const token = localStorage.getItem('jwtToken');
@@ -42,9 +49,24 @@ class Forms extends Component {
       this.props.history.push('/login');
     }
   }
+  toggle(){
+    this.setState({
+      modal:!this.state.modal
+    });
+  }
   onChange(e){
     this.setState({
       [e.target.name]: e.target.value
+    });
+  }
+  onReset(){
+    this.setState({
+      entity:'',
+      first_name:'',
+      last_name:'',
+      password: '',
+      username:'',
+      email:''
     });
   }
   onSubmit(e) {
@@ -59,10 +81,13 @@ class Forms extends Component {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       password: this.state.password,
-      username: this.state.username,
+      username: this.state.email,
       email: this.state.email
     }
     axios.post('api/doctor', data, headers);
+    this.setState({
+      modal:!this.state.modal
+    });
   }
   render() {
     const {first_name, last_name, entity, password, username, email} = this.state;
@@ -118,20 +143,6 @@ class Forms extends Component {
                     </Col>
                   </FormGroup>
 
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="email-input">Username</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="username"
-                             name="username"
-                             value={username}
-                             placeholder="Enter username"
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter username</FormText>
-                    </Col>
-                  </FormGroup>
-
 
                   <FormGroup row>
                     <Col md="3">
@@ -170,10 +181,19 @@ class Forms extends Component {
               <Button type="submit" size="sm" color="primary" onClick={this.onSubmit}><i className="fa fa-dot-circle-o"></i> Submit</Button>
               </Col>
               <Col md="1">
-              <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+              <Button type="reset" size="sm" color="danger" onClick={this.onReset}><i className="fa fa-ban"></i> Reset</Button>
               </Col>
               </Row>
               </CardFooter>
+              <Modal isOpen={this.state.modal}>
+                <ModalHeader toggle={this.toggle}>Success!</ModalHeader>
+                <ModalBody>
+                    You have successfully add a doctor!
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="primary" onClick={this.toggle}>Go back</Button>{' '}
+                </ModalFooter>
+              </Modal>
             </Card>
 
           </Col>

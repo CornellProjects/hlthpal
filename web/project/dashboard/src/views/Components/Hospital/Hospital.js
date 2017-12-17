@@ -41,6 +41,7 @@ class Forms extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.onReset = this.onReset.bind(this);
   }
   componentWillMount(){
     const token = localStorage.getItem('jwtToken');
@@ -68,7 +69,15 @@ class Forms extends Component {
       })
     );
   }
-
+  onReset(){
+    this.setState({
+      name:'',
+      street:'',
+      city:'',
+      state:'',
+      country:''
+    });
+  }
   toggle() {
     this.setState({
       modal: !this.state.modal
@@ -169,7 +178,7 @@ class Forms extends Component {
                 <Button type="submit" size="sm" color="primary" onClick={this.onSubmit}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                 </Col>
                 <Col md="1">
-                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                <Button type="reset" size="sm" color="danger" onClick={this.onReset}><i className="fa fa-ban"></i> Reset</Button>
                 </Col>
                 </Row>
               </CardFooter>
