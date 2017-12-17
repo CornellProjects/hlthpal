@@ -41,7 +41,7 @@ class PatientCard extends Component{
 
     axios.post('api/patient/history', data).then(
       (res) => this.setState({
-        records: res.data
+        records: res.data.reverse()
       })
     );
   }
