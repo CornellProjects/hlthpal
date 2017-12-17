@@ -18,8 +18,13 @@ import {
   Input,
   InputGroup,
   InputGroupAddon,
-  InputGroupButton
+  InputGroupButton,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from "reactstrap";
+import axios from 'axios';
 
 class Forms extends Component {
   constructor(props) {
@@ -27,9 +32,9 @@ class Forms extends Component {
     this.state = {
       first_name:'',
       last_name:'',
-      username:'',
+      email:'',
       password:'',
-      diagonosis:'',
+      diagnosis:'',
       care_giver:'',
       doctor:'',
       gender:'',
@@ -38,10 +43,13 @@ class Forms extends Component {
       city:'',
       sector:'',
       state:'',
-      country:''
+      country:'',
+      modal:false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
   componentWillMount(){
     const token = localStorage.getItem('jwtToken');
@@ -56,14 +64,55 @@ class Forms extends Component {
   }
   onSubmit(e) {
     e.preventDefault();
+    var data = {
+      first_name:this.state.first_name,
+      last_name:this.state.last_name,
+      username:this.state.email,
+      password:this.state.password,
+      diagnosis:this.state.diagnosis,
+      care_giver:this.state.care_giver,
+      doctor:this.state.doctor,
+      gender:this.state.gender,
+      mobile:this.state.mobile,
+      street:this.state.street,
+      city:this.state.city,
+      sector:this.state.sector,
+      state:this.state.state,
+      country:this.state.country
+    }
     var headers = {
       'Content-Type':'application/json'
     }
-    axios.post('api/doctor', this.state, headers);
+    axios.post('api/register', data, headers).then(
+      this.setState({
+        modal:!this.state.modal
+      })
+    );
   }
-
+  onReset(){
+    this.setState({
+      first_name:'',
+      last_name:'',
+      password:'',
+      diagnosis:'',
+      care_giver:'',
+      doctor:'',
+      gender:'',
+      mobile:'',
+      street:'',
+      city:'',
+      sector:'',
+      state:'',
+      country:''
+    });
+  }
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
   render() {
-    const {first_name, last_name, username, password, patient} = this.state;
+    const {first_name, last_name, password, email, diagnosis, care_giver, doctor, gender, mobile, street, city, sector, state, country} = this.state;
 
     return (
       <div className="animated fadeIn">
@@ -82,10 +131,13 @@ class Forms extends Component {
                     </Col>
                     <Col xs="12" md="9">
                       <Input
-                            type="text"
-                            id="text-input"
+                            type="first_name"
+                            id="first_name-input"
                             name="first_name"
-                            placeholder="Enter firstname"/>
+                            placeholder="Enter firstname"
+                            value={first_name}
+                            onChange={this.onChange}
+                            />
                       <FormText color="muted">Please enter firstname</FormText>
                     </Col>
                   </FormGroup>
@@ -96,10 +148,12 @@ class Forms extends Component {
                     </Col>
                     <Col xs="12" md="9">
                       <Input
-                            type="text"
-                            id="text-input"
+                            type="last_name"
+                            id="last_name-input"
                             name="last_name"
-                            placeholder="Enter lastname"/>
+                            placeholder="Enter lastname"
+                            value={last_name}
+                            onChange={this.onChange}/>
                       <FormText color="muted">Please enter lastname</FormText>
                     </Col>
                   </FormGroup>
@@ -112,10 +166,13 @@ class Forms extends Component {
                       <Input type="email"
                              id="email-input"
                              name="email"
-                             placeholder="Enter Email"/>
+                             placeholder="Enter Email"
+                             value={email}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter patient email</FormText>
                     </Col>
                   </FormGroup>
+
                   <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="password-input">Password</Label>
@@ -124,7 +181,10 @@ class Forms extends Component {
                       <Input type="password"
                              id="password-input"
                              name="password"
-                             placeholder="Password"/>
+                             placeholder="Password"
+                             value={name}
+                             onChange={this.onChange}
+                             />
                       <FormText className="help-block">Please enter a complex password</FormText>
                     </Col>
                   </FormGroup>
@@ -137,59 +197,56 @@ class Forms extends Component {
                       <Input type="diagnosis"
                              id="diagnosis"
                              name="diagnosis"
-                             placeholder="Enter patient diagnosis"/>
+                             placeholder="Enter patient diagnosis"
+                             value={diagnosis}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter diagnosis</FormText>
                     </Col>
                   </FormGroup>
 
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="address-input">Care giver</Label>
+                      <Label htmlFor="care_giver-input">Care giver</Label>
                     </Col>
                     <Col xs="12" md="9">
-                      <Input type="address"
-                             id="address-input"
+                      <Input type="care_giver"
+                             id="care_giver-input"
                              name="care_giver"
-                             placeholder="Enter care giver"/>
+                             placeholder="Enter care giver"
+                             vaule={care_giver}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter care giver</FormText>
                     </Col>
                   </FormGroup>
 
+
+
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="age-input">Doctor</Label>
+                      <Label htmlFor="doctor-input">Doctor</Label>
                     </Col>
                     <Col xs="12" md="9">
                       <Input type="doctor"
                              id="doctor-input"
                              name="doctor"
-                             placeholder="Enter patient age"/>
+                             placeholder="Enter dotor"
+                             value={doctor}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter doctor</FormText>
                     </Col>
                   </FormGroup>
 
                   <FormGroup row>
                     <Col md="3">
-                      <Label htmlFor="age-input">Doctor</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="doctor"
-                             id="doctor-input"
-                             name="doctor"
-                             placeholder="Enter patient age"/>
-                      <FormText className="help-block">Please enter doctor</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="age-input">Gender</Label>
+                      <Label htmlFor="gender-input">Gender</Label>
                     </Col>
                     <Col xs="12" md="9">
                       <Input type="gender"
                              id="gender-input"
                              name="gender"
-                             placeholder="Enter patient gender"/>
+                             placeholder="Enter patient gender"
+                             value={gender}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter gender</FormText>
                     </Col>
                   </FormGroup>
@@ -202,7 +259,9 @@ class Forms extends Component {
                       <Input type="mobile"
                              id="mobile-input"
                              name="mobile"
-                             placeholder="Enter mobile phone number"/>
+                             placeholder="Enter mobile phone number"
+                             value={mobile}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter mobile phone number</FormText>
                     </Col>
                   </FormGroup>
@@ -215,7 +274,9 @@ class Forms extends Component {
                       <Input type="street"
                              id="street-input"
                              name="street"
-                             placeholder="Enter street"/>
+                             placeholder="Enter street"
+                             value={street}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter street</FormText>
                     </Col>
                   </FormGroup>
@@ -228,7 +289,9 @@ class Forms extends Component {
                       <Input type="city"
                              id="city-input"
                              name="city"
-                             placeholder="Enter city"/>
+                             placeholder="Enter city"
+                             value={city}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter city</FormText>
                     </Col>
                   </FormGroup>
@@ -241,7 +304,9 @@ class Forms extends Component {
                       <Input type="sector"
                              id="sector-input"
                              name="sector"
-                             placeholder="Enter sector"/>
+                             placeholder="Enter sector"
+                             value={sector}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter sector</FormText>
                     </Col>
                   </FormGroup>
@@ -254,7 +319,9 @@ class Forms extends Component {
                       <Input type="state"
                              id="state-input"
                              name="state"
-                             placeholder="Enter state"/>
+                             placeholder="Enter state"
+                             value={state}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter state</FormText>
                     </Col>
                   </FormGroup>
@@ -267,7 +334,9 @@ class Forms extends Component {
                       <Input type="country"
                              id="country-input"
                              name="country"
-                             placeholder="Enter country"/>
+                             placeholder="Enter country"
+                             value={country}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter country</FormText>
                     </Col>
                   </FormGroup>
@@ -277,13 +346,22 @@ class Forms extends Component {
               <CardFooter>
               <Row>
               <Col md="1">
-              <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
+              <Button type="submit" size="sm" color="primary" onClick={this.onSubmit}><i className="fa fa-dot-circle-o"></i> Submit</Button>
               </Col>
               <Col md="1">
-              <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+              <Button type="reset" size="sm" color="danger" onClick={this.onReset}><i className="fa fa-ban"></i> Reset</Button>
               </Col>
               </Row>
               </CardFooter>
+              <Modal isOpen={this.state.modal}>
+                <ModalHeader toggle={this.toggle}>Success!</ModalHeader>
+                <ModalBody>
+                    You have successfully create an entity!
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="primary" onClick={this.toggle}>Go back</Button>{' '}
+                </ModalFooter>
+              </Modal>
             </Card>
 
           </Col>
