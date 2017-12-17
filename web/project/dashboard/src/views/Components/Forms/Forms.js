@@ -93,6 +93,7 @@ class Forms extends Component {
     this.setState({
       first_name:'',
       last_name:'',
+      email:'',
       password:'',
       diagnosis:'',
       care_giver:'',
