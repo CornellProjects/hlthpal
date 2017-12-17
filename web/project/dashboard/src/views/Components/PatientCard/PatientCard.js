@@ -10,6 +10,7 @@ class PatientCard extends Component{
     this.toggle = this.toggle.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.toggle_submit = this.toggle_submit.bind(this);
     this.state = {
       date: props.date,
       username: props.username,
@@ -21,10 +22,12 @@ class PatientCard extends Component{
       nausea: props.nausea,
       fatigue: props.fatigue,
       constipation: props.constipation,
+      last_note:props.note,
       modal: false,
+      modal_submit: false,
       records:[],
-      note:props.note,
-      notes:[]
+      notes:[],
+      new_note:"",
     };
   }
 
@@ -41,15 +44,39 @@ class PatientCard extends Component{
         records: res.data
       })
     );
+  }
+  componentDidMount(){
+    var headers = {
+      'Content-Type':'application/json'
+    }
+    var data = {
+      username:this.state.username
+    }
     axios.post('api/notes/history', data, headers).then(
       (res) => this.setState(
-        {notes:res.data}
-      )
+        {notes:res.data.reverse()}
+      ),
     );
   }
 
   toggle(){
     this.setState({modal: !this.state.modal});
+  }
+  toggle_submit(){
+    this.setState(
+      {modal_submit: !this.state.modal_submit}
+    );
+    var headers = {
+      'Content-Type':'application/json'
+    }
+    var data = {
+      username:this.state.username
+    }
+    axios.post('api/notes/history', data, headers).then(
+      (res) => this.setState(
+        {notes:res.data.reverse()}
+      ),
+    );
   }
   onSubmit(e) {
     e.preventDefault();
@@ -57,10 +84,15 @@ class PatientCard extends Component{
       'Content-Type':'application/json'
     }
     var data = {
-      notes: this.state.note,
+      notes: this.state.new_note,
       username:this.state.username
     }
-    axios.post('api/notes/create', data, headers);
+    axios.post('api/notes/create', data, headers).then(
+      (res) => this.setState({
+        modal_submit: !this.state.modal_submit,
+      })
+    );
+
   }
   onChange(e){
     this.setState({
@@ -69,7 +101,8 @@ class PatientCard extends Component{
   }
   render(){
     var { records } = this.state;
-    const {date, username, firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, note} = this.state;
+    const {date, username, firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, last_note, new_note} = this.state;
+    var {notes} = this.state;
     var renderPatients = () => {
       return records.map((record) => {
         var data = [];
@@ -102,13 +135,13 @@ class PatientCard extends Component{
         );
       })
     };
-    var {notes} = this.state;
+
     var renderNotes = () => {
-      return notes.reverse().map((note) => {
+      return notes.map((eachnote) => {
         return (
           <tr>
-            <th scope="row">{note.date.substring(0,10)}</th>
-            <td>{note.notes}</td>
+            <th scope="row">{eachnote.date.substring(0,10)}</th>
+            <td>{eachnote.notes}</td>
           </tr>
         );
       })
@@ -123,7 +156,7 @@ class PatientCard extends Component{
               <td>{nausea}</td>
               <td>{fatigue}</td>
               <td>{constipation}</td>
-              <td>{note}</td>
+              <td>{last_note}</td>
             <td>
                 <Button color="primary" size="sm" onClick={this.toggle} > More </Button>
                 <Modal isOpen={modal} size="lg" toggle={this.toggle} className={this.props.className}>
@@ -185,9 +218,9 @@ class PatientCard extends Component{
                                       <Label>Note</Label>
                                     </Col>
                                     <Col xs="12" md="9">
-                                      <Input type="note"
-                                             name="note"
-                                             value={note}
+                                      <Input type="new_note"
+                                             name="new_note"
+                                             value={new_note}
                                              placeholder="Enter your note"
                                              onChange={this.onChange}/>
                                     </Col>
@@ -200,6 +233,15 @@ class PatientCard extends Component{
                             <Button color="primary" size="sm" onClick={this.onSubmit}>Submit</Button>
                           </Col>
                           </Row>
+                          <Modal isOpen={this.state.modal_submit}>
+                            <ModalHeader toggle={this.toggle_submit}>Success!</ModalHeader>
+                            <ModalBody>
+                                You have successfully create a note!
+                            </ModalBody>
+                            <ModalFooter>
+                              <Button color="primary" onClick={this.toggle_submit}>Go back</Button>{' '}
+                            </ModalFooter>
+                          </Modal>
                           </CardFooter>
                         </Card>
                         </Col>
