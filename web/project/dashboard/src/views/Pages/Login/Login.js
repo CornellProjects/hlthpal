@@ -107,7 +107,7 @@ class Login extends Component {
                         <Button color="primary" className="px-4" onClick={this.onSubmit} disabled={isLoading}>Login</Button>
                       </Col>
                       <Col xs="6" className="text-right">
-                        <Button color="link" className="px-0" onClick={this.reset} >Forgot password?</Button>
+                        <a href="../password-reset/"><Button color="link" className="px-0">Forgot password?</Button></a>
                       </Col>
                     </Row>
                   </CardBlock>
