@@ -189,6 +189,7 @@ class UserLoginSerializer(ModelSerializer):
             'username',
             'email',
             'password',
+            'is_staff',
             'token'
         ]
         extra_kwargs = {"password": {"write_only": True}}
@@ -210,6 +211,7 @@ class UserLoginSerializer(ModelSerializer):
         #print "Users: ", user
         if user.exists() and user.count() == 1:
             user_obj = user.first()
+            print user_obj
         else:
             raise serializers.ValidationError("The username or email is not valid.")
             return
@@ -226,6 +228,9 @@ class UserLoginSerializer(ModelSerializer):
             payload = jwt_payload_handler(user_obj)
             token = jwt_encode_handler(payload)
             data['token'] = token
+
+            # Check id user is patient
+            data['is_staff'] = user_obj.is_staff
             return data
         else:
             raise serializers.ValidationError("User not found!")
@@ -249,6 +254,18 @@ class UserSerializer(ModelSerializer):
         model = User
         fields = [
             'id',
+            'first_name',
+            'last_name'
+        ]
+
+
+# User GET serializer with user fname and lname and username
+class UserGetSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username'
             'first_name',
             'last_name'
         ]
@@ -346,6 +363,16 @@ class PatientActivateSerializer(ModelSerializer):
         ]
 
 
+# User profile serializer
+class NotesCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Notes
+        fields = [
+            'id',
+            'date',
+            'notes',
+            'dosage'
+        ]
 
 
 # User profile serializer
@@ -354,8 +381,8 @@ class NotesGetSerializer(ModelSerializer):
         model = Notes
         fields = [
             'date',
-            'patient',
-            'text'
+            'notes',
+            'dosage'
         ]
 
 

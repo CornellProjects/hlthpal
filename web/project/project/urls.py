@@ -27,7 +27,7 @@ urlpatterns = [
     # media url
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,}),
     # Dashboard url
-    url(r'^dashboard', admin.site.urls),
+    url(r'^dashboard', views.dashboard, name='dashboard'),
     # Password reset
     url(r'^password-reset/$', auth_views.password_reset, name='password_reset'),
     url(r'^password-reset/done/$', auth_views.password_reset_done, name='password_reset_done'),
@@ -39,5 +39,3 @@ urlpatterns = [
     # Default URL
     url(r'$', views.index, name='index'),
 ]
-
-

@@ -7,3 +7,4 @@ migrations/
 *.pyc
 __pycache__
 *.idea
+/venv
