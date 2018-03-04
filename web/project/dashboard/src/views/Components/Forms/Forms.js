@@ -69,16 +69,19 @@ class Forms extends Component {
       last_name:this.state.last_name,
       username:this.state.email,
       password:this.state.password,
-      diagnosis:this.state.diagnosis,
-      care_giver:this.state.care_giver,
-      doctor:this.state.doctor,
-      gender:this.state.gender,
-      mobile:this.state.mobile,
-      street:this.state.street,
-      city:this.state.city,
-      sector:this.state.sector,
-      state:this.state.state,
-      country:this.state.country
+      email:this.state.email,
+      patient: {
+        diagnosis:this.state.diagnosis,
+        care_giver:this.state.care_giver,
+        doctor:this.state.doctor,
+        gender:this.state.gender,
+        mobile:this.state.mobile,
+        street:this.state.street,
+        city:this.state.city,
+        sector:this.state.sector,
+        state:this.state.state,
+        country:this.state.country
+      }
     }
     var headers = {
       'Content-Type':'application/json'
@@ -183,7 +186,7 @@ class Forms extends Component {
                              id="password-input"
                              name="password"
                              placeholder="Password"
-                             value={name}
+                             value={password}
                              onChange={this.onChange}
                              />
                       <FormText className="help-block">Please enter a complex password</FormText>
