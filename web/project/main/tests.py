@@ -92,36 +92,86 @@ class ApiTestCases(StaticLiveServerTestCase):
                          headers={"Content-Type": "application/json"})
         return self.assertTrue(int(r.status_code) == 200)
 
-    # def test_update_user_patient(self):
-    #     # update patient's email and doctor Name from Malaika to Johnson
-    #     print("Running test_update_patient\n")
-    #     self.test_create_patient()
-    #     params = {"patient": {"doctor": "Johnson",
-    #                           "care_giver": "Sarah",
-    #                           "diagnosis": "Malaria",
-    #                           "gender": "Male",
-    #                           "mobile": "3456724158",
-    #                           "street": "14th Ave",
-    #                           "sector": "Route 1",
-    #                           "city": "Kigali",
-    #                           "state": "Kigali",
-    #                           "country": "Rwanda"
-    #                         },
-    #               "first_name": "Rumbai",
-    #               "last_name": "Katenge",
-    #               "email": "kigali2018@gmail.com",
-    #               "password": "#$5323adaad",
-    #               "username": "olukats"
-    #               }
-    #     r = requests.patch("%s%s" % (self.live_server_url, "/api/user"), data=json.dumps(params),
-    #                        auth=("olukats", "#$5323adaad"), headers={"Content-Type": "application/json"})
-    #     print(r.json())
-    #     return self.assertTrue(int(r.status_code) == 200)
-    #
-    # def test_delete_user_patient(self):
-    #     print("Running test_delete_user")
-    #     self.test_create_patient()
-    #
-    #     r = requests.delete("%s%s" % (self.live_server_url, "/api/user/"),
-    #                         auth=("olukats", "#$5323adaad"), headers={"Content-Type": "application/json"})
-    #     return self.assertTrue(int(r.status_code) == 204)
+    def test_update_user_patient(self):
+        # update patient's email and doctor Name from Malaika to Johnson
+        print("Running test_update_patient\n")
+        self.test_create_patient()
+        params = {"patient": {"doctor": "Johnson",
+                              "care_giver": "Sarah",
+                              "diagnosis": "Malaria",
+                              "gender": "Male",
+                              "mobile": "3456724158",
+                              "street": "14th Ave",
+                              "sector": "Route 1",
+                              "city": "Kigali",
+                              "state": "Kigali",
+                              "country": "Rwanda"
+                            },
+                  "first_name": "Rumbai",
+                  "last_name": "Katenge",
+                  "email": "kigali2018@gmail.com",
+                  "password": "#$5323adaad",
+                  "username": "olukats"
+                  }
+        r = requests.patch("%s%s" % (self.live_server_url, "/api/user"), data=json.dumps(params),
+                           auth=("olukats", "#$5323adaad"), headers={"Content-Type": "application/json"})
+        print(r.json())
+        return self.assertTrue(int(r.status_code) == 200)
+
+    def test_delete_user_patient(self):
+        print("Running test_delete_user")
+        self.test_create_patient()
+
+        r = requests.delete("%s%s" % (self.live_server_url, "/api/user/"),
+                            auth=("olukats", "#$5323adaad"), headers={"Content-Type": "application/json"})
+        return self.assertTrue(int(r.status_code) == 204)
+
+    def test_create_entity(self):
+        print("Running test_create_entity")
+        params = {"name":"Hospital","street":"street","city":"city","state":"state","country":"country"}
+        # "Authorization: JWT __YOUR_TOKEN__"
+        r = requests.post("%s%s" % (self.live_server_url, "/api/entity"), data=json.dumps(params), auth=(),
+                          headers={"Content-Type": "application/json"})
+        return self.assertTrue(int(r.status_code) == 201)
+
+    def test_create_doctor(self):
+        # add a doctor to the database
+        print("Running test_create_doctor")
+        params = {"first_name":"John", "last_name":"John", "email":"patrick@gmail.com", "username":"patrick",
+                  "password":"testPassword", "doctor": {"entity": 1} }
+        r = requests.post("%s%s" % (self.live_server_url, "/api/doctor"), data=json.dumps(params), auth=(),
+                          headers={"Content-Type": "application/json"})
+        return self.assertTrue(int(r.status_code) == 201)
+
+    def test_create_record(self):
+        print("Running test_create_record")
+        params = {"score":15}
+        r = requests.post("%s%s" % (self.live_server_url, "/api/record"), data=json.dumps(params), auth=(),
+                          headers={"Content-Type": "application/json"})
+        return self.assertTrue(int(r.status_code) == 201)
+
+    def test_update_record(self):
+        print("Running test_update_record")
+        self.test_create_record()
+        params = {"score":10}
+        r = requests.put("%s%s" % (self.live_server_url, "/api/edit_record/1"), data=json.dumps(params), auth=(),
+                          headers={"Content-Type": "application/json"})
+        return self.assertTrue(int(r.status_code) == 200 and r.json()['score']==10)
+
+    def test_create_answer(self):
+        print("Running test_create_answer")
+        params = {"answer":1,"text":"","question":2,"record":2}
+        r = requests.put("%s%s" % (self.live_server_url, "/api/answer"), data=json.dumps(params), auth=(),
+                         headers={"Content-Type": "application/json"})
+        return self.assertTrue(int(r.status_code) == 201)
+
+    def test_update_answer(self):
+        print("Running test_edit_answer\n")
+        self.test_create_answer()
+        params = {"answer":1,"text":""}
+        r = requests.put("%s%s" % (self.live_server_url, "/api/answer/1"), data=json.dumps(params), auth=(),
+                         headers={"Content-Type": "application/json"})
+        return self.assertTrue(int(r.status_code) == 201)
+
+
+
