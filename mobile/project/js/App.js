@@ -11,7 +11,7 @@ import ProgressBar from './components/loaders/ProgressBar';
 
 import theme from './themes/base-theme';
 
-global.myUrl = 'http://';
+global.myUrl = 'http://10.132.129.0:8000';
 
 const styles = StyleSheet.create({
   container: {

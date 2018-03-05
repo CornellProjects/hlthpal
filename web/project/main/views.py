@@ -433,6 +433,7 @@ class PatientDataGetView(ListAPIView):
     def get(self, request, format=None):
         patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
+
         for user in patients:
             # query = Record.objects.filter(user=user).order_by('-date').first()
             # Get last submission for each patient
@@ -464,6 +465,10 @@ class PatientDataGetView(ListAPIView):
                 query = Answer.objects.filter(record=rec.data['id'])
                 ans = PatientRecordGetSerializer(query,  many=True);
                 entry['data'] = ans.data;
+                result.append(entry)
+            else:
+                entry['record'] = []
+                entry['data'] = []
                 result.append(entry)
 
         return Response(result)
