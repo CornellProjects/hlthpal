@@ -177,8 +177,8 @@ class PatientCard extends Component{
                                       <tr>
                                         <th>Last Submission</th>
                                         <th>Pain</th>
-                                        <th>Shortness of breath</th>
-                                        <th>Nausea and Vomitting</th>
+                                        <th>SOB</th>
+                                        <th>Nausea and Vomiting</th>
                                         <th>Fatigue</th>
                                         <th>Constipation</th>
                                         <th>Q3</th>

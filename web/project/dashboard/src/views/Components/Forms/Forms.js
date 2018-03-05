@@ -68,18 +68,22 @@ class Forms extends Component {
       first_name:this.state.first_name,
       last_name:this.state.last_name,
       username:this.state.email,
+      email:this.state.email,
       password:this.state.password,
-      diagnosis:this.state.diagnosis,
-      care_giver:this.state.care_giver,
-      doctor:this.state.doctor,
-      gender:this.state.gender,
-      mobile:this.state.mobile,
-      street:this.state.street,
-      city:this.state.city,
-      sector:this.state.sector,
-      state:this.state.state,
-      country:this.state.country
+      patient:{
+        diagnosis:this.state.diagnosis,
+        care_giver:this.state.care_giver,
+        doctor:this.state.doctor,
+        gender:this.state.gender,
+        mobile:this.state.mobile,
+        street:this.state.street,
+        city:this.state.city,
+        sector:this.state.sector,
+        state:this.state.state,
+        country:this.state.country
+      }
     }
+
     var headers = {
       'Content-Type':'application/json'
     }
@@ -87,7 +91,10 @@ class Forms extends Component {
       this.setState({
         modal:!this.state.modal
       })
-    );
+   ).catch(function(err) {
+      console.error(JSON.stringify(err));
+      console.log("Yoyoyo");
+      })
   }
   onReset(){
     this.setState({
@@ -135,7 +142,7 @@ class Forms extends Component {
                             type="first_name"
                             id="first_name-input"
                             name="first_name"
-                            placeholder="Enter firstname"
+                            placeholder="Enter Firstname"
                             value={first_name}
                             onChange={this.onChange}
                             />
@@ -152,7 +159,7 @@ class Forms extends Component {
                             type="last_name"
                             id="last_name-input"
                             name="last_name"
-                            placeholder="Enter lastname"
+                            placeholder="Enter Lastname"
                             value={last_name}
                             onChange={this.onChange}/>
                       <FormText color="muted">Please enter lastname</FormText>
@@ -182,10 +189,9 @@ class Forms extends Component {
                       <Input type="password"
                              id="password-input"
                              name="password"
-                             placeholder="Password"
-                             value={name}
-                             onChange={this.onChange}
-                             />
+                             placeholder="Enter Password"
+                             value={password}
+                             onChange={this.onChange}/>
                       <FormText className="help-block">Please enter a complex password</FormText>
                     </Col>
                   </FormGroup>
@@ -196,9 +202,9 @@ class Forms extends Component {
                     </Col>
                     <Col xs="12" md="9">
                       <Input type="diagnosis"
-                             id="diagnosis"
+                             id="diagnosis-input"
                              name="diagnosis"
-                             placeholder="Enter patient diagnosis"
+                             placeholder="Enter Patient Diagnosis"
                              value={diagnosis}
                              onChange={this.onChange}/>
                       <FormText className="help-block">Please enter diagnosis</FormText>
@@ -213,8 +219,8 @@ class Forms extends Component {
                       <Input type="care_giver"
                              id="care_giver-input"
                              name="care_giver"
-                             placeholder="Enter care giver"
-                             vaule={care_giver}
+                             placeholder="Enter a Caregiver Name"
+                             value={care_giver}
                              onChange={this.onChange}/>
                       <FormText className="help-block">Please enter care giver</FormText>
                     </Col>

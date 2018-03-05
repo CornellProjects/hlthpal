@@ -35,6 +35,7 @@ class Patients extends Component {
     super(props)
     this.state = {
       patients: [],
+      allPatients: []
     };
   }
   componentWillMount(){
@@ -52,30 +53,49 @@ class Patients extends Component {
   render(){
     var {patients} = this.state;
     var renderPatients = () => {
-      return patients.map((patient) => {
-        var data = [];
-        var length = 5;
-        for (var i = 0; i < patient.data.length; i++){
-          data.push(patient.data[i].answer)
+      var patientCards = patients.map((patient) => {
+        if (patient.data.length > 0) {
+          var data = [];
+          var length = 5;
+          for (var i = 0; i < patient.data.length; i++){
+            data.push(patient.data[i].answer)
+          }
+          while (data.length < length){
+            data.push(null)
+          }
+          return (
+            <PatientCard key={patient.user.id}
+                         date={patient.record.date.substring(0,10)}
+                         username={patient.user.username}
+                         firstname={patient.user.first_name}
+                         lastname={patient.user.last_name}
+                         sector={patient.location.sector}
+                         pain={data[0]}
+                         breath={data[1]}
+                         nausea={data[2]}
+                         fatigue={data[3]}
+                         constipation={data[4]}
+                         note={patient.notes.notes}></PatientCard>
+          );
+        } else {
+          return (
+            <PatientCard key={patient.user.id}
+                         date=''
+                         username={patient.user.username}
+                         firstname={patient.user.first_name}
+                         lastname={patient.user.last_name}
+                         sector={patient.location.sector}
+                         pain=''
+                         breath=''
+                         nausea=''
+                         fatigue=''
+                         constipation=''
+                         note={patient.notes.notes}></PatientCard>
+          );
         }
-        while (data.length < length){
-          data.push(null)
-        }
-        return (
-          <PatientCard key={patient.user.id}
-                       date={patient.record.date.substring(0,10)}
-                       username={patient.user.username}
-                       firstname={patient.user.first_name}
-                       lastname={patient.user.last_name}
-                       sector={patient.location.sector}
-                       pain={data[0]}
-                       breath={data[1]}
-                       nausea={data[2]}
-                       fatigue={data[3]}
-                       constipation={data[4]}
-                       note={patient.notes.notes}></PatientCard>
-        );
-      })
+      });
+
+      return patientCards;
     };
     return (
       <Row>
@@ -92,7 +112,7 @@ class Patients extends Component {
                     <th>Patient Name</th>
                     <th>Sector</th>
                     <th>Pain</th>
-                    <th>Shortness of breath</th>
+                    <th>SOB</th>
                     <th>Nausea and Vomitting</th>
                     <th>Fatigue</th>
                     <th>Constipation</th>
