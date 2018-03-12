@@ -446,8 +446,10 @@ class PatientDataGetView(ListAPIView):
             if patient is not None:
                 sector_serial = PatientSectorSerializer(patient)
                 entry['location'] = sector_serial.data
+                print(patient,' sector: ', sector_serial.data)
             else:
                 entry['location'] = { 'sector': ''}
+                print(patient, 'no sector')
 
             # Get latest score
             notes = Notes.objects.filter(patient=user).last()
