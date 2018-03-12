@@ -70,12 +70,7 @@ class Forms extends Component {
       username:this.state.email,
       email:this.state.email,
       password:this.state.password,
-<<<<<<< HEAD
-      patient:{
-=======
-      email:this.state.email,
       patient: {
->>>>>>> 007761b1e7b413b9dce3d97ac267028189ec2293
         diagnosis:this.state.diagnosis,
         care_giver:this.state.care_giver,
         doctor:this.state.doctor,
