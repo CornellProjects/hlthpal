@@ -11,17 +11,8 @@ export default {
     alignItems: 'center',
   },
   text: {
-    marginTop:50,
+    marginTop:30,
     fontSize: 30,
-    alignSelf:'center',
-    color: '#F16C00',
-    marginLeft: 20,
-    marginRight:20,
-    fontFamily: 'sans-serif-condensed',
-  },
-  subText: {
-    fontSize: 20,
-    marginBottom: 15,
     alignSelf:'center',
     color: '#F16C00',
     marginLeft: 20,
@@ -30,7 +21,7 @@ export default {
   },
   radios: {
     flex:1,
-    marginTop: 33,
+    marginTop: 45,
     marginLeft: 30,
     marginRight: 30,
   },

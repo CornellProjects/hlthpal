@@ -1,9 +1,19 @@
-
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Body,Thumbnail,Right,View} from 'native-base';
+import { Container,
+         Header,
+         Title,
+         Content,
+         Text,
+         Button,
+         Icon,
+         Left,
+         Body,
+         Thumbnail,
+         Right,
+         View} from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
@@ -28,7 +38,7 @@ class Home extends Component {
 
   onButtonPress() {
     const { token } = this.props;
-    Actions.qone();
+    Actions.Instructions();
   }
 
   render() {
@@ -39,9 +49,7 @@ class Home extends Component {
             <Button transparent onPress={this.props.openDrawer}>
               <Icon active name="menu" />
             </Button>
-           
           </Left>
-
           <Body>
             <Title>{(this.props.name) ? this.props.name : 'Home'}</Title>
           </Body>
@@ -50,18 +58,18 @@ class Home extends Component {
               <Icon active name="power" />
             </Button>
           </Right>
-          
         </Header>
-
         <Content>
           <View style={styles.mt}>
             <Text style={styles.text}>
               Hi {this.props.userName}, how are you today?
             </Text>
-
             <View style={styles.buttons}>
-                <Button rounded bordered style={styles.center} onPress={() => this.onButtonPress()}>
+                <Button rounded style={styles.round} onPress={() => this.onButtonPress()}>
                     <Text style={styles.btn}>Take record</Text>
+                </Button>
+                <Button light rounded style={styles.light} onPress={() => this.onButtonPress()}>
+                    <Text style={styles.btn}>View Past Data</Text>
                 </Button>
             </View>
          </View>

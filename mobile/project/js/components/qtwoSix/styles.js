@@ -11,7 +11,7 @@ export default {
     alignItems: 'center',
   },
   text: {
-    marginTop:60,
+    marginTop:30,
     fontSize: 30,
     alignSelf:'center',
     color: '#F16C00',
@@ -21,7 +21,7 @@ export default {
   },
   radios: {
     flex:1,
-    marginTop: 65,
+    marginTop: 45,
     marginLeft: 30,
     marginRight: 30,
   },

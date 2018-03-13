@@ -1,17 +1,29 @@
-
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio } from 'native-base';
+import {
+    Container,
+    Header,
+    Title,
+    Content,
+    Text,
+    Button,
+    Icon,
+    Left,
+    Body,
+    Right,
+    Input,
+    InputGroup,
+    Item,
+    Col } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
 
 
-class Qtwo extends Component {
+class Instructions extends Component {
 
   static propTypes = {
     name: React.PropTypes.string,
@@ -33,40 +45,34 @@ class Qtwo extends Component {
             <Button transparent onPress={this.props.openDrawer}>
               <Icon active name="menu" />
             </Button>
-           
           </Left>
-
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Question 2'}</Title>
+            <Title>{(this.props.name) ? this.props.name : 'Instructions'}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
               <Icon active name="power" />
             </Button>
           </Right>
-          
         </Header>
-
         <Content>
+            <Grid style={styles.buttons}>
+                <Col>
+                    <Button rounded bordered onPress={() => Actions.home()} style={styles.center}>
+                    <Text>Cancel</Text>
+                    </Button>
+                </Col>
+                <Col>
+                    <Button rounded onPress={() => Actions.qtwoOne()} style={styles.center}>
+                    <Text>Next</Text>
+                    </Button>
+                </Col>
+            </Grid>
            <Text style={styles.text}>
             Below is a list of symptoms, which you may or may not have experienced. For
-            each symptom, please tick one box that best describe how it affected you 
-            over the past week.
+            each symptom, please tick one box that best describe how it affected you
+            over the past 3 days.
           </Text>
-
-            <Grid style={styles.buttons}>
-            <Col>
-              <Button bordered rounded onPress={() => Actions.qone()} style={styles.center}>
-                  <Text>Back</Text>
-              </Button>
-            </Col>
-            <Col>
-              <Button rounded onPress={() => Actions.qtwoOne()} style={styles.center}>
-                  <Text>Next</Text>
-              </Button>
-            </Col>
-          </Grid>
-         
         </Content>
       </Container>
     );
@@ -85,4 +91,4 @@ const mapStateToProps = state => ({
   list: state.list.list,
 });
 
-export default connect(mapStateToProps, bindAction)(Qtwo);
+export default connect(mapStateToProps, bindAction)(Instructions);

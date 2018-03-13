@@ -2,7 +2,15 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Content, Item, Button, Icon, View, Text, Spinner } from 'native-base';
+import { Container,
+         Content,
+         Item,
+         Button,
+         Icon,
+         View,
+         Text,
+         Spinner,
+         Label } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { Grid, Row,Col } from 'react-native-easy-grid';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -65,23 +73,23 @@ class Login extends Component {
           <Content>
             <Image source={background} style={styles.shadow}>
               <View style={styles.bg}>
-                <Item style={styles.input}>
-                  <TextField placeholder="email"
+                <Item stackedLabel style={styles.input}>
+                  <Label>Email</Label>
+                  <TextField placeholder="john@email.com"
                     value={this.props.email}
                     onChangeText={this.onEmailChange.bind(this)} />
                 </Item>
-                <Item style={styles.input}>
+                <Item stackedLabel style={styles.input}>
+                  <Label>PIN</Label>
                   <TextField
-                    placeholder="password"
+                    placeholder="******"
                     value={this.props.password}
                     onChangeText={this.onPasswordChange.bind(this)}
                     secureTextEntry
                   />
                 </Item>
-
                 {this.renderErrorMessage()}
                 {this.renderButtons()}
-
               </View>
             </Image>
           </Content>
