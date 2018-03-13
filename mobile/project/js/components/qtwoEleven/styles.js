@@ -11,19 +11,17 @@ export default {
     alignItems: 'center',
   },
   text: {
-      marginTop:50,
-      fontSize: 24,
-      marginBottom: 15,
-      alignItems: 'center',
-      alignContent: 'center',
-      color: '#F16C00',
-      marginLeft: 30,
-      marginRight: 30,
-      fontFamily: 'sans-serif-condensed',
+    marginTop:30,
+    fontSize: 24,
+    alignSelf:'center',
+    color: '#F16C00',
+    marginLeft: 30,
+    marginRight:30,
+    fontFamily: 'sans-serif-condensed',
   },
   radios: {
     flex:1,
-    marginTop: 50,
+    marginTop: 45,
     marginLeft: 30,
     marginRight: 30,
   },
@@ -31,11 +29,8 @@ export default {
     alignSelf: 'center',
   },
   buttons:{
-    marginTop: 45,
+    marginTop: 50,
     marginBottom:18,
     justifyContent: 'center',
-  },
-  title: {
-     width: 175,
   }
 };

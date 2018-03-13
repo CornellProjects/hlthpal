@@ -1,15 +1,27 @@
-
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio } from 'native-base';
+import { Container,
+         Header,
+         Title,
+         Content,
+         Card,
+         Text,
+         Button,
+         Icon,
+         Left,
+         Body,
+         Right,
+         Input,
+         InputGroup,
+         Item,
+         Col } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import SymptomList from '../SymptomList';
 import styles from './styles';
-
 
 class otherSymptoms extends Component {
 
@@ -32,9 +44,7 @@ class otherSymptoms extends Component {
             <Button transparent onPress={this.props.openDrawer}>
               <Icon active name="menu" />
             </Button>
-
           </Left>
-
           <Body>
             <Title>Other Symptoms</Title>
           </Body>
@@ -43,17 +53,25 @@ class otherSymptoms extends Component {
               <Icon active name="power" />
             </Button>
           </Right>
-
         </Header>
-
         <Content>
+            <Grid style={styles.buttons}>
+                <Col>
+                    <Button rounded bordered onPress={() => Actions.qtwoSeven()} style={styles.center}>
+                    <Text>Back</Text>
+                    </Button>
+                </Col>
+                <Col>
+                    <Button rounded onPress={() => Actions.qtwoEight()} style={styles.center}>
+                    <Text>Next</Text>
+                    </Button>
+                </Col>
+            </Grid>
             <Text style={styles.text}>
             Please list any other symptoms not mentioned above, and tick one box to show how
-             they have affected you over the past week.
+             they have affected you over the past 3 days.
             </Text>
-
             <SymptomList />
-
             <Grid style={styles.buttons}>
                 <Row>
                     <Col>
@@ -63,20 +81,6 @@ class otherSymptoms extends Component {
                     </Col>
                 </Row>
             </Grid>
-
-            <Grid style={styles.buttons}>
-                <Col>
-                  <Button transparent onPress={() => Actions.qtwoTen()} style={styles.center}>
-                      <Icon name='arrow-back' />
-                  </Button>
-                </Col>
-                <Col>
-                  <Button transparent onPress={() => Actions.qthree()} style={styles.center}>
-                      <Icon name='arrow-forward' />
-                  </Button>
-                </Col>
-            </Grid>
-
         </Content>
       </Container>
     );

@@ -26,6 +26,7 @@ class PatientCreateSerializer(ModelSerializer):
             'doctor',
             'gender',
             'street',
+            'sector',
             'city',
             'state',
             'country'
@@ -108,7 +109,8 @@ class UserCreateSerializer(ModelSerializer):
                 street=validated_data['patient']['street'],
                 city=validated_data['patient']['city'],
                 state=validated_data['patient']['state'],
-                country=validated_data['patient']['country']
+                country=validated_data['patient']['country'],
+                sector=validated_data['patient']['sector']
             )
 
             return validated_data

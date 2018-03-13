@@ -7,7 +7,7 @@ export default {
     backgroundColor: '#FBFAFA',
   },
   text: {
-    marginTop:60,
+    marginTop:30,
     fontSize: 24,
     alignItems: 'center',
     alignContent: 'center',
@@ -38,7 +38,6 @@ export default {
   },
   buttons:{
     marginTop: 50,
-    marginBottom:18,
     justifyContent: 'center',
   }
 };

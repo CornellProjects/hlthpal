@@ -7,7 +7,7 @@ export default {
     backgroundColor: '#FBFAFA',
   },
   btn: {
-    color: '#F16C00',
+    alignSelf:'center',
   },
   text:{
     color: '#F16C00',
@@ -24,7 +24,12 @@ export default {
     justifyContent: 'center',
     alignItems: 'center',
   },
-    center: {
+  round: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  light: {
+    marginTop: 30,
     alignSelf: 'center',
   },
   buttons:{

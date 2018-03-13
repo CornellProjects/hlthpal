@@ -113,7 +113,7 @@ class Patients extends Component {
                     <th>Sector</th>
                     <th>Pain</th>
                     <th>SOB</th>
-                    <th>Nausea and Vomitting</th>
+                    <th>Nausea</th>
                     <th>Fatigue</th>
                     <th>Constipation</th>
                     <th>Note</th>

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { setQuestion, createAnswerObject, setAnswer, answerChanged } from '../../actions/answers';
+import { setQuestion, createAnswerObject, setAnswer, answerChanged, resetRating } from '../../actions/answers';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
@@ -20,6 +20,7 @@ class QtwoFour extends Component {
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
     answerChanged: React.PropTypes.func,
+    resetRating: React.PropTypes.func,
     setQuestion: React.PropTypes.func,
     createAnswerObject: React.PropTypes.func,
   }
@@ -49,7 +50,7 @@ class QtwoFour extends Component {
     let text = '';
 
     answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
-
+    this.props.resetRating(rating);
     Actions.qtwoFive();
   }
 
@@ -73,7 +74,7 @@ class QtwoFour extends Component {
           </Left>
 
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Question 2 - 4'}</Title>
+            <Title>{(this.props.name) ? this.props.name : 'Question 2.3'}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
@@ -84,11 +85,20 @@ class QtwoFour extends Component {
         </Header>
 
         <Content>
+            <Grid style={styles.buttons}>
+                <Col>
+                    <Button rounded bordered onPress={() => this.onBackPress()} style={styles.center}>
+                    <Text>Back</Text>
+                    </Button>
+                </Col>
+                <Col>
+                    <Button rounded onPress={() => this.onButtonPress()} style={styles.center}>
+                    <Text>Next</Text>
+                    </Button>
+                </Col>
+            </Grid>
            <Text style={styles.text}>
-            Nausea{"\n"}
-          </Text>
-          <Text style={styles.subText}>
-          (feeling like you are going to be sick)
+            Nausea
           </Text>
 
            <Card style={styles.radios}>
@@ -103,20 +113,6 @@ class QtwoFour extends Component {
                  onSelection={ this.props.answerChanged.bind(this) }
              />
            </Card>
-
-          <Grid style={styles.buttons}>
-            <Col>
-              <Button transparent onPress={() => this.onBackPress()} style={styles.center}>
-                  <Icon name='arrow-back' />
-              </Button>
-            </Col>
-            <Col>
-              <Button transparent onPress={() => this.onButtonPress()} style={styles.center}>
-                  <Icon name='arrow-forward' />
-              </Button>
-            </Col>
-          </Grid>
-
         </Content>
       </Container>
     );
@@ -128,6 +124,7 @@ function bindAction(dispatch) {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
     answerChanged: rating => dispatch(answerChanged(rating)),
+    resetRating: rating => dispatch(resetRating(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
     setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
   };

@@ -7,7 +7,8 @@ import {
     ANSWER_CHANGED,
     TEXT_INPUT_CHANGED,
     SYMPTOM_INPUT_CHANGED,
-    ADD_SYMPTOM
+    ADD_SYMPTOM,
+    RESET_RATING
 } from '../actions/answers';
 
 export type State = {
@@ -16,7 +17,6 @@ export type State = {
     question: number,
     textInput: string,
     rating: string,
-    symptom: string
 }
 
 const initialState = {
@@ -25,7 +25,6 @@ const initialState = {
     question: '',
     textInput: '',
     rating: '',
-    symptom: ''
 };
 
 export default function (state:State = initialState, action:Action): State {
@@ -46,6 +45,8 @@ export default function (state:State = initialState, action:Action): State {
             return { ...state, symptom: action.payload  };
         case ADD_SYMPTOM:
             return [ ...state, action.item.push  ];
+        case RESET_RATING:
+            return { ...state, rating: action.payload };
         default:
             return state;
     }

@@ -23,6 +23,7 @@ export const registerUser = ({
         selectedOption,
         caregiver,
         street,
+        sector,
         city,
         myState,
         country
@@ -50,6 +51,7 @@ export const registerUser = ({
                          gender: selectedOption,
                          mobile: mobile,
                          street: street,
+                         sector: sector,
                          city: city,
                          state: myState,
                          country: country,
