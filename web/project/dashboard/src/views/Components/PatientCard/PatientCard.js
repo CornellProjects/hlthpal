@@ -177,8 +177,8 @@ class PatientCard extends Component{
                                       <tr>
                                         <th>Last Submission</th>
                                         <th>Pain</th>
-                                        <th>Shortness of breath</th>
-                                        <th>Nausea and Vomitting</th>
+                                        <th>SOB</th>
+                                        <th>Nausea</th>
                                         <th>Fatigue</th>
                                         <th>Constipation</th>
                                         <th>Q3</th>
@@ -239,7 +239,7 @@ class PatientCard extends Component{
                                 You have successfully create a note!
                             </ModalBody>
                             <ModalFooter>
-                              <Button color="primary" onClick={this.toggle_submit}>Go back</Button>{' '}
+                              <Button color="primary" onClick={this.toggle_submit}>Okay</Button>{' '}
                             </ModalFooter>
                           </Modal>
                           </CardFooter>

@@ -1,10 +1,13 @@
 import axios from 'axios';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
 export function login(data){
   var headers = {
-    'Content-Type':'application/json'
-  }
+      'Content-Type':'application/json'
+  };
   return dispatch => {
       return axios.post('api/login', data, headers).then(
         res => {
@@ -18,3 +21,4 @@ export function login(data){
         }
       )
 }}
+

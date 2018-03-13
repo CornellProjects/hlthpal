@@ -62,9 +62,6 @@ class Header extends Component {
         <NavbarBrand href="#"></NavbarBrand>
         <NavbarToggler className="d-md-down-none" onClick={this.sidebarMinimize}>&#9776;</NavbarToggler>
         <Nav className="ml-auto" navbar>
-          <NavItem className="d-md-down-none">
-            <NavLink href="#"><i className="icon-bell"></i><Badge pill color="danger">5</Badge></NavLink>
-          </NavItem>
           <NavItem>
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle className="nav-link dropdown-toggle">
@@ -72,12 +69,6 @@ class Header extends Component {
                 <span className="d-md-down-none">admin</span>
               </DropdownToggle>
               <DropdownMenu right className={this.state.dropdownOpen ? 'show' : ''}>
-                <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
-                <DropdownItem><i className="fa fa-bell-o"></i> Notifications<Badge color="info">42</Badge></DropdownItem>
-                <DropdownItem header tag="div" className="text-center"><strong>Settings</strong></DropdownItem>
-                <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
-                <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
-                <DropdownItem divider/>
                 <DropdownItem onClick={this.onSubmit}><i className="fa fa-lock"></i> Logout</DropdownItem>
               </DropdownMenu>
             </Dropdown>
