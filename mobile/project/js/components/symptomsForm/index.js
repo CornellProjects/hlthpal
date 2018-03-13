@@ -7,7 +7,7 @@ import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import TextField from '../TextField'
 import { SegmentedControls } from 'react-native-radio-buttons';
-import { setSymptom, createSymptomObject, symptomChanged, answerChanged } from '../../actions/answers';
+import { setSymptom, createSymptomObject, symptomChanged, answerChanged, resetRating } from '../../actions/answers';
 import styles from './styles';
 
 class symptomsForm extends Component {
@@ -20,6 +20,7 @@ class symptomsForm extends Component {
         openDrawer: React.PropTypes.func,
         symptomChanged: React.PropTypes.func,
         answerChanged: React.PropTypes.func,
+        resetRating: React.PropTypes.func,
         createSymptomObject: React.PropTypes.func,
     }
 
@@ -28,6 +29,7 @@ class symptomsForm extends Component {
         if (symptom != '') {
             mySymptoms.push(this.props.setSymptom({ record, symptom, rating }).payload);
         }
+        this.props.resetRating(rating);
         Actions.otherSymptoms();
     }
 
@@ -104,6 +106,7 @@ function bindAction(dispatch) {
     openDrawer: () => dispatch(openDrawer()),
     symptomChanged: text => dispatch(symptomChanged(text)),
     answerChanged: rating => dispatch(answerChanged(rating)),
+    resetRating: rating => dispatch(resetRating(rating)),
     setSymptom: (record, symptom, rating) => dispatch(createSymptomObject(record, symptom, rating)),
   };
 }
