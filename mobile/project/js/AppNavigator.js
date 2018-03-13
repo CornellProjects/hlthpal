@@ -1,27 +1,14 @@
-
 import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import { Drawer } from 'native-base';
 import { Router, Scene } from 'react-native-router-flux';
-
 import { closeDrawer } from './actions/drawer';
-
 import Login from './components/login/';
 import Home from './components/home/';
 import BlankPage from './components/blankPage';
 import SideBar from './components/sideBar';
 import { statusBarColor } from './themes/base-theme';
-import Qone from './components/qone';
-import Qtwo from './components/qtwo';
-import Qthree from './components/qthree';
-import Qfour from './components/qfour';
-import Qfive from './components/qfive';
-import Qsix from './components/qsix';
-import Qseven from './components/qseven';
-import Qeight from './components/qeight';
-import Qnine from './components/qnine';
-import Qten from './components/qten';
 import QtwoOne from './components/qtwoOne';
 import QtwoTwo from './components/qtwoTwo';
 import QtwoThree from './components/qtwoThree';
@@ -32,10 +19,15 @@ import QtwoSeven from './components/qtwoSeven';
 import QtwoEight from './components/qtwoEight';
 import QtwoNine from './components/qtwoNine';
 import QtwoTen from './components/qtwoTen';
+import QtwoEleven from './components/qtwoEleven';
+import QtwoTwelve from './components/qtwoTwelve';
 import otherSymptoms from './components/otherSymptoms';
 import FillInfo from './components/fillInfo';
 import RecordList from './components/RecordList';
 import symptomsForm from './components/symptomsForm';
+import SummaryPage from './components/SummaryPage';
+import Questions from './components/Questions';
+import Instructions from './components/instructions';
 
 const RouterWithRedux = connect()(Router);
 
@@ -46,7 +38,6 @@ class AppNavigator extends Component {
     closeDrawer: React.PropTypes.func,
   }
 
-
   componentDidUpdate() {
     if (this.props.drawerState === 'opened') {
       this.openDrawer();
@@ -56,7 +47,6 @@ class AppNavigator extends Component {
       this._drawer._root.close();
     }
   }
-
 
   openDrawer() {
     this._drawer._root.open();
@@ -76,12 +66,6 @@ class AppNavigator extends Component {
         return <Home />;
       case 'blankPage':
         return <BlankPage />;
-      case 'qone':
-        return <Qone />;
-      case 'qtwo':
-        return <Qtwo />;
-      case 'qtwoOne':
-        return <QtwoOne />;
       case 'fillInfo':
         return <FillInfo />;
       case 'qtwoOne':
@@ -104,28 +88,22 @@ class AppNavigator extends Component {
         return <QtwoNine />
       case 'qtwoTen':
         return <QtwoTen />
+      case 'qtwoEleven':
+        return <QtwoEleven />
+      case 'qtwoTwelve':
+        return <QtwoTwelve />
       case 'otherSymptoms':
         return <otherSymptoms />
       case 'symptomsForm':
         return <symptomsForm />
-      case 'qthree':
-        return <Qthree />
-      case 'qfour':
-        return <Qfour />
-      case 'qfive':
-        return <Qfive />
-      case 'qsix':
-        return <Qsix />
-      case 'qseven':
-        return <Qseven />
-      case 'qeight':
-        return <Qeight />
-      case 'qnine':
-        return <Qnine />
-      case 'qten':
-        return <Qten />
       case 'RecordList':
         return <RecordList />
+      case 'SummaryPage':
+        return <SummaryPage />
+      case 'Questions':
+        return <Questions />
+      case 'Instructions':
+        return <Instructions />
       default:
         return <Login />;
     }
@@ -170,16 +148,6 @@ class AppNavigator extends Component {
             <Scene key="fillInfo" component={FillInfo} />
             <Scene key="home" component={Home} />
             <Scene key="blankPage" component={BlankPage} />
-            <Scene key="qone" component={Qone} />
-            <Scene key="qtwo" component={Qtwo} />
-            <Scene key="qthree" component={Qthree} />
-            <Scene key="qfour" component={Qfour} />
-            <Scene key="qfive" component={Qfive} />
-            <Scene key="qsix" component={Qsix} />
-            <Scene key="qseven" component={Qseven} />
-            <Scene key="qeight" component={Qeight} />
-            <Scene key="qnine" component={Qnine} />
-            <Scene key="qten" component={Qten} />
             <Scene key="qtwoOne" component={QtwoOne} />
             <Scene key="qtwoTwo" component={QtwoTwo} />
             <Scene key="qtwoThree" component={QtwoThree} />
@@ -190,9 +158,14 @@ class AppNavigator extends Component {
             <Scene key="qtwoEight" component={QtwoEight} />
             <Scene key="qtwoNine" component={QtwoNine} />
             <Scene key="qtwoTen" component={QtwoTen} />
+            <Scene key="qtwoEleven" component={QtwoEleven} />
+            <Scene key="qtwoTwelve" component={QtwoTwelve} />
             <Scene key="otherSymptoms" component={otherSymptoms} />
             <Scene key="symptomsForm" component={symptomsForm} />
             <Scene key="RecordList" component={RecordList} />
+            <Scene key="SummaryPage" component={SummaryPage} />
+            <Scene key="Questions" component={Questions} />
+            <Scene key="Instructions" component={Instructions} />
           </Scene>
         </RouterWithRedux>
       </Drawer>
