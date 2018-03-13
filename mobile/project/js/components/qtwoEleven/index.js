@@ -5,26 +5,33 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { setQuestion, createAnswerObject, setAnswer, answerModified } from '../../actions/answers';
+import { setQuestion, createAnswerObject, setAnswer, answerModified, resetRating } from '../../actions/answers';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
 import styles from './styles';
 
 
-class Qsix extends Component {
+class QtwoEleven extends Component {
 
   static propTypes = {
-    name: React.PropTypes.string,
-    setIndex: React.PropTypes.func,
-    list: React.PropTypes.arrayOf(React.PropTypes.string),
-    openDrawer: React.PropTypes.func,
-    answerModified: React.PropTypes.func,
-    setQuestion: React.PropTypes.func,
+      name: React.PropTypes.string,
+      setIndex: React.PropTypes.func,
+      list: React.PropTypes.arrayOf(React.PropTypes.string),
+      openDrawer: React.PropTypes.func,
+      answerModified: React.PropTypes.func,
+      resetRating: React.PropTypes.func,
+      setQuestion: React.PropTypes.func,
+      createAnswerObject: React.PropTypes.func,
+  }
+
+  newPage(index) {
+      this.props.setIndex(index);
+      Actions.blankPage();
   }
 
   componentWillMount() {
-    this.props.setQuestion(15);
+      this.props.setQuestion(11);
   }
 
   componentDidMount() {
@@ -34,7 +41,7 @@ class Qsix extends Component {
   onBackPress() {
     const { answersArray } = this.props;
     answersArray.pop();
-    Actions.qfive();
+    Actions.qtwoNine();
   }
 
   onButtonPress() {
@@ -43,23 +50,18 @@ class Qsix extends Component {
     let text = '';
 
     answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
-
-    Actions.qseven();
-  }
-
-  newPage(index) {
-    this.props.setIndex(index);
-    Actions.blankPage();
+    this.props.resetRating(rating);
+    Actions.qtwoTwelve();
   }
 
   render() {
     const options = [
-        'Always',
+        'Yes',
         'Most of the time',
         'Sometimes',
         'Occasionally',
         'Not at all'
-    ];
+     ];
 
     return (
       <Container style={styles.container}>
@@ -72,7 +74,7 @@ class Qsix extends Component {
           </Left>
 
           <Body>
-            <Title style={styles.title}>{(this.props.name) ? this.props.name : 'Over the past week'}</Title>
+            <Title>{(this.props.name) ? this.props.name : 'Question 6'}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
@@ -83,36 +85,33 @@ class Qsix extends Component {
         </Header>
 
         <Content>
+            <Grid style={styles.buttons}>
+                <Col>
+                    <Button rounded bordered onPress={() => this.onBackPress()} style={styles.center}>
+                    <Text>Back</Text>
+                    </Button>
+                </Col>
+                <Col>
+                    <Button rounded onPress={() => this.onButtonPress()} style={styles.center}>
+                    <Text>Next</Text>
+                    </Button>
+                </Col>
+            </Grid>
            <Text style={styles.text}>
-            Have you felt at peace?
+            Over the past 3 days, have you felt at peace?
           </Text>
-
            <Card style={styles.radios}>
-              <SegmentedControls
-                  direction={'column'}
-                  tint={'#F16C00'}
-                  options={options}
-                  containerBorderRadius={0}
-                  optionStyle={{fontSize:20, paddingTop: 8}}
-                  optionContainerStyle={{ height: 60, alignItems: 'center' }}
-                  selectedIndex={ this.props.rating }
-                  onSelection={value => this.props.answerModified(value)}
-              />
+             <SegmentedControls
+                 direction={'column'}
+                 tint={'#F16C00'}
+                 options={options}
+                 containerBorderRadius={0}
+                 optionStyle={{fontSize:20, paddingTop: 8}}
+                 optionContainerStyle={{ height: 60, alignItems: 'center' }}
+                 selectedIndex={ this.props.rating }
+                 onSelection={ this.props.answerModified.bind(this) }
+             />
            </Card>
-
-          <Grid style={styles.buttons}>
-            <Col>
-              <Button transparent onPress={() => this.onBackPress} style={styles.center}>
-                  <Icon name='arrow-back' />
-              </Button>
-            </Col>
-            <Col>
-              <Button transparent onPress={() => this.onButtonPress()} style={styles.center}>
-                  <Icon name='arrow-forward' />
-              </Button>
-            </Col>
-          </Grid>
-
         </Content>
       </Container>
     );
@@ -124,6 +123,7 @@ function bindAction(dispatch) {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
     answerModified: rating => dispatch(answerModified(rating)),
+    resetRating: rating => dispatch(resetRating(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
     setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
   };
@@ -138,4 +138,4 @@ const mapStateToProps = state => ({
   answersArray: state.records.answersArray,
 });
 
-export default connect(mapStateToProps, bindAction)(Qsix);
+export default connect(mapStateToProps, bindAction)(QtwoEleven);

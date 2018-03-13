@@ -1,30 +1,38 @@
+
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
-import { Container, Header, Title, Card, Content, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
+import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
-import { setQuestion, createAnswerObject, setAnswer, answerChanged, resetRating } from '../../actions/answers';
+import { setQuestion, createAnswerObject, setAnswer, answerModified, resetRating } from '../../actions/answers';
+import { createRecord } from '../../actions/records';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
-import { SegmentedControls } from 'react-native-radio-buttons'
+import { SegmentedControls } from 'react-native-radio-buttons';
 import styles from './styles';
 
 
-class QtwoTwo extends Component {
+class QtwoTwelve extends Component {
 
   static propTypes = {
-    name: React.PropTypes.string,
-    setIndex: React.PropTypes.func,
-    list: React.PropTypes.arrayOf(React.PropTypes.string),
-    openDrawer: React.PropTypes.func,
-    answerChanged: React.PropTypes.func,
-    resetRating: React.PropTypes.func,
-    setQuestion: React.PropTypes.func,
+      name: React.PropTypes.string,
+      setIndex: React.PropTypes.func,
+      list: React.PropTypes.arrayOf(React.PropTypes.string),
+      openDrawer: React.PropTypes.func,
+      answerModified: React.PropTypes.func,
+      resetRating: React.PropTypes.func,
+      setQuestion: React.PropTypes.func,
+      createAnswerObject: React.PropTypes.func,
+  }
+
+  newPage(index) {
+      this.props.setIndex(index);
+      Actions.blankPage();
   }
 
   componentWillMount() {
-    this.props.setQuestion(3);
+      this.props.setQuestion(11);
   }
 
   componentDidMount() {
@@ -34,31 +42,34 @@ class QtwoTwo extends Component {
   onBackPress() {
     const { answersArray } = this.props;
     answersArray.pop();
-    Actions.qtwoOne();
+    Actions.qtwoNine();
   }
 
   onButtonPress() {
-    const { question, record, rating, answersArray } = this.props;
+    const {
+            question,
+            record,
+            rating,
+            answersArray,
+            mySymptoms,
+            score,
+            token } = this.props;
 
     let text = '';
 
     answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
     this.props.resetRating(rating);
-    Actions.qtwoThree();
-  }
-
-  newPage(index) {
-    this.props.setIndex(index);
-    Actions.blankPage();
+    this.props.createRecord({ token, answersArray, mySymptoms, score });
+    Actions.home();
   }
 
   render() {
     const options = [
-        'Not at all',
-        'Slightly',
-        'Moderately',
-        'Severely',
-        'Overwhelmingly'
+        'Yes',
+        'Most of the time',
+        'Sometimes',
+        'Occasionally',
+        'Not at all'
     ];
 
     return (
@@ -72,7 +83,7 @@ class QtwoTwo extends Component {
           </Left>
 
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Question 2.1'}</Title>
+            <Title>{(this.props.name) ? this.props.name : 'Question 7'}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
@@ -83,22 +94,21 @@ class QtwoTwo extends Component {
         </Header>
 
         <Content>
-            <Grid style={styles.buttons}>
-                <Col>
-                    <Button rounded bordered onPress={() => this.onBackPress()} style={styles.center}>
+          <Grid style={styles.buttons}>
+               <Col>
+                  <Button rounded bordered onPress={() => this.onBackPress()} style={styles.center}>
                     <Text>Back</Text>
-                    </Button>
-                </Col>
-                <Col>
-                    <Button rounded onPress={() => this.onButtonPress()} style={styles.center}>
+                  </Button>
+               </Col>
+               <Col>
+                  <Button rounded onPress={() => this.onButtonPress()} style={styles.center}>
                     <Text>Next</Text>
-                    </Button>
-                </Col>
-            </Grid>
-           <Text style={styles.text}>
-            Shortness of breath
+                  </Button>
+               </Col>
+          </Grid>
+          <Text style={styles.text}>
+            Have you had enough help and advice for your family to plan for the future?
           </Text>
-
            <Card style={styles.radios}>
              <SegmentedControls
                  direction={'column'}
@@ -108,7 +118,7 @@ class QtwoTwo extends Component {
                  optionStyle={{fontSize:20, paddingTop: 8}}
                  optionContainerStyle={{ height: 60, alignItems: 'center' }}
                  selectedIndex={ this.props.rating }
-                 onSelection={ this.props.answerChanged.bind(this) }
+                 onSelection={ this.props.answerModified.bind(this) }
              />
            </Card>
         </Content>
@@ -121,20 +131,24 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
-    answerChanged: rating => dispatch(answerChanged(rating)),
+    answerModified: rating => dispatch(answerModified(rating)),
     resetRating: rating => dispatch(resetRating(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
     setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
+    createRecord: (token, answersArray, mySymptoms, score) => dispatch(createRecord(token, answersArray, mySymptoms, score)),
   };
 }
 
 const mapStateToProps = state => ({
   name: state.user.name,
+  token: state.user.token,
   list: state.list.list,
   question: state.answers.question,
   record: state.records.record,
+  score: state.records.score,
   rating: state.answers.rating,
   answersArray: state.records.answersArray,
+  mySymptoms: state.records.mySymptoms,
 });
 
-export default connect(mapStateToProps, bindAction)(QtwoTwo);
+export default connect(mapStateToProps, bindAction)(QtwoTwelve);
