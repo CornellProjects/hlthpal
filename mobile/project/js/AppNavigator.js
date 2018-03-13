@@ -25,8 +25,6 @@ import otherSymptoms from './components/otherSymptoms';
 import FillInfo from './components/fillInfo';
 import RecordList from './components/RecordList';
 import symptomsForm from './components/symptomsForm';
-import SummaryPage from './components/SummaryPage';
-import Questions from './components/Questions';
 import Instructions from './components/instructions';
 
 const RouterWithRedux = connect()(Router);
@@ -98,10 +96,6 @@ class AppNavigator extends Component {
         return <symptomsForm />
       case 'RecordList':
         return <RecordList />
-      case 'SummaryPage':
-        return <SummaryPage />
-      case 'Questions':
-        return <Questions />
       case 'Instructions':
         return <Instructions />
       default:
@@ -163,8 +157,6 @@ class AppNavigator extends Component {
             <Scene key="otherSymptoms" component={otherSymptoms} />
             <Scene key="symptomsForm" component={symptomsForm} />
             <Scene key="RecordList" component={RecordList} />
-            <Scene key="SummaryPage" component={SummaryPage} />
-            <Scene key="Questions" component={Questions} />
             <Scene key="Instructions" component={Instructions} />
           </Scene>
         </RouterWithRedux>
