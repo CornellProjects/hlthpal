@@ -1,0 +1,7 @@
+{"name": "NewPatientCard",
+    "version": "0.0.0",
+    "dependencies": {
+
+},
+"main": "./NewPatientCard.js"
+}
