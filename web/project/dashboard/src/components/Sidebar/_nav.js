@@ -14,7 +14,7 @@ export default {
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },
     {
-      name: 'My Patients',
+      name: 'Patients List',
       url: '/home',
       icon: 'icon-star',
     },
@@ -23,16 +23,16 @@ export default {
       url: '/addPatients',
       icon: 'icon-calculator',
     },
-    {
-      name: 'Add Doctors',
-      url: '/addDoctors',
-      icon: 'icon-calculator',
-    },
-    {
-      name: 'Add Hospitals',
-      url: '/addHospitals',
-      icon: 'icon-calculator',
-    },
+    // {
+    //   name: 'Add Doctors',
+    //   url: '/addDoctors',
+    //   icon: 'icon-calculator',
+    // },
+    // {
+    //   name: 'Add Hospitals',
+    //   url: '/addHospitals',
+    //   icon: 'icon-calculator',
+    // },
     {
       divider: true
     }
