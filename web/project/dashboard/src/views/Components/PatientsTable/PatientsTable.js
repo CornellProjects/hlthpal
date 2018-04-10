@@ -37,6 +37,7 @@ class PatientsTable extends Component {
                         key: patient.user.id,
                         date: patient.record.date.substring(0,10),
                         username: patient.user.username,
+                        name: patient.user.first_name + ' ' + patient.user.last_name,
                         firstname: patient.user.first_name,
                         lastname: patient.user.last_name,
                         sector: patient.location.sector,
@@ -52,6 +53,7 @@ class PatientsTable extends Component {
                     return {
                         key: patient.user.id,
                         date: '',
+                        name: patient.user.first_name + ' ' + patient.user.last_name,
                         username: patient.user.username,
                         firstname: patient.user.first_name,
                         lastname: patient.user.last_name,
@@ -143,8 +145,10 @@ class PatientsTable extends Component {
                                         },
                                         {
                                             Header: "Patient Name",
-                                            Cell: cellData => (<span>{cellData.original.firstname} {cellData.original.lastname}</span>)
-                                            // accessor: "firstname"
+                                            accessor: "name"
+                                            // filterMethod: (filter, row) =>
+                                            //     row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase()),
+                                            // Cell: cellData => (<span>{cellData.original.firstname} {cellData.original.lastname}</span>)
                                         },
                                         {
                                             Header: 'Sector',
