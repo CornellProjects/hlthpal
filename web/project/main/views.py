@@ -31,6 +31,7 @@ from .serializers import (
     EntityCreateSerializer,
     QuestionGetSerializer,
     SymptomSerializer,
+    SymptomGetSerializer,
     QuestionSerializer,
     NotesCreateSerializer,
     NotesGetSerializer,
@@ -309,14 +310,21 @@ class PatientHistoryView(APIView):
                 clean_result['record'] = record_serial.data
 
                 answers = Answer.objects.filter(record=record_serial.data['id'])
+                symptoms = Symptom.objects.filter(record=record_serial.data['id'])
 
-                ans_result = []
+                ans_result, symp_result = [], []
                 for ans in answers:
                     ans_serial = AnswerGetSerializer(ans);
                     ans_result.append(ans_serial.data)
 
+                for symp in symptoms:
+                    symp_serial = SymptomGetSerializer(symp);
+                    symp_result.append(symp_serial.data)
+
                 clean_result['data'] = ans_result
+                clean_result['symp'] = symp_result
                 result.append(clean_result)
+                # print(result)
             return Response(result, status=status.HTTP_200_OK)
 
         else:

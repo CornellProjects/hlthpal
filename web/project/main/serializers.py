@@ -324,7 +324,6 @@ class SymptomSerializer(ModelSerializer):
         ]
         list_serializer_class = SymptomListSerializer
 
-
 class RecordSerializer(ModelSerializer):
     class Meta:
         model = Record
@@ -343,6 +342,14 @@ class AnswerGetSerializer(ModelSerializer):
             'text',
         ]
 
+class SymptomGetSerializer(ModelSerializer):
+    class Meta:
+        model = Symptom
+        fields = [
+            'symptom',
+            'answer'
+        ]
+        
 ######################################################################################
 # privileged user serializer classes
 ######################################################################################
