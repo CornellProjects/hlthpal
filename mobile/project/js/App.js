@@ -10,8 +10,10 @@ import ProgressBar from './components/loaders/ProgressBar';
 
 import theme from './themes/base-theme';
 
-//global.myUrl = 'http://100.64.0.251:8000';
-global.myUrl = 'http://hlthpal.com';
+//import { URL } from './localUrl.js';
+//global.myUrl = URL;
+
+ global.myUrl = 'http://hlthpal.com';
 
 const styles = StyleSheet.create({
   container: {
