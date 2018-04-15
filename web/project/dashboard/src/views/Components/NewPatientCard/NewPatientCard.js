@@ -125,7 +125,9 @@ class NewPatientCard extends Component{
         let {notes} = this.state;
         let renderPatients = () => {
             return records.map((record) => {
-                let data = [];
+                let data = []
+//                let data = new Array(5);
+//                console.log({firstname}, record.data);
                 let length = 10;
                 for (let i=0; i < record.data.length; i++){
                     data.push(record.data[i].answer);
