@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import { Table, Button, Card, CardBody, CardBlock, CardHeader, CardFooter, Row, Col, Label, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup } from "reactstrap";
+import { Table, Button, Card, CardBody, CardBlock, CardHeader, CardFooter, Row, Col, Label, Modal,
+    ModalHeader, ModalBody, ModalFooter, Input, FormGroup, UncontrolledTooltip } from "reactstrap";
 import axios from 'axios';
 import PatientDetail from "../PatientDetail/PatientDetail"
 
@@ -155,11 +156,23 @@ class NewPatientCard extends Component{
             })
         };
 
+        let renderSymptoms = () => {
+          return records.map((record) => {
+            return record.symp.map((symptom) => {
+                return (<tr>
+                        <td scope="row">{record.record.date.substring(0,10)}</td>
+                        <td>{symptom.symptom}</td>
+                        <td>{symptom.answer}</td>
+                        </tr>)
+            });
+          });
+        };
+
         let renderNotes = () => {
             return notes.map((eachnote) => {
                 return (
                     <tr>
-                        <th scope="row">{eachnote.date.substring(0,10)}</th>
+                        <td scope="row">{eachnote.date.substring(0,10)}</td>
                         <td>{eachnote.notes}</td>
                     </tr>
                 );
@@ -180,7 +193,7 @@ class NewPatientCard extends Component{
                                 </Col>
                             </Row>
                         </CardHeader>
-                        <CardBlock className="card-body">
+                        <CardBody className="card-body">
                             <Row>
                                 <Col>
                                     <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
@@ -192,11 +205,26 @@ class NewPatientCard extends Component{
                                             <th>Nausea</th>
                                             <th>Fatigue</th>
                                             <th>Constipation</th>
-                                            <th>Q3</th>
-                                            <th>Q4</th>
-                                            <th>Q5</th>
-                                            <th>Q6</th>
-                                            <th>Q7</th>
+                                            <th id="q3">Q3</th>
+                                            <th id="q4">Q4</th>
+                                            <th id="q5">Q5</th>
+                                            <th id="q6">Q6</th>
+                                            <th id="q7">Q7</th>
+                                            <UncontrolledTooltip placement="top" target="q3">
+                                             Have you been feeling worried about your illness in the past 3 days?
+                                            </UncontrolledTooltip>
+                                            <UncontrolledTooltip placement="top" target="q4">
+                                             Over the past 3 days, have you been able to share how you are feeling with your family or friends?
+                                            </UncontrolledTooltip>
+                                            <UncontrolledTooltip placement="top" target="q5">
+                                              Over the past 3 days have you felt that life was worthwhile?
+                                            </UncontrolledTooltip>
+                                            <UncontrolledTooltip placement="top" target="q6">
+                                             Over the past 3 days, have you felt at peace?
+                                            </UncontrolledTooltip>
+                                            <UncontrolledTooltip placement="top" target="q7">
+                                             Have you had enough help and advice for your family to plan for the future?
+                                            </UncontrolledTooltip>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -204,6 +232,24 @@ class NewPatientCard extends Component{
                                         </tbody>
 
                                     </Table>
+
+                                    <CardHeader/>
+
+                                    <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+                                        <thead className="thead-default">
+                                          <tr>
+                                            <th>Date</th>
+                                            <th>Other Symptoms</th>
+                                            <th>Score</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          { renderSymptoms() }
+                                        </tbody>
+                                    </Table>
+
+                                    <CardHeader/>
+
                                     <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                                         <thead className="thead-default">
                                         <tr>
@@ -217,6 +263,8 @@ class NewPatientCard extends Component{
                                     </Table>
                                 </Col>
                             </Row>
+
+
                             <Row>
                                 <Col xs="12" md="12">
                                     <Card>
@@ -260,7 +308,7 @@ class NewPatientCard extends Component{
                                     </Card>
                                 </Col>
                             </Row>
-                        </CardBlock>
+                        </CardBody>
 
                     </Card>
                 </Col>
