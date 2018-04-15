@@ -136,6 +136,17 @@ class PatientCard extends Component{
       })
     };
 
+//    var renderSymptoms = () => {
+//          return records.map((record) => {
+//            return record.symp.map((symptom) => {
+//                <tr>
+//                <th scope="row">{symptom.symptom}</th>
+//                <td>{symptom.symptom}</td>
+//                </tr>
+//            });
+//          });
+//        };
+
     var renderNotes = () => {
       return notes.map((eachnote) => {
         return (
@@ -193,6 +204,19 @@ class PatientCard extends Component{
                                   </tbody>
 
                                 </Table>
+                                //Render Symptoms
+//                                <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+//                                    <thead className="thead-default">
+//                                      <tr>
+//                                        <th>Date</th>
+//                                        <th>Symptoms</th>
+//                                      </tr>
+//                                    </thead>
+//                                    <tbody>
+//                                      { renderSymptoms() }
+//                                    </tbody>
+//                                </Table>
+                                //Render Notes
                                 <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
                                     <thead className="thead-default">
                                       <tr>
