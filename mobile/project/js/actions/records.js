@@ -10,7 +10,9 @@ function calculateRecordScore(myArray) {
     var count = 0;
 
     myArray.forEach(function(item) {
-        count += item.answer;
+        if (!isNaN(parseInt(item.answer))){
+            count += item.answer;
+        }
     });
 
     return count;
@@ -24,7 +26,7 @@ function assignRecord(myArray, record) {
     return myArray;
 };
 
-function prepareRecord(myArray) {
+function prepareRecord(myArray) { //only push questions that have been filled
     let myNewArray = []
     myArray.forEach(function(item) {
         if (item.answer !== ""){
