@@ -24,6 +24,16 @@ function assignRecord(myArray, record) {
     return myArray;
 };
 
+function prepareRecord(myArray) {
+    let myNewArray = []
+    myArray.forEach(function(item) {
+        if (item.answer !== ""){
+            myNewArray.push(item);
+        }
+    });
+    return myNewArray;
+};
+
 const setCurrentRecord = (dispatch, record) => {
     dispatch({
         type: CREATE_RECORD,
@@ -54,6 +64,7 @@ export const createRecord = ({ token, answersArray, mySymptoms, score }) => {
 
             answersArray = assignRecord(answersArray, parsed);
             mySymptoms = assignRecord(mySymptoms, parsed);
+            newAnswersArray = prepareRecord(answersArray);
 
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
@@ -63,7 +74,7 @@ export const createRecord = ({ token, answersArray, mySymptoms, score }) => {
                    'Authorization': 'JWT '+token,
                    },
 
-                   body: JSON.stringify(answersArray)
+                   body: JSON.stringify(newAnswersArray)
             }).then(response => {console.log('ANSWERS', response)});
 
             fetch(myUrl + '/api/symptom', {
