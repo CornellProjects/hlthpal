@@ -3,8 +3,9 @@ import ReactTable from 'react-table';
 import axios from 'axios';
 import 'react-table/react-table.css';
 import {
-    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, Card,
-    CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table} from "reactstrap";
+    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter,
+    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table
+} from "reactstrap";
 import PatientCard from "../PatientCard/PatientCard";
 
 
