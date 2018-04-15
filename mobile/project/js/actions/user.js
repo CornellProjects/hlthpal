@@ -57,8 +57,6 @@ export const loginUser = ({ email, password }) => {
                                    })
                                    .then(response => {
                                         const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-                                        console.log(str);
-                                        console.log('Hehehe')
                                         getCurrentUser(dispatch, JSON.parse(str).first_name);
                                     })
 
