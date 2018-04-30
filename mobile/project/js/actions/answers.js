@@ -29,6 +29,7 @@ export const getQuestions = ({ token }) => {
                 .then(response => {
                      const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
                      const parsed = JSON.parse(str);
+                     console.log('Question: ' + parsed);
                      setQuestions(dispatch, parsed);
                  });
      };

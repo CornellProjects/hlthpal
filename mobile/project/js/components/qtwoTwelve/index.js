@@ -1,15 +1,16 @@
 
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, NetInfo } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 import { setQuestion, createAnswerObject, setAnswer, answerModified, resetRating } from '../../actions/answers';
-import { createRecord } from '../../actions/records';
+import { createRecord, retrieveAnswersFromLocalStorage } from '../../actions/records';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
+import { connectionState } from '../../actions/user';
 import styles from './styles';
 
 
@@ -24,6 +25,7 @@ class QtwoTwelve extends Component {
       resetRating: React.PropTypes.func,
       setQuestion: React.PropTypes.func,
       createAnswerObject: React.PropTypes.func,
+      connectionState: React.PropTypes.func,
   }
 
   newPage(index) {
@@ -32,12 +34,21 @@ class QtwoTwelve extends Component {
   }
 
   componentWillMount() {
-      this.props.setQuestion(11);
+    this.props.setQuestion(11);
+    NetInfo.isConnected.removeEventListener('change', this.handleConnectionChange);
   }
 
   componentDidMount() {
     const { question, record, rating, answersArray } = this.props;
+    NetInfo.isConnected.addEventListener('change', this.handleConnectionChange);
   }
+
+  handleConnectionChange = (isConnected) => {
+    console.log('[DEBUG][handleConnectionChange] isConnected: ' + isConnected);
+    if (isConnected) {
+        retrieveAnswersFromLocalStorage();
+    }
+  };
 
   onBackPress() {
     const { answersArray } = this.props;
@@ -136,6 +147,7 @@ function bindAction(dispatch) {
     setQuestion: question => dispatch(setQuestion(question)),
     setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
     createRecord: (token, answersArray, mySymptoms, score) => dispatch(createRecord(token, answersArray, mySymptoms, score)),
+    connectionState: (isConnected) => dispatch(connectionState(isConnected)),
   };
 }
 
@@ -149,6 +161,7 @@ const mapStateToProps = state => ({
   rating: state.answers.rating,
   answersArray: state.records.answersArray,
   mySymptoms: state.records.mySymptoms,
+  connectionState: state.connectionState,
 });
 
 export default connect(mapStateToProps, bindAction)(QtwoTwelve);
