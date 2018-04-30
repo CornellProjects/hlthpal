@@ -6,7 +6,7 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container, Header, Title, Content, Card, Text, Button, Icon, Left, Body, Right,Input,InputGroup,Item,Col,Radio,List,ListItem } from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 import { setQuestion, createAnswerObject, setAnswer, answerModified, resetRating } from '../../actions/answers';
-import { retrieveAnswersFromLocalStorage } from '../../actions/records';
+import { createRecord, retrieveAnswersFromLocalStorage } from '../../actions/records';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
