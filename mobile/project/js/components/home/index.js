@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, NetInfo } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { Container,
@@ -17,6 +17,7 @@ import { Container,
 import { Grid, Row } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
+import { retrieveAnswersFromLocalStorage } from '../../actions/records';
 import styles from './styles';
 
 class Home extends Component {
@@ -35,6 +36,20 @@ class Home extends Component {
   componentWillMount() {
     const { token } = this.props;
   }
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('change', this.handleConnectionChange);
+  }
+
+  componentDidMount() {
+    NetInfo.isConnected.addEventListener('change', this.handleConnectionChange);
+  }
+
+  handleConnectionChange = (isConnected) => {
+    if (isConnected) {
+      retrieveAnswersFromLocalStorage();
+    }
+  };
 
   onButtonPress() {
     const { token } = this.props;
