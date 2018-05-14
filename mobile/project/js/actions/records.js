@@ -1,6 +1,8 @@
 import type { Action } from './types';
 import { Actions } from 'react-native-router-flux';
 import { NetInfo, AsyncStorage } from 'react-native';
+import OfflineAnswerHandler from '../handlers/offlineAnswerHandler';
+import Record from '../dao/record';
 
 export const SELECT_RECORD       = 'SELECT_RECORD';
 export const SELECT_SYMPTOM      = 'SELECT_SYMPTOM';
@@ -37,42 +39,6 @@ function prepareRecord(myArray) { //only push questions that have been filled
     return myNewArray;
 };
 
-async function persistRecordToLocalStore(token, answersArray, mySymptoms, score) {
-    console.log('[DEBUG] Inside persistRecordToLocalStore');
-    try {
-        console.log('[DEBUG] Persisting token to local storage ' + JSON.stringify(token));
-        console.log('[DEBUG] Persisting answersArray to local storage ' + JSON.stringify(answersArray));
-        console.log('[DEBUG] Persisting mySymptoms to local storage ' + JSON.stringify(mySymptoms));
-        console.log('[DEBUG] Persisting score to local storage ' + JSON.stringify(score));
-
-        AsyncStorage.setItem('@MyHtPal:token', JSON.stringify(token));
-        AsyncStorage.setItem('@MyHtPal:answersArray', JSON.stringify(answersArray));
-        AsyncStorage.setItem('@MyHtPal:mySymptoms', JSON.stringify(mySymptoms));
-        AsyncStorage.setItem('@MyHtPal:score', JSON.stringify(score));
-    } catch (error) {
-        console.log('Error saving data' + error);
-    }
-}
-
-async function retrieveRecordFromLocalStorage() {
-    try {
-        const retrievedToken = await AsyncStorage.getItem('@MyHtPal:token');
-        const retrievedAnswersArray = await AsyncStorage.getItem('@MyHtPal:answersArray');
-        const retrievedSymptoms = await AsyncStorage.getItem('@MyHtPal:mySymptoms');
-        const retrievedScore = await AsyncStorage.getItem('@MyHtPal:score');
-
-        const retrievedRecord = {
-            token : JSON.parse(retrievedToken),
-            answersArray : JSON.parse(retrievedAnswersArray),
-            mySymptoms : JSON.parse(retrievedSymptoms),
-            score : JSON.parse(retrievedScore)
-        };
-        return retrievedRecord;
-    } catch (error) {
-        console.log('Error retrieving data' + error);
-    }
-}
-
 const setCurrentRecord = (dispatch, record) => {
     dispatch({
         type: CREATE_RECORD,
@@ -80,18 +46,9 @@ const setCurrentRecord = (dispatch, record) => {
     });
 };
 
-/**
- * Retrieves the saved answers on the device.
- */
-export const retrieveAnswersFromLocalStorage = () => {
-    retrieveRecordFromLocalStorage().then((record) => {
-        console.log('[DEBUG] async retrieved record = ' + JSON.stringify(record));
-        submitCreateRecordCall(record.token, record.answersArray, record.mySymptoms, record.score);
-    });
-};
+const submitCreateRecordCall = (token, answersArray, mySymptoms, score, callback) => {
+    console.log('Submitting a record to the server.');
 
-function submitCreateRecordCall(token, answersArray, mySymptoms, score) {
-    console.log('[DEBUG] submitCreateRecordCall called');
     fetch(myUrl + '/api/record', {
                method: 'POST',
                headers: {
@@ -132,29 +89,66 @@ function submitCreateRecordCall(token, answersArray, mySymptoms, score) {
                },
 
            body: JSON.stringify(mySymptoms)
-        }).then(response => {console.log('SYMPTOMS', response)});
+        }).then(response => {
+            console.log('SYMPTOMS', response);
+            if (callback) {
+                callback();
+            }});
     });
+}
+
+/**
+ * If there is network connectivity, submits all the offline records.
+ *
+ * @param token
+ *     the currently active user's token
+ */
+export const submitOfflineRecords = (token) => {
+    if (!token) {
+        throw 'The token cannot be empty, null, or undefined.';
+    }
+
+    NetInfo.isConnected.fetch().done((isConnected) => {
+        if (isConnected) {
+            const offlineAnswerHandler = new OfflineAnswerHandler();
+            offlineAnswerHandler.retrieveOfflineRecords(function(record) {
+                const recordObject = JSON.parse(record);
+                submitCreateRecordCall(token,
+                    recordObject.answers,
+                    recordObject.symptoms,
+                    recordObject.score,
+                    cleanUp);
+            });
+        }
+    });
+}
+
+/**
+ * Removes all records saved on the device.
+ */
+const cleanUp = () => {
+    const offlineAnswerHandler = new OfflineAnswerHandler();
+    offlineAnswerHandler.deleteOfflineRecords();
 }
 
 /**
  * Submit POST requests to the API endpoints store the user responses.
  */
 export const createRecord = ({ token, answersArray, mySymptoms, score }) => {
-    console.log('[DEBUG] createRecord called.');
     return (dispatch) => {
         NetInfo.isConnected.fetch().done((isConnected) => {
-            console.log('[DEBUG] createRecord => has connectivity :' + isConnected);
+            const totalScore =
+                calculateRecordScore(answersArray) +
+                calculateRecordScore(mySymptoms);
+
             if (isConnected) {
-                score = calculateRecordScore(answersArray);
-                score += calculateRecordScore(mySymptoms);
-
-                console.log('[DEBUG] Create record called');
-                console.log('[DEBUG] Taget URL is ' + myUrl);
-
-                submitCreateRecordCall(token, answersArray, mySymptoms, score);
+                console.log('There is network connectivity, submitting the record online.');
+                submitCreateRecordCall(token, answersArray, mySymptoms, totalScore);
             } else {
-                console.log('No internet connectivity, persisting the records locally.');
-                persistRecordToLocalStore(token, answersArray, mySymptoms, score);
+                console.log('No network connectivity, persisting the record locally.');
+                const record = new Record(answersArray, mySymptoms, totalScore);
+                const offlineAnswerHandler = new OfflineAnswerHandler();
+                offlineAnswerHandler.saveRecord(record);
             }
         });
     };

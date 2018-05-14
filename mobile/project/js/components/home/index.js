@@ -16,8 +16,10 @@ import { Container,
          View} from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
+import { directoryExists } from '../../handlers/fileHandler';
+import { submitOfflineRecords } from '../../actions/records';
 import { openDrawer } from '../../actions/drawer';
-import { retrieveAnswersFromLocalStorage } from '../../actions/records';
+
 import styles from './styles';
 
 class Home extends Component {
@@ -43,13 +45,17 @@ class Home extends Component {
 
   componentDidMount() {
     NetInfo.isConnected.addEventListener('change', this.handleConnectionChange);
+    const token = this.props.token;
+    submitOfflineRecords(token);
   }
 
   handleConnectionChange = (isConnected) => {
+    console.log('Connectivity changed. Has network connectivity: ' + isConnected);
     if (isConnected) {
-      retrieveAnswersFromLocalStorage();
+        const token = this.props.token;
+        submitOfflineRecords(token);
     }
-  };
+  }
 
   onButtonPress() {
     const { token } = this.props;
