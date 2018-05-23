@@ -3,7 +3,7 @@ import type { Action } from './types';
 import { Actions } from 'react-native-router-flux';
 import { NetInfo } from 'react-native';
 import _ from 'lodash';
-import { moi_username, moi_password, moi_firstname } from '../cred.js';
+import { users } from '../cred.js';
 
 export const EMAIL_CHANGED            = 'EMAIL_CHANGED';
 export const PASSWORD_CHANGED         = 'PASSWORD_CHANGED';
@@ -106,9 +106,16 @@ export const loginUser = ({ email, password }) => {
     //                    });
             } else {
                 console.log('No internet connectivity, persisting the user credentials locally.');
-//                persistRecordToLocalStore(token, answersArray, mySymptoms, score);
-                loginUserSuccess(dispatch, null);
-                getCurrentUser(dispatch, moi_firstname);
+                offlineInfo = getCurrentUserOfflineDetail(email, password);
+                console.log(offlineInfo, offlineInfo !== null);
+                if (offlineInfo !== null) {
+                    loginUserSuccess(dispatch, null);
+                    getCurrentUser(dispatch, offlineInfo);
+                    offlineCred(dispatch, email, password)
+                }
+                else {
+                    loginUserFail(dispatch);
+                }
             }
         });
 
@@ -142,9 +149,27 @@ const getCurrentUser = (dispatch, firstName) => {
     });
 };
 
+function getCurrentUserOfflineDetail(email, password){
+    all_users = users();
+    var value = null;
+    all_users.forEach(function(item) {
+        if ((item.email == email) && (item.password == password)){
+            value = item.first_name
+        }
+    });
+    return value;
+}
+
 export const connectionState = ({ status }) => {
     return {
         type: CHANGE_CONNECTION_STATUS,
         isConnected: status
     };
+};
+
+export const offlineCred = (dispatch, email, password) => {
+    dispatch({
+        type: 'SET_OFFLINE_CRED',
+        payload: {'email': email, 'password': password}
+    });
 };
