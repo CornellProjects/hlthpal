@@ -3,7 +3,7 @@ import type { Action } from './types';
 import { Actions } from 'react-native-router-flux';
 import { NetInfo } from 'react-native';
 import _ from 'lodash';
-import { moi_username, moi_password } from '../cred.js';
+import { moi_username, moi_password, moi_firstname } from '../cred.js';
 
 export const EMAIL_CHANGED            = 'EMAIL_CHANGED';
 export const PASSWORD_CHANGED         = 'PASSWORD_CHANGED';
@@ -107,8 +107,8 @@ export const loginUser = ({ email, password }) => {
             } else {
                 console.log('No internet connectivity, persisting the user credentials locally.');
 //                persistRecordToLocalStore(token, answersArray, mySymptoms, score);
-                loginUserSuccess(dispatch, null);
-//                getCurrentUser(dispatch, JSON.parse(str).first_name);
+                loginUserSuccess(dispatch, 'null');
+                getCurrentUser(dispatch, moi_firstname);
             }
         });
 
