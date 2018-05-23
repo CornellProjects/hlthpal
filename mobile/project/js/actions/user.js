@@ -107,7 +107,7 @@ export const loginUser = ({ email, password }) => {
             } else {
                 console.log('No internet connectivity, persisting the user credentials locally.');
 //                persistRecordToLocalStore(token, answersArray, mySymptoms, score);
-                loginUserSuccess(dispatch, 'null');
+                loginUserSuccess(dispatch, null);
                 getCurrentUser(dispatch, moi_firstname);
             }
         });
