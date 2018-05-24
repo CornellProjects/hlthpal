@@ -22,7 +22,7 @@ class EntityAdmin(admin.ModelAdmin):
 
 class RecordAdmin(admin.ModelAdmin):
 	# list_display = [field.name for field in Record._meta.get_fields()]
-	list_display = ('date', 'user', 'score',)
+	list_display = ('date', 'user', 'score', 'created_date',)
 
 class NotesAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Notes._meta.get_fields()]
