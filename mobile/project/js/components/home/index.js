@@ -46,14 +46,18 @@ class Home extends Component {
   componentDidMount() {
     NetInfo.isConnected.addEventListener('change', this.handleConnectionChange);
     const token = this.props.token;
-    submitOfflineRecords(token);
+    const username = this.props.username;
+    const password = this.props.password;
+    submitOfflineRecords(token, username, password);
   }
 
   handleConnectionChange = (isConnected) => {
     console.log('Connectivity changed. Has network connectivity: ' + isConnected);
     if (isConnected) {
         const token = this.props.token;
-        submitOfflineRecords(token);
+        const username = this.props.username;
+        const password = this.props.password;
+        submitOfflineRecords(token, username, password);
     }
   }
 
@@ -83,7 +87,7 @@ class Home extends Component {
         <Content>
           <View style={styles.mt}>
             <Text style={styles.text}>
-              Hi {this.props.userName}, how are you today?
+              Hi {this.props.first_name}, how are you today?
             </Text>
             <View style={styles.buttons}>
                 <Button rounded style={styles.round} onPress={() => this.onButtonPress()}>
@@ -110,7 +114,9 @@ function bindAction(dispatch) {
 const mapStateToProps = state => ({
   list: state.list.list,
   token: state.user.token,
-  userName: state.user.userName,
+  first_name: state.user.first_name,
+  username: state.user.username,
+  password: state.user.password
 });
 
 export default connect(mapStateToProps, bindAction)(Home);
