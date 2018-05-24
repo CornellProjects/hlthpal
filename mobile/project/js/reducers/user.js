@@ -7,13 +7,15 @@ import {
     LOGIN_USER,
     CURRENT_USER,
     SET_RECORDS,
-    CHANGE_CONNECTION_STATUS
+    CHANGE_CONNECTION_STATUS,
+    SET_OFFLINE_CRED
 } from '../actions/user';
 
 export type State = {
     myRecords: string,
-    userName: string,
+    username: string,
     email: string,
+    first_name: string,
     password: string,
     user: string,
     error: string,
@@ -25,7 +27,8 @@ export type State = {
 const initialState = {
     myRecords: [],
     email: '',
-    userName: '',
+    username: '',
+    first_name:'',
     password: '',
     user: null,
     error: '',
@@ -46,7 +49,9 @@ export default function (state:State = initialState, action:Action): State {
       case LOGIN_USER_SUCCESS:
           return { ...state, error: '', token: action.payload, loading: false };
       case CURRENT_USER:
-          return { ...state, userName: action.payload };
+          return { ...state, first_name: action.payload };
+      case SET_OFFLINE_CRED:
+          return { ...state, username: action.payload.username, password: action.payload.password };
       case LOGIN_USER_FAIL:
           return { ...state, error: 'Wrong email or password. Please try again.', password: '', loading: false };
       case SET_RECORDS:
