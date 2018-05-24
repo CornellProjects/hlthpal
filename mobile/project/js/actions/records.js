@@ -49,7 +49,7 @@ const setCurrentRecord = (dispatch, record) => {
     });
 };
 
-const submitCreateRecordCall = (token, answersArray, mySymptoms, score, callback) => {
+const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_date, callback) => {
     console.log('Submitting a record to the server.');
 
     fetch(myUrl + '/api/record', {
@@ -61,7 +61,8 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, callback
                },
 
                body: JSON.stringify({
-                    score: score
+                    score: score,
+                    created_date: created_date
                })
     })
     .then(response => {
@@ -100,19 +101,20 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, callback
     });
 }
 
-const submitCreateRecordCallNoToken = (email, password, answersArray, mySymptoms, score, callback) => {
-    console.log('Submitting a record to the server.');
+const submitCreateRecordCallNoToken = (username, password, answersArray, mySymptoms, score, created_date, callback) => {
+    console.log('Submitting a record to the server.', timestamp);
 
     fetch(myUrl + '/api/record', {
                method: 'POST',
                headers: {
                'Accept': 'application/json',
                'Content-Type': 'application/json',
-               'Authorization': 'Basic ' + base64.encode(email + ":" + password),
+               'Authorization': 'Basic ' + base64.encode(username + ":" + password),
                },
 
                body: JSON.stringify({
-                    score: score
+                    score: score,
+                    created_date: created_date
                })
     })
     .then(response => {
@@ -128,7 +130,7 @@ const submitCreateRecordCallNoToken = (email, password, answersArray, mySymptoms
                headers: {
                'Accept': 'application/json',
                'Content-Type': 'application/json',
-               'Authorization': 'Basic ' + base64.encode(email + ":" + password),
+               'Authorization': 'Basic ' + base64.encode(username + ":" + password),
                },
 
                body: JSON.stringify(newAnswersArray)
@@ -139,7 +141,7 @@ const submitCreateRecordCallNoToken = (email, password, answersArray, mySymptoms
                headers: {
                'Accept': 'application/json',
                'Content-Type': 'application/json',
-               'Authorization': 'Basic '+ base64.encode(email + ":" + password),
+               'Authorization': 'Basic '+ base64.encode(username + ":" + password),
                },
 
            body: JSON.stringify(mySymptoms)
@@ -170,6 +172,7 @@ export const submitOfflineRecords = (token, username, password) => {
                         recordObject.answers,
                         recordObject.symptoms,
                         recordObject.score,
+                        recordObject.created_date,
                         cleanUp);
                 });
             }
@@ -186,6 +189,7 @@ export const submitOfflineRecords = (token, username, password) => {
                         recordObject.answers,
                         recordObject.symptoms,
                         recordObject.score,
+                        recordObject.created_date,
                         cleanUp);
                 });
             }
@@ -213,7 +217,8 @@ export const createRecord = ({ token, answersArray, mySymptoms, score }) => {
 
             if (isConnected) {
                 console.log('There is network connectivity, submitting the record online.');
-                submitCreateRecordCall(token, answersArray, mySymptoms, totalScore);
+                timestamp = new Date();
+                submitCreateRecordCall(token, answersArray, mySymptoms, totalScore, timestamp.getTime());
             } else {
                 console.log('No network connectivity, persisting the record locally.');
                 const record = new Record(answersArray, mySymptoms, totalScore);
