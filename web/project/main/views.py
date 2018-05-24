@@ -185,8 +185,19 @@ class RecordAPIView(ListCreateAPIView):
     serializer_class = RecordSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def create(self, request):
+        print(request.data)
+        if 'created_date' in request.data:
+            request.data['created_date'] = datetime.datetime.fromtimestamp(int(request.data['created_date'])/1000).strftime('%Y-%m-%d %H:%M:%S'+'Z')
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=self.request.user, created_date=request.data['created_date'])
+        else:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=self.request.user)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
         return Record.objects.filter(user=self.request.user)
