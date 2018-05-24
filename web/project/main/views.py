@@ -14,6 +14,7 @@ from django.db.models.signals import post_save
 from django.core.mail import send_mail
 from django.conf import settings
 from wsgiref.util import FileWrapper
+from django.core.exceptions import MultipleObjectsReturned
 
 # Custom models
 from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient
@@ -186,12 +187,18 @@ class RecordAPIView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def create(self, request):
-        print(request.data)
+        # print(request.data)
         if 'created_date' in request.data:
             request.data['created_date'] = datetime.datetime.fromtimestamp(int(request.data['created_date'])/1000).strftime('%Y-%m-%d %H:%M:%S'+'Z')
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(user=self.request.user, created_date=request.data['created_date'])
+            try:
+                Record.objects.get(user=request.user, created_date=request.data['created_date'])
+                return Response({"detail": "Instance already initiated"}, status=status.HTTP_400_BAD_REQUEST)
+            except Record.MultipleObjectsReturned:
+                return Response({"detail": "Instance already initiated"}, status=status.HTTP_400_BAD_REQUEST)
+            except Record.DoesNotExist:
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save(user=self.request.user, created_date=request.data['created_date'])
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
