@@ -13,6 +13,7 @@ export const LOGIN_USER               = 'LOGIN_USER';
 export const CURRENT_USER             = 'CURRENT_USER';
 export const SET_RECORDS              = 'SET_RECORDS';
 export const CHANGE_CONNECTION_STATUS = 'CHANGE_CONNECTION_STATUS';
+export const SET_OFFLINE_CRED = 'SET_OFFLINE_CRED';
 
 export const emailChanged = (text) => {
     return {
@@ -107,11 +108,10 @@ export const loginUser = ({ email, password }) => {
             } else {
                 console.log('No internet connectivity, persisting the user credentials locally.');
                 offlineInfo = getCurrentUserOfflineDetail(email, password);
-                console.log(offlineInfo, offlineInfo !== null);
                 if (offlineInfo !== null) {
                     loginUserSuccess(dispatch, null);
-                    getCurrentUser(dispatch, offlineInfo);
-                    offlineCred(dispatch, email, password)
+                    getCurrentUser(dispatch, offlineInfo.first_name);
+                    offlineCred(dispatch, offlineInfo.username, password);
                 }
                 else {
                     loginUserFail(dispatch);
@@ -154,7 +154,7 @@ function getCurrentUserOfflineDetail(email, password){
     var value = null;
     all_users.forEach(function(item) {
         if ((item.email == email) && (item.password == password)){
-            value = item.first_name
+            value = {'first_name': item.first_name, 'username': item.username}
         }
     });
     return value;
@@ -167,9 +167,9 @@ export const connectionState = ({ status }) => {
     };
 };
 
-export const offlineCred = (dispatch, email, password) => {
+export const offlineCred = (dispatch, username, password) => {
     dispatch({
         type: 'SET_OFFLINE_CRED',
-        payload: {'email': email, 'password': password}
+        payload: {'username': username, 'password': password}
     });
 };
