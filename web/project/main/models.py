@@ -69,6 +69,7 @@ class Record(models.Model):
     date = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     score = models.IntegerField()
+    created_date = models.DateTimeField(null=True, blank=True)
 
 
 # Model to get answers from the user
