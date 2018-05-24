@@ -17,7 +17,7 @@ function calculateRecordScore(myArray) {
 
     myArray.forEach(function(item) {
         if (!isNaN(parseInt(item.answer))){
-            count += item.answer;
+            count += parseInt(item.answer);
         }
     });
 
@@ -66,43 +66,46 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                })
     })
     .then(response => {
-        const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-        const parsed = JSON.parse(str).id;
+        if (response.status < 400) {
+            const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
+            const parsed = JSON.parse(str).id;
 
-        answersArray = assignRecord(answersArray, parsed);
-        mySymptoms = assignRecord(mySymptoms, parsed);
-        newAnswersArray = prepareRecord(answersArray);
+            answersArray = assignRecord(answersArray, parsed);
+            mySymptoms = assignRecord(mySymptoms, parsed);
+            newAnswersArray = prepareRecord(answersArray);
 
-        fetch(myUrl + '/api/answer', {
-               method: 'POST',
-               headers: {
-               'Accept': 'application/json',
-               'Content-Type': 'application/json',
-               'Authorization': 'JWT '+ token,
-               },
+            fetch(myUrl + '/api/answer', {
+                   method: 'POST',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+ token,
+                   },
 
-               body: JSON.stringify(newAnswersArray)
-        }).then(response => {console.log('ANSWERS', response)});
+                   body: JSON.stringify(newAnswersArray)
+            }).then(response => {console.log('ANSWERS', response)});
 
-        fetch(myUrl + '/api/symptom', {
-               method: 'POST',
-               headers: {
-               'Accept': 'application/json',
-               'Content-Type': 'application/json',
-               'Authorization': 'JWT '+token,
-               },
+            fetch(myUrl + '/api/symptom', {
+                   method: 'POST',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'JWT '+token,
+                   },
 
-           body: JSON.stringify(mySymptoms)
-        }).then(response => {
-            console.log('SYMPTOMS', response);
-            if (callback) {
-                callback();
-            }});
+               body: JSON.stringify(mySymptoms)
+            }).then(response => {
+                console.log('SYMPTOMS', response);
+                if (callback) {
+                    callback();
+                }});
+        }
+
     });
 }
 
 const submitCreateRecordCallNoToken = (username, password, answersArray, mySymptoms, score, created_date, callback) => {
-    console.log('Submitting a record to the server.', timestamp);
+    console.log('Submitting a record to the server.', created_date);
 
     fetch(myUrl + '/api/record', {
                method: 'POST',
@@ -118,39 +121,42 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                })
     })
     .then(response => {
-        const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
-        const parsed = JSON.parse(str).id;
+        if (response.status < 400){
+            const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
+            const parsed = JSON.parse(str).id;
 
-        answersArray = assignRecord(answersArray, parsed);
-        mySymptoms = assignRecord(mySymptoms, parsed);
-        newAnswersArray = prepareRecord(answersArray);
+            answersArray = assignRecord(answersArray, parsed);
+            mySymptoms = assignRecord(mySymptoms, parsed);
+            newAnswersArray = prepareRecord(answersArray);
 
-        fetch(myUrl + '/api/answer', {
-               method: 'POST',
-               headers: {
-               'Accept': 'application/json',
-               'Content-Type': 'application/json',
-               'Authorization': 'Basic ' + base64.encode(username + ":" + password),
-               },
+            fetch(myUrl + '/api/answer', {
+                   method: 'POST',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'Basic ' + base64.encode(username + ":" + password),
+                   },
 
-               body: JSON.stringify(newAnswersArray)
-        }).then(response => {console.log('ANSWERS', response)});
+                   body: JSON.stringify(newAnswersArray)
+            }).then(response => {console.log('ANSWERS', response)});
 
-        fetch(myUrl + '/api/symptom', {
-               method: 'POST',
-               headers: {
-               'Accept': 'application/json',
-               'Content-Type': 'application/json',
-               'Authorization': 'Basic '+ base64.encode(username + ":" + password),
-               },
+            fetch(myUrl + '/api/symptom', {
+                   method: 'POST',
+                   headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Authorization': 'Basic '+ base64.encode(username + ":" + password),
+                   },
 
-           body: JSON.stringify(mySymptoms)
-        }).then(response => {
-            console.log('SYMPTOMS', response);
-            if (callback) {
-                callback();
-            }});
-    });
+               body: JSON.stringify(mySymptoms)
+            }).then(response => {
+                console.log('SYMPTOMS', response);
+                if (callback) {
+                    callback();
+                }});
+          }
+        });
+
 }
 
 /**
