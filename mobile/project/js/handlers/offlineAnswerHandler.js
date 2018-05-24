@@ -39,16 +39,20 @@ export default class OfflineAnswerHandler {
      */
     saveRecord(record) {
         console.log('Persisting record to local storage.');
+        const result = getRecordFileName();
+        const filePath = result.path;
+        const timestamp = result.time;
 
         const recordToPersist = {
             answers : record.answers,
             symptoms : record.symptoms,
-            score : record.score
+            score : record.score,
+            created_date: timestamp
         };
 
         const serializedRecord = JSON.stringify(recordToPersist);
 
-        const filePath = getRecordFileName();
+
 
         directoryExists(DIRECTORY)
             .then((exists) => {
@@ -160,5 +164,8 @@ const deleteAllRecordFiles = (fileMetadataList) => {
  */
 const getRecordFileName = () => {
     const currentTime = new Date();
-    return DIRECTORY + PATH_SEPARATOR + FILE_PREFIX + currentTime.getTime() + FILE_EXTENSION;
+    return {
+        'path': DIRECTORY + PATH_SEPARATOR + FILE_PREFIX + currentTime.getTime() + FILE_EXTENSION,
+        'time': currentTime.getTime()
+    }
 }
