@@ -203,7 +203,7 @@ class NewPatientCard extends Component{
                                         <tr>
                                             <th>Last Submission</th>
                                             <th>Pain</th>
-                                            <th>SOB</th>
+                                            <th id="SOB">SOB</th>
                                             <th>Nausea</th>
                                             <th>Fatigue</th>
                                             <th>Constipation</th>
@@ -212,6 +212,9 @@ class NewPatientCard extends Component{
                                             <th id="q5">Q5</th>
                                             <th id="q6">Q6</th>
                                             <th id="q7">Q7</th>
+                                            <UncontrolledTooltip placement="top" target="SOB">
+                                                Shortness of Breath
+                                            </UncontrolledTooltip>
                                             <UncontrolledTooltip placement="top" target="q3">
                                              Have you been feeling worried about your illness in the past 3 days?
                                             </UncontrolledTooltip>
