@@ -1,5 +1,5 @@
 {
-  "name": "HlthPal",
+  "name": "hlthpal",
   "version": "6.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "base-64": "^0.1.0",
     "code-push": "^2.0.1-beta",
     "color": "^0.11.3",
     "lodash": "^4.13.1",
@@ -73,5 +74,9 @@
   "upstreamRepo": "git@github.com:GeekyAnts/react-native-native-base-seed.git",
   "jest": {
     "preset": "jest-react-native"
-  }
+  },
+  "main": "index.android.js",
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

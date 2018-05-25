@@ -22,8 +22,7 @@
     "reactstrap": "^5.0.0-alpha.4",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "simple-line-icons": "^2.4.1",
-    "react-table": "^6.8.0"
+    "simple-line-icons": "^2.4.1"
   },
   "scripts": {
     "dev": "webpack -d --progress --watch --profile --json > compilation-stats.json --env.dev",
@@ -54,5 +53,9 @@
     "webpack": "^3.11.0",
     "webpack-bundle-tracker": "^0.2.0",
     "webpack-dev-server": "^2.9.1"
-  }
+  },
+  "description": "This is the dashboard for health care professionals to view patients' submitted data. Dashboard is built using [React](https://reactjs.org/).",
+  "main": "webpack.config.js",
+  "author": "",
+  "license": "ISC"
 }
