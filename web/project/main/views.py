@@ -1,5 +1,6 @@
 import os
 import datetime
+from django.utils.dateparse import parse_datetime
 import collections, json
 from django.http import HttpResponse, JsonResponse
 from django.http import HttpResponseForbidden
@@ -512,10 +513,10 @@ class PatientDataGetView(ListAPIView):
                 entry['data'] = ans.data;
                 result.append(entry)
             else:
-                entry['record'] = []
+                entry['record'] = {'date':'1900-05-24T07:27:21.238535Z'}
                 entry['data'] = []
                 result.append(entry)
-
+        result = sorted(result, key=lambda x: float(parse_datetime(x['record']['date']).strftime('%s')), reverse=True) #datetime.datetime(2012,4,1,0,0).timestamp()
         return Response(result)
 
 
