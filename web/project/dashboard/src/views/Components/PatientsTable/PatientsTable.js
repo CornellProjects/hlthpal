@@ -13,6 +13,7 @@ class PatientsTable extends Component {
     constructor(props){
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
+        this.checkboxSubmit = this.checkboxSubmit.bind(this);
         this.state = {
             patients: [],
             allPatients: [],
@@ -46,7 +47,9 @@ class PatientsTable extends Component {
                         nausea: data[2],
                         fatigue: data[3],
                         constipation: data[4],
-                        note: patient.notes.notes
+                        note: patient.notes.notes,
+                        record_key: patient.record.id,
+                        user: patient.record.signed
                     };
                 };
                 const newPatient = (patient) => {
@@ -63,7 +66,9 @@ class PatientsTable extends Component {
                         nausea: '',
                         fatigue: '',
                         constipation: '',
-                        note: patient.notes.notes
+                        note: patient.notes.notes,
+                        record_key: null,
+                        user: null
                     };
                 };
                 this.setState({
@@ -114,6 +119,14 @@ class PatientsTable extends Component {
             state: {detail: params}
         })
 
+    };
+
+    checkboxSubmit(params){
+        let headers = {
+            'Content-Type':'application/json'
+        };
+        let url = 'api/edit_record/' + params.record_key;
+        axios.put(url, {"update_user": true}, headers)
     };
 
     render() {
@@ -177,6 +190,18 @@ class PatientsTable extends Component {
                                         {
                                             Header: 'Note',
                                             accessor: "note"
+                                        },
+                                        {
+                                            Header: 'Signed',
+                                            sortable: false,
+                                            filterable: false,
+                                            Cell: cellData => { if ((cellData.original.record_key !== null) && (cellData.original.user !== null)) {
+                                                    return (<Input addon type="checkbox" defaultChecked
+                                                                      onClick={() => this.checkboxSubmit(cellData.original)} />)}
+                                                else if ((cellData.original.record_key !== null) && (cellData.original.user === null)){
+                                                    return (<Input addon type="checkbox"
+                                                               onClick={() => this.checkboxSubmit(cellData.original)} />)}
+                                            }
                                         },
                                         {
                                             Header: 'More Info',
