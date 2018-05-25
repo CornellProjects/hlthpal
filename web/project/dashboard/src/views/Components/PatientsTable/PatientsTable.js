@@ -193,11 +193,15 @@ class PatientsTable extends Component {
                                         },
                                         {
                                             Header: 'Signed',
-                                            sortable: false,
+                                            accessor: 'user',
                                             filterable: false,
-                                            Cell: cellData => { if ((cellData.original.record_key !== null) && (cellData.original.user !== null)) {
-                                                    return (<Input addon type="checkbox" defaultChecked
-                                                                      onClick={() => this.checkboxSubmit(cellData.original)} />)}
+                                            Cell: cellData => {if ((cellData.original.record_key !== null) && (cellData.original.user !== null)) {
+                                                console.log(cellData.original.user.first_name, cellData.original.user);
+                                                return (<div>
+                                                                <Input addon type="checkbox" defaultChecked
+                                                                      onClick={() => this.checkboxSubmit(cellData.original)} />
+                                                                <span>{cellData.original.user.first_name}</span>
+                                                            </div>)}
                                                 else if ((cellData.original.record_key !== null) && (cellData.original.user === null)){
                                                     return (<Input addon type="checkbox"
                                                                onClick={() => this.checkboxSubmit(cellData.original)} />)}
