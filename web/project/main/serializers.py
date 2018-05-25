@@ -1,7 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from rest_framework import serializers, exceptions
-from rest_framework import permissions
+from rest_framework import serializers, exceptions, permissions
 from rest_framework.serializers import (ModelSerializer, EmailField, CharField, ListSerializer)
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth import get_user_model
@@ -330,7 +329,9 @@ class RecordSerializer(ModelSerializer):
         fields = [
             'id',
             'date',
-            'score'
+            'score',
+            'created_date',
+            'signed'
         ]
 
 class AnswerGetSerializer(ModelSerializer):

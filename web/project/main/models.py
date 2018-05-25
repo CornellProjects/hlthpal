@@ -70,6 +70,7 @@ class Record(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     score = models.IntegerField()
     created_date = models.DateTimeField(null=True, blank=True)
+    signed = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, blank=True, related_name='signed_user')
 
 
 # Model to get answers from the user

@@ -6,7 +6,6 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from django.template import loader
 from django.contrib.auth import get_user_model
-from django.views.generic import UpdateView
 from rest_framework.authentication import TokenAuthentication
 from django.utils.encoding import smart_str
 from django.core.urlresolvers import reverse_lazy
@@ -14,7 +13,8 @@ from django.db.models.signals import post_save
 from django.core.mail import send_mail
 from django.conf import settings
 from wsgiref.util import FileWrapper
-from django.core.exceptions import MultipleObjectsReturned
+from rest_framework.decorators import detail_route
+from rest_framework import generics
 
 # Custom models
 from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient
@@ -51,6 +51,7 @@ from rest_framework.response import Response
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
+    UpdateAPIView,
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
     get_object_or_404)
@@ -209,14 +210,30 @@ class RecordAPIView(ListCreateAPIView):
     def get_queryset(self):
         return Record.objects.filter(user=self.request.user)
 
-
-class RecordUpdateView(RetrieveUpdateDestroyAPIView):
-    '''API to delete or edit a Record '''
-    queryset = Record.objects.filter()
+class RecordUpdateView(UpdateAPIView):
     serializer_class = RecordSerializer
-    permission_classes = [IsAuthenticated]
-    model = Record
-    success_url = reverse_lazy('id')
+    queryset = Record.objects.all()
+    def update(self, request, pk=None):
+        record = get_object_or_404(Record, pk=pk)
+        for param in request.data:
+            if param == 'score':
+                record.score = request.data[param]
+                print('updating score', record.signed)
+            if param == 'update_user':
+                record.signed = request.user if record.signed == None else None
+                print('updating user', record.signed)
+        record.save()
+        return Response({'detail': 'Signed user info updated'}, status=status.HTTP_200_OK)
+
+# class RecordUpdateView(RetrieveUpdateDestroyAPIView):
+#     '''API to delete or edit a Record '''
+#     queryset = Record.objects.filter()
+#     serializer_class = RecordSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def update(self, request)
+#     model = Record
+#     success_url = reverse_lazy('id')
 
 
 class QuestionUpdateView(RetrieveUpdateDestroyAPIView):
