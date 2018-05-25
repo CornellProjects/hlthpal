@@ -4,7 +4,7 @@ import axios from 'axios';
 import 'react-table/react-table.css';
 import {
     Row, Col, Modal, ModalHeader, ModalBody, ModalFooter,
-    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table
+    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip
 } from "reactstrap";
 import PatientCard from "../PatientCard/PatientCard";
 
@@ -94,19 +94,19 @@ class PatientsTable extends Component {
                 });
             })
             .catch((error) => {
-                console.log(error.response.data);
+                // console.log(error.response.data);
                 if (error.response) {
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
+                    // console.log(error.response.data);
+                    // console.log(error.response.status);
+                    // console.log(error.response.headers);
                 } else if (error.request) {
                     // The request was made but no response was received
                     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                     // http.ClientRequest in node.js
-                    console.log(error.request);
+                    // console.log(error.request);
                 } else {
                     // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
+                    // console.log('Error', error.message);
                 }
 
             });
@@ -172,7 +172,8 @@ class PatientsTable extends Component {
                                             accessor: "pain"
                                         },
                                         {
-                                            Header: 'SOB',
+                                            // Header: 'SOB',
+                                            Header: () => <span id="SOB"> SOB</span>,
                                             accessor: "breath"
                                         },
                                         {
@@ -196,7 +197,7 @@ class PatientsTable extends Component {
                                             accessor: 'user',
                                             filterable: false,
                                             Cell: cellData => {if ((cellData.original.record_key !== null) && (cellData.original.user !== null)) {
-                                                console.log(cellData.original.user.first_name, cellData.original.user);
+                                                // console.log(cellData.original.user.first_name, cellData.original.user);
                                                 return (<div>
                                                                 <Input addon type="checkbox" defaultChecked
                                                                       onClick={() => this.checkboxSubmit(cellData.original)} />
@@ -220,6 +221,9 @@ class PatientsTable extends Component {
                                     // className="-striped -highlight"
                                 />
                             </div>
+                            <UncontrolledTooltip placement="top" target="SOB">
+                                Shortness of Breath
+                            </UncontrolledTooltip>
                         </CardBody>
                     </Card>
                 </Col>
