@@ -189,15 +189,17 @@ class RecordAPIView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def create(self, request):
-        # print(request.data)
         if 'created_date' in request.data:
             request.data['created_date'] = datetime.datetime.fromtimestamp(int(request.data['created_date'])/1000).strftime('%Y-%m-%d %H:%M:%S'+'Z')
             try:
-                Record.objects.get(user=request.user, created_date=request.data['created_date'])
+                record = Record.objects.get(user=request.user, created_date=request.data['created_date'])
+                print("One instance already initiated")
                 return Response({"detail": "Instance already initiated"}, status=status.HTTP_400_BAD_REQUEST)
             except Record.MultipleObjectsReturned:
+                print("Multiple instances initiated")
                 return Response({"detail": "Instance already initiated"}, status=status.HTTP_400_BAD_REQUEST)
             except Record.DoesNotExist:
+                print("Creating new record")
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 serializer.save(user=self.request.user, created_date=request.data['created_date'])
