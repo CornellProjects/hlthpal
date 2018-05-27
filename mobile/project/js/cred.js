@@ -1,7 +1,7 @@
 //export const {user, user0, user1, user2, user3, user4}
 
 user = {
-            'username':'test',
+            'username':'test@gmail.com',
             'email': 'test@gmail.com',
             'password': 'test1234',
             'first_name': 'Cassandra'
