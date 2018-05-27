@@ -106,7 +106,7 @@ export const loginUser = ({ email, password }) => {
 
     //                    });
             } else {
-                console.log('No internet connectivity, persisting the user credentials locally.');
+                console.log('No internet connectivity, getting user data locally.');
                 offlineInfo = getCurrentUserOfflineDetail(email, password);
                 if (offlineInfo !== null) {
                     loginUserSuccess(dispatch, null);
