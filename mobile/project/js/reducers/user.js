@@ -47,7 +47,8 @@ export default function (state:State = initialState, action:Action): State {
       case LOGIN_USER:
           return { ...state, loading: true, error: '' };
       case LOGIN_USER_SUCCESS:
-          return { ...state, error: '', token: action.payload, loading: false };
+//          return { ...state, error: '', token: action.payload, loading: false };
+          return { ...state, error: '', token: action.payload.token, username: action.payload.username, password: action.payload.password, loading: false };
       case CURRENT_USER:
           return { ...state, first_name: action.payload };
       case SET_OFFLINE_CRED:

@@ -3,7 +3,6 @@ import { Actions } from 'react-native-router-flux';
 import { NetInfo, AsyncStorage } from 'react-native';
 import OfflineAnswerHandler from '../handlers/offlineAnswerHandler';
 import Record from '../dao/record';
-//import { moi_username, moi_email, moi_password, moi_firstname } from '../cred.js';
 
 export const SELECT_RECORD       = 'SELECT_RECORD';
 export const SELECT_SYMPTOM      = 'SELECT_SYMPTOM';
@@ -155,6 +154,9 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                     callback();
                 }});
           }
+        else {
+            console.log(response);
+        }
         });
 
 }
@@ -166,41 +168,41 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
  *     the currently active user's token
  */
 export const submitOfflineRecords = (token, username, password) => {
-    if (token===null) {
+//    if (token===null) {
 //        throw 'The token cannot be empty, null, or undefined.';
-        console.log('The token is either empty, null, or undefined.');
-        NetInfo.isConnected.fetch().done((isConnected) => {
-            if (isConnected) {
-                const offlineAnswerHandler = new OfflineAnswerHandler();
-                offlineAnswerHandler.retrieveOfflineRecords(function(record) {
-                    const recordObject = JSON.parse(record);
-                    submitCreateRecordCallNoToken(username, password,
-                        recordObject.answers,
-                        recordObject.symptoms,
-                        recordObject.score,
-                        recordObject.created_date,
-                        cleanUp);
-                });
-            }
+//    console.log('The token is either empty, null, or undefined.');
+    NetInfo.isConnected.fetch().done((isConnected) => {
+        if (isConnected) {
+            const offlineAnswerHandler = new OfflineAnswerHandler();
+            offlineAnswerHandler.retrieveOfflineRecords(function(record) {
+                const recordObject = JSON.parse(record);
+                submitCreateRecordCallNoToken(username, password,
+                    recordObject.answers,
+                    recordObject.symptoms,
+                    recordObject.score,
+                    recordObject.created_date,
+                    cleanUp);
+            });
+        }
         });
-    }
-    else {
-        console.log('Token value is present');
-        NetInfo.isConnected.fetch().done((isConnected) => {
-            if (isConnected) {
-                const offlineAnswerHandler = new OfflineAnswerHandler();
-                offlineAnswerHandler.retrieveOfflineRecords(function(record) {
-                    const recordObject = JSON.parse(record);
-                    submitCreateRecordCall(token,
-                        recordObject.answers,
-                        recordObject.symptoms,
-                        recordObject.score,
-                        recordObject.created_date,
-                        cleanUp);
-                });
-            }
-        });
-    }
+//    }
+//    else {
+//        console.log('Token value is present');
+//        NetInfo.isConnected.fetch().done((isConnected) => {
+//            if (isConnected) {
+//                const offlineAnswerHandler = new OfflineAnswerHandler();
+//                offlineAnswerHandler.retrieveOfflineRecords(function(record) {
+//                    const recordObject = JSON.parse(record);
+//                    submitCreateRecordCall(token,
+//                        recordObject.answers,
+//                        recordObject.symptoms,
+//                        recordObject.score,
+//                        recordObject.created_date,
+//                        cleanUp);
+//                });
+//            }
+//        });
+//    }
 }
 
 /**
@@ -214,17 +216,19 @@ const cleanUp = () => {
 /**
  * Submit POST requests to the API endpoints store the user responses.
  */
-export const createRecord = ({ token, answersArray, mySymptoms, score }) => {
+export const createRecord = ({ token, username, password, answersArray, mySymptoms, score }) => {
     return (dispatch) => {
         NetInfo.isConnected.fetch().done((isConnected) => {
             const totalScore =
-                calculateRecordScore(answersArray) +
-                calculateRecordScore(mySymptoms);
+                parseInt(calculateRecordScore(answersArray)) +
+                parseInt(calculateRecordScore(mySymptoms));
 
             if (isConnected) {
                 console.log('There is network connectivity, submitting the record online.');
                 timestamp = new Date();
-                submitCreateRecordCall(token, answersArray, mySymptoms, totalScore, timestamp.getTime());
+//                submitCreateRecordCall(token, answersArray, mySymptoms, totalScore, timestamp.getTime());
+                console.log("Usernam", username, "password", password);
+                submitCreateRecordCallNoToken(username, password, answersArray, mySymptoms, totalScore, timestamp.getTime());
             } else {
                 console.log('No network connectivity, persisting the record locally.');
                 const record = new Record(answersArray, mySymptoms, totalScore);

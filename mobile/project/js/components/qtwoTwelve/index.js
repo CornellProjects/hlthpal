@@ -10,7 +10,7 @@ import { createRecord, retrieveAnswersFromLocalStorage } from '../../actions/rec
 import { setIndex } from '../../actions/list'
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons';
-import { connectionState } from '../../actions/user';
+import { connectionState, use } from '../../actions/user';
 import styles from './styles';
 
 
@@ -18,6 +18,8 @@ class QtwoTwelve extends Component {
 
   static propTypes = {
       name: React.PropTypes.string,
+      username: React.PropTypes.string,
+      password: React.PropTypes.string,
       setIndex: React.PropTypes.func,
       list: React.PropTypes.arrayOf(React.PropTypes.string),
       openDrawer: React.PropTypes.func,
@@ -59,13 +61,15 @@ class QtwoTwelve extends Component {
             answersArray,
             mySymptoms,
             score,
-            token } = this.props;
+            token,
+            username,
+            password} = this.props;
 
     let text = '';
 
     answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
     this.props.resetRating(rating);
-    this.props.createRecord({ token, answersArray, mySymptoms, score });
+    this.props.createRecord({ token, username, password, answersArray, mySymptoms, score });
     Actions.home();
   }
 
@@ -141,7 +145,7 @@ function bindAction(dispatch) {
     resetRating: rating => dispatch(resetRating(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
     setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
-    createRecord: (token, answersArray, mySymptoms, score) => dispatch(createRecord(token, answersArray, mySymptoms, score)),
+    createRecord: (token, username, password, answersArray, mySymptoms, score) => dispatch(createRecord(token, username, password, answersArray, mySymptoms, score)),
     connectionState: (isConnected) => dispatch(connectionState(isConnected)),
   };
 }
@@ -149,6 +153,8 @@ function bindAction(dispatch) {
 const mapStateToProps = state => ({
   name: state.user.name,
   token: state.user.token,
+  username: state.user.username,
+  password: state.user.password,
   list: state.list.list,
   question: state.answers.question,
   record: state.records.record,

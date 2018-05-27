@@ -50,7 +50,7 @@ export const loginUser = ({ email, password }) => {
                    .then(user => {// calling after request is complete
                         if (user.status === 200) {
                             const str = JSON.stringify(eval('(' + user._bodyInit + ')'));
-                            loginUserSuccess(dispatch, JSON.parse(str).token);
+                            loginUserSuccess(dispatch, JSON.parse(str).token, email, password);
                             fetch(myUrl + '/api/user', {
                                    method: 'GET',
                                    headers: {
@@ -109,7 +109,7 @@ export const loginUser = ({ email, password }) => {
                 console.log('No internet connectivity, getting user data locally.');
                 offlineInfo = getCurrentUserOfflineDetail(email, password);
                 if (offlineInfo !== null) {
-                    loginUserSuccess(dispatch, null);
+                    loginUserSuccess(dispatch, null, email, password);
                     getCurrentUser(dispatch, offlineInfo.first_name);
                     offlineCred(dispatch, offlineInfo.username, password);
                 }
@@ -133,10 +133,11 @@ const loginUserFail = (dispatch) => {
     dispatch({ type: LOGIN_USER_FAIL });
 };
 
-const loginUserSuccess = (dispatch, user) => {
+const loginUserSuccess = (dispatch, token, username, password) => {
     dispatch({
         type: LOGIN_USER_SUCCESS,
-        payload: user
+        payload: {'username': username, 'password': password, 'token': token}
+//        payload: token
     });
     // redirect successful login to homepage
     Actions.home();
