@@ -45,11 +45,14 @@ class Patient(models.Model):
     diagnosis = models.CharField(max_length=50, blank=True)
     gender = models.CharField(max_length=6, blank=True)
     mobile = models.CharField(max_length=10, blank=True)
-    street = models.CharField(max_length=200)
+    address = models.CharField(max_length=250, null=True, blank=True)
+    category = models.CharField(max_length=200, null=True, blank=True)
+    referral = models.CharField(max_length=200, null=True, blank=True)
+    street = models.CharField(max_length=200, null=True, blank=True)
     sector = models.CharField(max_length=200)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
 
 
 # Model to associate questions with answers

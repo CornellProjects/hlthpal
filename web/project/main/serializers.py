@@ -24,11 +24,10 @@ class PatientCreateSerializer(ModelSerializer):
             'diagnosis',
             'doctor',
             'gender',
-            'street',
+            'address',
             'sector',
-            'city',
-            'state',
-            'country'
+            'category',
+            'referral'
         ]
 
 
@@ -105,10 +104,10 @@ class UserCreateSerializer(ModelSerializer):
                 diagnosis=validated_data['patient']['diagnosis'],
                 doctor=validated_data['patient']['doctor'],
                 gender=validated_data['patient']['gender'],
-                street=validated_data['patient']['street'],
-                city=validated_data['patient']['city'],
-                state=validated_data['patient']['state'],
-                country=validated_data['patient']['country'],
+                address=validated_data['patient']['address'],
+                category=validated_data['patient']['category'],
+                referral=validated_data['patient']['referral'],
+                # country=validated_data['patient']['country'],
                 sector=validated_data['patient']['sector']
             )
 
