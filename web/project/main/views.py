@@ -213,9 +213,10 @@ class RecordAPIView(ListCreateAPIView):
     def get_queryset(self):
         return Record.objects.filter(user=self.request.user)
 
-class RecordUpdateView(UpdateAPIView):
+class RecordUpdateView(RetrieveUpdateDestroyAPIView):
     serializer_class = RecordSerializer
     queryset = Record.objects.all()
+    permission_classes = [IsAuthenticated]
     def update(self, request, pk=None):
         record = get_object_or_404(Record, pk=pk)
         for param in request.data:
