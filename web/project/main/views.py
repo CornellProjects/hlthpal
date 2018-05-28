@@ -16,6 +16,7 @@ from django.conf import settings
 from wsgiref.util import FileWrapper
 from rest_framework.decorators import detail_route
 from rest_framework import generics
+from django.db import IntegrityError
 
 # Custom models
 from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient
@@ -202,7 +203,10 @@ class RecordAPIView(ListCreateAPIView):
                 print("Creating new record")
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
-                serializer.save(user=self.request.user, created_date=request.data['created_date'])
+                try:
+                    serializer.save(user=self.request.user, created_date=request.data['created_date'])
+                except IntegrityError:
+                    return Response({"detail": "Instance already initiated"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
