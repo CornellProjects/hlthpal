@@ -31,7 +31,7 @@ class QtwoThree extends Component {
   }
 
   componentWillMount() {
-    this.props.setQuestion(4);
+    this.props.setQuestion(3);
   }
 
   componentDidMount() {

@@ -31,7 +31,7 @@ class QtwoEight extends Component {
   }
 
   componentWillMount() {
-      this.props.setQuestion(9);
+      this.props.setQuestion(8);
   }
 
   componentDidMount() {

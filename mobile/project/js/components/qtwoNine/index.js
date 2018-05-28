@@ -31,7 +31,7 @@ class QtwoNine extends Component {
   }
 
   componentWillMount() {
-      this.props.setQuestion(10);
+      this.props.setQuestion(9);
   }
 
   componentDidMount() {

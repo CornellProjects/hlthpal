@@ -25,7 +25,7 @@ class QtwoOne extends Component {
   }
 
   componentWillMount() {
-    this.props.setQuestion(2);
+    this.props.setQuestion(1);
   }
 
   componentDidMount() {

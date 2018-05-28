@@ -31,7 +31,7 @@ class QtwoFive extends Component {
   }
 
   componentWillMount() {
-    this.props.setQuestion(6);
+    this.props.setQuestion(5);
   }
 
   componentDidMount() {

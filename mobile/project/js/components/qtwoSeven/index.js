@@ -31,7 +31,7 @@ class QtwoSeven extends Component {
   }
 
   componentWillMount() {
-      this.props.setQuestion(8);
+      this.props.setQuestion(7);
   }
 
   componentDidMount() {

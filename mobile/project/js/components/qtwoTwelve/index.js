@@ -36,7 +36,7 @@ class QtwoTwelve extends Component {
   }
 
   componentWillMount() {
-    this.props.setQuestion(11);
+    this.props.setQuestion(12);
   }
 
   componentWillUnmount() {
