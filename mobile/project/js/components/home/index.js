@@ -93,9 +93,9 @@ class Home extends Component {
                 <Button rounded style={styles.round} onPress={() => this.onButtonPress()}>
                     <Text style={styles.btn}>Take record</Text>
                 </Button>
-//                <Button light rounded style={styles.light} onPress={() => this.onButtonPress()}>
-//                    <Text style={styles.btn}>View Past Data</Text>
-//                </Button>
+                {/*<Button light rounded style={styles.light} onPress={() => this.onButtonPress()}>
+                    <Text style={styles.btn}>View Past Data</Text>
+                </Button>*/}
             </View>
          </View>
         </Content>
