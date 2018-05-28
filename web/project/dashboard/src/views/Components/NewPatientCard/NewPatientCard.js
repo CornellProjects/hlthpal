@@ -125,10 +125,10 @@ class NewPatientCard extends Component{
         let {notes} = this.state;
         let renderPatients = () => {
             return records.map((record) => {
-                let data = []
+                let data = [];
 //                let data = new Array(5);
 //                console.log({firstname}, record.data);
-                let length = 10;
+                let length = 12;
                 for (let i=0; i < record.data.length; i++){
                     data.push(record.data[i].answer);
                 }
@@ -145,14 +145,16 @@ class NewPatientCard extends Component{
                         date={record.record.date.substring(0,10)}
                         pain={data[0]}
                         breath={data[1]}
-                        nausea={data[2]}
-                        fatigue={data[3]}
-                        constipation={data[4]}
-                        q3={data[5]}
-                        q4={data[6]}
-                        q5={data[7]}
-                        q6={data[8]}
-                        q7={data[9]}
+                        fatigue={data[2]}
+                        nausea={data[3]}
+                        vomiting={data[4]}
+                        poor_appetite={data[5]}
+                        constipation={data[6]}
+                        q3={data[7]}
+                        q4={data[8]}
+                        q5={data[9]}
+                        q6={data[10]}
+                        q7={data[11]}
                     />
                 );
             })
