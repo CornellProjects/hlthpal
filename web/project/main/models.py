@@ -56,7 +56,7 @@ class Patient(models.Model):
 class Question(models.Model):
     question = models.CharField(
         max_length=255,
-        blank=True,
+        blank=True, 
         help_text='Enter question text here'
     )
 
@@ -78,8 +78,8 @@ class Record(models.Model):
 class Answer(models.Model):
     # text field is used to enter answer to first question
     text = models.CharField(max_length=255, blank=True)
-    answer = models.IntegerField()
-    question = models.ForeignKey(Question)
+    answer = models.IntegerField(null=True, blank=True)
+    question = models.ForeignKey(Question, null=True, blank=True)
     record = models.ForeignKey(Record)
 
     # we only want to accept one answer per question per Record
