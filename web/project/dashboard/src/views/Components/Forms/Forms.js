@@ -36,14 +36,17 @@ class Forms extends Component {
       password:'',
       diagnosis:'',
       care_giver:'',
+      address: '',
       doctor:'',
       gender:'',
       mobile:'',
-      street:'',
-      city:'',
-      sector:'',
-      state:'',
-      country:'',
+      // street:'',
+      // city:'',
+      sector: '',
+      category: '',
+      referral: '',
+      // state:'',
+      // country:'',
       modal:false
     };
     this.onSubmit = this.onSubmit.bind(this);
@@ -76,17 +79,20 @@ class Forms extends Component {
         doctor:this.state.doctor,
         gender:this.state.gender,
         mobile:this.state.mobile,
-        street:this.state.street,
-        city:this.state.city,
-        sector:this.state.sector,
-        state:this.state.state,
-        country:this.state.country
+        category:this.state.category,
+        referral:this.state.referral,
+        // street:this.state.street,
+        address:this.state.address,
+        // city:this.state.city,
+        sector:this.state.sector
+        // state:this.state.state,
+        // country:this.state.country
       }
     }
 
     var headers = {
       'Content-Type':'application/json'
-    }
+    };
     axios.post('api/register', data, headers).then(
       this.setState({
         modal:!this.state.modal
@@ -107,11 +113,14 @@ class Forms extends Component {
       doctor:'',
       gender:'',
       mobile:'',
-      street:'',
-      city:'',
-      sector:'',
-      state:'',
-      country:''
+      address: '',
+      category: '',
+      referral: '',
+      // street:'',
+      // city:'',
+      sector:''
+      // state:'',
+      // country:''
     });
   }
   toggle() {
@@ -120,7 +129,8 @@ class Forms extends Component {
     });
   }
   render() {
-    const {first_name, last_name, password, email, diagnosis, care_giver, doctor, gender, mobile, street, city, sector, state, country} = this.state;
+    // const {first_name, last_name, password, email, diagnosis, care_giver, address, doctor, gender, mobile, street, city, sector, state, country} = this.state;
+    const {first_name, last_name, password, email, diagnosis, care_giver, address, doctor, gender, mobile, sector, category, referral} = this.state;
 
     return (
       <div className="animated fadeIn">
@@ -199,6 +209,81 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
+                      <Col md="3">
+                          <Label htmlFor="gender-input">Gender</Label>
+                      </Col>
+                      <Col xs="12" md="9">
+                          <Input type="gender"
+                                 id="gender-input"
+                                 name="gender"
+                                 placeholder="Enter patient gender"
+                                 value={gender}
+                                 onChange={this.onChange}/>
+                          <FormText className="help-block">Please enter gender</FormText>
+                      </Col>
+                  </FormGroup>
+
+                  <FormGroup row>
+                      <Col md="3">
+                          <Label htmlFor="category-input">Category</Label>
+                      </Col>
+                      <Col xs="12" md="9">
+                          <Input type="category"
+                                 id="category-input"
+                                 name="category"
+                                 placeholder="Enter enter social category"
+                                 value={category}
+                                 onChange={this.onChange}/>
+                          <FormText className="help-block">Please enter social category</FormText>
+                      </Col>
+                  </FormGroup>
+
+                  <FormGroup row>
+                      <Col md="3">
+                          <Label htmlFor="mobile-input">Mobile</Label>
+                      </Col>
+                      <Col xs="12" md="9">
+                          <Input type="mobile"
+                                 id="mobile-input"
+                                 name="mobile"
+                                 placeholder="Enter mobile phone number"
+                                 value={mobile}
+                                 onChange={this.onChange}/>
+                          <FormText className="help-block">Please enter mobile phone number</FormText>
+                      </Col>
+                  </FormGroup>
+
+                  <FormGroup row>
+                      <Col md="3">
+                          <Label htmlFor="street-input">Home Address</Label>
+                      </Col>
+                      <Col xs="12" md="9">
+                          <Input type="address"
+                                 id="address-input"
+                                 name="address"
+                                 placeholder="Enter address"
+                                 value={address}
+                                 onChange={this.onChange}/>
+                          <FormText className="help-block">Please enter home address</FormText>
+                      </Col>
+                  </FormGroup>
+
+                  <FormGroup row>
+                      <Col md="3">
+                          <Label htmlFor="sector-input">Sector</Label>
+                      </Col>
+                      <Col xs="12" md="9">
+                          <Input type="sector"
+                                 id="sector-input"
+                                 name="sector"
+                                 placeholder="Enter sector"
+                                 value={sector}
+                                 onChange={this.onChange}/>
+                          <FormText className="help-block">Please enter sector</FormText>
+                      </Col>
+                  </FormGroup>
+
+                  <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="address-input">Diagnosis</Label>
                     </Col>
@@ -211,6 +296,21 @@ class Forms extends Component {
                              onChange={this.onChange}/>
                       <FormText className="help-block">Please enter diagnosis</FormText>
                     </Col>
+                  </FormGroup>
+
+                  <FormGroup row>
+                      <Col md="3">
+                          <Label htmlFor="address-input">Referred From</Label>
+                      </Col>
+                      <Col xs="12" md="9">
+                          <Input type="referral"
+                                 id="referral-input"
+                                 name="referral"
+                                 placeholder="Please enter place where patient was referred from"
+                                 value={referral}
+                                 onChange={this.onChange}/>
+                          <FormText className="help-block">Please enter place where patient was referred from</FormText>
+                      </Col>
                   </FormGroup>
 
                   <FormGroup row>
@@ -243,110 +343,66 @@ class Forms extends Component {
                     </Col>
                   </FormGroup>
 
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="gender-input">Gender</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="gender"
-                             id="gender-input"
-                             name="gender"
-                             placeholder="Enter patient gender"
-                             value={gender}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter gender</FormText>
-                    </Col>
-                  </FormGroup>
+                  {/*<FormGroup row>*/}
+                      {/*<Col md="3">*/}
+                          {/*<Label htmlFor="street-input">Street</Label>*/}
+                      {/*</Col>*/}
+                      {/*<Col xs="12" md="9">*/}
+                          {/*<Input type="street"*/}
+                                 {/*id="street-input"*/}
+                                 {/*name="street"*/}
+                                 {/*placeholder="Enter street"*/}
+                                 {/*value={street}*/}
+                                 {/*onChange={this.onChange}/>*/}
+                          {/*<FormText className="help-block">Please enter street</FormText>*/}
+                      {/*</Col>*/}
+                  {/*</FormGroup>*/}
 
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="mobile-input">Mobile</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="mobile"
-                             id="mobile-input"
-                             name="mobile"
-                             placeholder="Enter mobile phone number"
-                             value={mobile}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter mobile phone number</FormText>
-                    </Col>
-                  </FormGroup>
+                  {/*<FormGroup row>*/}
+                    {/*<Col md="3">*/}
+                      {/*<Label htmlFor="city-input">City</Label>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs="12" md="9">*/}
+                      {/*<Input type="city"*/}
+                             {/*id="city-input"*/}
+                             {/*name="city"*/}
+                             {/*placeholder="Enter city"*/}
+                             {/*value={city}*/}
+                             {/*onChange={this.onChange}/>*/}
+                      {/*<FormText className="help-block">Please enter city</FormText>*/}
+                    {/*</Col>*/}
+                  {/*</FormGroup>*/}
 
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="street-input">Street</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="street"
-                             id="street-input"
-                             name="street"
-                             placeholder="Enter street"
-                             value={street}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter street</FormText>
-                    </Col>
-                  </FormGroup>
 
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="city-input">City</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="city"
-                             id="city-input"
-                             name="city"
-                             placeholder="Enter city"
-                             value={city}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter city</FormText>
-                    </Col>
-                  </FormGroup>
+                  {/*<FormGroup row>*/}
+                    {/*<Col md="3">*/}
+                      {/*<Label htmlFor="state-input">State</Label>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs="12" md="9">*/}
+                      {/*<Input type="state"*/}
+                             {/*id="state-input"*/}
+                             {/*name="state"*/}
+                             {/*placeholder="Enter state"*/}
+                             {/*value={state}*/}
+                             {/*onChange={this.onChange}/>*/}
+                      {/*<FormText className="help-block">Please enter state</FormText>*/}
+                    {/*</Col>*/}
+                  {/*</FormGroup>*/}
 
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="sector-input">Sector</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="sector"
-                             id="sector-input"
-                             name="sector"
-                             placeholder="Enter sector"
-                             value={sector}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter sector</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="state-input">State</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="state"
-                             id="state-input"
-                             name="state"
-                             placeholder="Enter state"
-                             value={state}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter state</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="country-input">Country</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="country"
-                             id="country-input"
-                             name="country"
-                             placeholder="Enter country"
-                             value={country}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter country</FormText>
-                    </Col>
-                  </FormGroup>
+                  {/*<FormGroup row>*/}
+                    {/*<Col md="3">*/}
+                      {/*<Label htmlFor="country-input">Country</Label>*/}
+                    {/*</Col>*/}
+                    {/*<Col xs="12" md="9">*/}
+                      {/*<Input type="country"*/}
+                             {/*id="country-input"*/}
+                             {/*name="country"*/}
+                             {/*placeholder="Enter country"*/}
+                             {/*value={country}*/}
+                             {/*onChange={this.onChange}/>*/}
+                      {/*<FormText className="help-block">Please enter country</FormText>*/}
+                    {/*</Col>*/}
+                  {/*</FormGroup>*/}
 
                 </Form>
               </CardBlock>
