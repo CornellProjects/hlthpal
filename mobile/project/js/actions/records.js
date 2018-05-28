@@ -34,6 +34,7 @@ function assignRecord(myArray, record) {
 function prepareRecord(myArray) { //only push questions that have been filled
     let myNewArray = []
     myArray.forEach(function(item) {
+        myNewArray.push(item)
         if (item.answer !== ""){
             myNewArray.push(item);
         }
@@ -81,7 +82,7 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                    'Authorization': 'JWT '+ token,
                    },
 
-                   body: JSON.stringify(newAnswersArray)
+                   body: JSON.stringify(answersArray)
             }).then(response => {console.log('ANSWERS', response)});
 
             fetch(myUrl + '/api/symptom', {
@@ -128,6 +129,7 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
             mySymptoms = assignRecord(mySymptoms, parsed);
             newAnswersArray = prepareRecord(answersArray);
 
+            console.log('answersarray', answersArray);
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
                    headers: {
@@ -136,7 +138,7 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                    'Authorization': 'Basic ' + base64.encode(username + ":" + password),
                    },
 
-                   body: JSON.stringify(newAnswersArray)
+                   body: JSON.stringify(answersArray)
             }).then(response => {console.log('ANSWERS', response)});
 
             fetch(myUrl + '/api/symptom', {

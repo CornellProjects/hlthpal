@@ -117,8 +117,8 @@ export const setAnswer = ({ record, question, textInput, rating }) => {
 };
 
 export const createAnswerObject = ({ record, question, text_input, rating }) => {
-    if (rating === undefined) {
-        rating = 0;
+    if ((rating === undefined) || (rating === '')) {
+        rating = null;
     }
 
     if (text_input === undefined) {
