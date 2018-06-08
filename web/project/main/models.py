@@ -96,6 +96,25 @@ class Symptom(models.Model):
     answer = models.IntegerField()
     record = models.ForeignKey(Record)
 
+class Log(models.Model):
+    """ logs in all major activities on the bitmely site on a user basis"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    STATUS_CHOICES = (
+        ('failed_sign_in', 'Failed Signed-in'),
+        ('success_sign_in', 'Successful Signed-in'),
+        ('sign_off', 'Signed-out'),
+        ('view_dashboard', 'Visited Dashboard'),
+        ('add_new_patient', 'Added Patient'),
+        ('view_patient_details', 'Visited Patient Detail'),
+        ('add_patient_note', 'Added Patient Note'),
+        )
+    activity = models.CharField(max_length=100, choices=STATUS_CHOICES)
+
+    class Meta:
+        ordering = ('created_date', 'activity', 'user')
+    def __str__(self):
+        return '{} by {}'.format(self.activity, self.user)
 
 #########################################################################
 # Models for priviliged user access
