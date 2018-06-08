@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.sessions.models import Session
 
 # Register your models here.
 
@@ -30,7 +31,13 @@ class NotesAdmin(admin.ModelAdmin):
 class SymptomAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Symptom._meta.get_fields()]
 
+class SessionAdmin(admin.ModelAdmin):
+    def _session_data(self, obj):
+        return obj.get_decoded()
+    list_display = ['session_key', '_session_data', 'expire_date']
 
+
+admin.site.register(Session, SessionAdmin)
 admin.site.register(Patient, PatientAdmin)
 admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(Answer, AnswerAdmin)
