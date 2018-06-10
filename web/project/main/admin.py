@@ -3,10 +3,13 @@ from django.contrib.sessions.models import Session
 
 # Register your models here.
 
-from .models import Patient, Doctor, Question, Answer, Record, Symptom, Notes, Entity
+from .models import Patient, Doctor, Question, Answer, Record, Symptom, Notes, Entity, Log
 
 class PatientAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Patient._meta.get_fields()]
+
+class LogAdmin(admin.ModelAdmin):
+	list_display = [field.name for field in Log._meta.get_fields()]
 
 class DoctorAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Doctor._meta.get_fields()]
@@ -38,6 +41,7 @@ class SessionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Session, SessionAdmin)
+admin.site.register(Log, LogAdmin)
 admin.site.register(Patient, PatientAdmin)
 admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(Answer, AnswerAdmin)
