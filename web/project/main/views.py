@@ -120,7 +120,8 @@ class UserCreateView(CreateAPIView):
     queryset = User.objects.all()
 
     def post(self, request, *args, **kwargs):
-        Log.objects.create(user=request.user, activity='add_new_patient')
+        if not request.user.is_anonymous:
+            Log.objects.create(user=request.user, activity='add_new_patient')
         return self.create(request, *args, **kwargs)
 
 
@@ -142,10 +143,12 @@ class UserLoginView(APIView):
                 result.pop('username')
             if result.has_key('email'):
                 result.pop('email')
-            Log.objects.create(user=request.user, activity='success_sign_in')
+            if not request.user.is_anonymous:
+                Log.objects.create(user=request.user, activity='success_sign_in')
             return Response(result, status=status.HTTP_200_OK)
         else:
-            Log.objects.create(user=request.user, activity='failed_sign_in') # failed sign in or sign out.
+            if not request.user.is_anonymous:
+                Log.objects.create(user=request.user, activity='failed_sign_in') # failed sign in or sign out.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -491,7 +494,8 @@ class PatientDataGetView(ListAPIView):
     def get(self, request, format=None):
         patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
-        Log.objects.create(user=request.user, activity='view_dashboard')
+        if not request.user.is_anonymous:
+            Log.objects.create(user=request.user, activity='view_dashboard')
 
         for user in patients:
             # query = Record.objects.filter(user=user).order_by('-date').first()
@@ -571,7 +575,8 @@ class NotesCreateView(APIView):
     queryset = User.objects.filter(is_staff=False)
 
     def post(self, request, format=None):
-        Log.objects.create(user=request.user, activity='add_patient_note')
+        if not request.user.is_anonymous:
+            Log.objects.create(user=request.user, activity='add_patient_note')
         data = request.data
         result = {}
         # Check who posted
@@ -654,7 +659,8 @@ class NotesHistoryGetView(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
 
-        Log.objects.create(user=request.user, activity='view_patient_details')
+        if not request.user.is_anonymous:
+            Log.objects.create(user=request.user, activity='view_patient_details')
         # Check if request contains username
         username = data.get("username", None)
         result = {}
