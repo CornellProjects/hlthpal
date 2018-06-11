@@ -98,7 +98,7 @@ class Symptom(models.Model):
 
 class Log(models.Model):
     """ logs in all major activities on the bitmely site on a user basis"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     STATUS_CHOICES = (
         ('failed_sign_in', 'Failed Signed-in'),
