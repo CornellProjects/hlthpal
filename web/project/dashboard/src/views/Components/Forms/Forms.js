@@ -47,7 +47,9 @@ class Forms extends Component {
       referral: '',
       // state:'',
       // country:'',
-      modal:false
+      modal:false,
+      header: 'Success!',
+      message: 'You have successfully created a patient!'
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -88,19 +90,40 @@ class Forms extends Component {
         // state:this.state.state,
         // country:this.state.country
       }
-    }
+    };
 
     var headers = {
       'Content-Type':'application/json'
     };
-    axios.post('api/register', data, headers).then(
-      this.setState({
-        modal:!this.state.modal
-      })
-   ).catch(function(err) {
-      console.error(JSON.stringify(err));
-      console.log("Yoyoyo");
-      })
+    var self = this;
+
+    axios.post('api/register', data, headers).then(response => {
+        console.log('Mistake');
+        self.setState({
+            modal:!self.state.modal
+        });
+    }).catch(function(err) {
+        console.error(JSON.stringify(err));
+        let message1 = '';
+        if (err.response.status === 400){
+            for (let property in err.response.data) {
+                if (property === 'patient'){
+                    for (let item in err.response.data[property]) {
+                        message1 = message1 + item + ':' + err.response.data[property][item] + '\n ';
+                        console.log(message1, item);
+                    }
+                }
+                else{
+                    message1 = message1 + property + ':' + err.response.data[property] + '\n ';
+                }
+            }
+            self.setState({
+                header:'Failure',
+                message: message1,
+                modal:!self.state.modal
+            });
+        }
+    });
   }
   onReset(){
     this.setState({
@@ -125,7 +148,9 @@ class Forms extends Component {
   }
   toggle() {
     this.setState({
-      modal: !this.state.modal
+      modal: !this.state.modal,
+      header: 'Success!',
+      message: 'You have successfully created a patient!'
     });
   }
   render() {
@@ -417,9 +442,9 @@ class Forms extends Component {
               </Row>
               </CardFooter>
               <Modal isOpen={this.state.modal}>
-                <ModalHeader toggle={this.toggle}>Success!</ModalHeader>
+                <ModalHeader toggle={this.toggle}>{this.state.header}</ModalHeader>
                 <ModalBody>
-                    You have successfully create an entity!
+                    {this.state.message}
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" onClick={this.toggle}>Okay</Button>{' '}
