@@ -106,6 +106,7 @@ class Log(models.Model):
         ('sign_off', 'Signed-out'),
         ('view_dashboard', 'Visited Dashboard'),
         ('add_new_patient', 'Added Patient'),
+        ('fail_add_new_patient', 'Failed Added Patient'),
         ('view_patient_details', 'Visited Patient Detail'),
         ('add_patient_note', 'Added Patient Note'),
         )

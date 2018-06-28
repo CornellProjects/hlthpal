@@ -120,9 +120,18 @@ class UserCreateView(CreateAPIView):
     queryset = User.objects.all()
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_anonymous:
-            Log.objects.create(user=request.user, activity='add_new_patient')
-        return self.create(request, *args, **kwargs)
+        serializer = UserCreateSerializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            if not request.user.is_anonymous:
+                Log.objects.create(user=request.user, activity='add_new_patient')
+            return self.create(request, *args, **kwargs)
+        except:
+            print(serializer.errors)
+            # print('Errors')
+            if not request.user.is_anonymous:
+                Log.objects.create(user=request.user, activity='fail_add_new_patient') # failed sign in or sign out.
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 
 class UserLoginView(APIView):
