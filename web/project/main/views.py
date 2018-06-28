@@ -501,7 +501,7 @@ class PatientDataGetView(ListAPIView):
     queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        patients = User.objects.filter(is_staff=False, is_active=True)
+        patients = User.objects.filter(is_staff=False, is_active=True, date_joined__gte=datetime.date(2018, 06, 28))
         result = []
         if not request.user.is_anonymous:
             Log.objects.create(user=request.user, activity='view_dashboard')
@@ -544,6 +544,7 @@ class PatientDataGetView(ListAPIView):
                 entry['record'] = {'date':'1900-05-24T07:27:21.238535Z'}
                 entry['data'] = []
                 result.append(entry)
+
         result = sorted(result, key=lambda x: float(parse_datetime(x['record']['date']).strftime('%s')), reverse=True) #datetime.datetime(2012,4,1,0,0).timestamp()
         return Response(result)
 
