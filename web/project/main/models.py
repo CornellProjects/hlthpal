@@ -44,7 +44,7 @@ class Patient(models.Model):
     care_giver = models.CharField(max_length=100)
     diagnosis = models.CharField(max_length=50, blank=True)
     gender = models.CharField(max_length=6, blank=True)
-    mobile = models.CharField(max_length=10, blank=True)
+    mobile = models.CharField(max_length=15, blank=True)
     address = models.CharField(max_length=250, null=True, blank=True)
     category = models.CharField(max_length=200, null=True, blank=True)
     referral = models.CharField(max_length=200, null=True, blank=True)
