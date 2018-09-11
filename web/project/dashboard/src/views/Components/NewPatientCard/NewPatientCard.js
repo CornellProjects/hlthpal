@@ -172,6 +172,24 @@ class NewPatientCard extends Component{
           });
         };
 
+        let renderFullSymptoms = () => {
+            let table_symptoms = renderSymptoms();
+            if (table_symptoms.flat().length > 0){
+                return (<Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+                    <thead className="thead-default">
+                    <tr>
+                        <th>Date</th>
+                        <th>Other Symptoms</th>
+                        <th>Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    { table_symptoms }
+                    </tbody>
+                    </Table>);
+            }
+        };
+
         let renderNotes = () => {
             return notes.map((eachnote) => {
                 return (
@@ -182,6 +200,24 @@ class NewPatientCard extends Component{
                 );
             })
         };
+
+        let renderFullNotes = () => {
+            let table_notes = renderNotes();
+            if (table_notes.flat().length > 0){
+                return (<Table hover responsive className="table-outline mb-0 d-none d-sm-table">
+                    <thead className="thead-default">
+                    <tr>
+                        <th>Date</th>
+                        <th>Note</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    { table_notes }
+                    </tbody>
+                    </Table>);
+            }
+        };
+
         return(
             //Add a key value somewhere, see react errors for more info
             <Row>
@@ -239,41 +275,20 @@ class NewPatientCard extends Component{
                                         </tbody>
 
                                     </Table>
-
-                                    <CardHeader/>
-
-                                    <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-                                        <thead className="thead-default">
-                                          <tr>
-                                            <th>Date</th>
-                                            <th>Other Symptoms</th>
-                                            <th>Score</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          { renderSymptoms() }
-                                        </tbody>
-                                    </Table>
-
-                                    <CardHeader/>
-
-                                    <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-                                        <thead className="thead-default">
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Note</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        { renderNotes() }
-                                        </tbody>
-                                    </Table>
                                 </Col>
                             </Row>
-
-
                             <Row>
-                                <Col xs="12" md="12">
+                                <Col>
+                                    {renderFullSymptoms()}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    {renderFullNotes()}
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
                                     <Card>
                                         <CardHeader>
                                             Create Note for {firstname}
