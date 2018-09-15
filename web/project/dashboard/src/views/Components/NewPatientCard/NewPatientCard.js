@@ -194,15 +194,25 @@ class NewPatientCard extends Component{
 
     render(){
         let renderPatientData = () => {
-            const {firstname, all_records, all_symptoms, all_notes, new_note} = this.state;
+            const {firstname, lastname, sector, all_records, all_symptoms, all_notes, new_note} = this.state;
             return (
                 <Row>
                     <Col>
                         <Card>
                             <CardHeader>
-                                {firstname}
+                                <Row>
+                                    <Col md="3">
+                                        <Label>Patient Name: {firstname + " " + lastname}</Label>
+                                    </Col>
+                                    <Col md="3">
+                                        <Label>Sector: {sector}</Label>
+                                    </Col>
+                                </Row>
                             </CardHeader>
                             <CardBody className="card-body">
+                                <CardHeader>
+                                    Summary of Records
+                                </CardHeader>
                                 <div>
                                     <ReactTable
                                         getTheadTrProps={
@@ -287,6 +297,9 @@ class NewPatientCard extends Component{
                                         defaultPageSize={5}
                                         minRows={3}
                                         noDataText='No Patient Records Yet'
+                                        // pageText= undefined
+                                        // ofText: undefined
+                                        // rowsText: undefined
                                     />
                                 </div>
                                 <UncontrolledTooltip placement="top" target="SOB">
@@ -308,7 +321,9 @@ class NewPatientCard extends Component{
                                 <UncontrolledTooltip placement="top" target="q7">
                                     Have you had enough help and advice for your family to plan for the future?
                                 </UncontrolledTooltip>
-
+                                <CardHeader>
+                                    Summary of Other Symptoms
+                                </CardHeader>
                                 <div>
                                     <ReactTable
                                         getTheadTrProps={
@@ -344,7 +359,9 @@ class NewPatientCard extends Component{
                                         noDataText='No Symptoms Recorded'
                                     />
                                 </div>
-
+                                <CardHeader>
+                                    Medical Notes
+                                </CardHeader>
                                 <div>
                                     <ReactTable
                                         getTheadTrProps={
@@ -376,12 +393,12 @@ class NewPatientCard extends Component{
                                         noDataText='No Notes Recorded'
                                     />
                                 </div>
-
+                                <Row/>
                                 <Row>
                                     <Col xs="12" md="12">
                                         <Card>
                                             <CardHeader>
-                                                Create Note for {firstname}
+                                                Add a Note for {firstname}
                                             </CardHeader>
                                             <CardBody>
                                                 <FormGroup row>
