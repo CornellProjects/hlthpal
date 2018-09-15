@@ -3,9 +3,8 @@ import ReactTable from 'react-table';
 import axios from 'axios';
 import 'react-table/react-table.css';
 import {
-    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter,
-    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
-// import PatientCard from "../PatientCard/PatientCard";
+    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody,
+    CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
 
 
 class PatientsTable extends Component {
@@ -28,11 +27,7 @@ class PatientsTable extends Component {
         }
         axios.get('api/patients/data')
             .then((res) => {
-                // this.setState({
-                //     patients: res.data
-                // });
                 let patients = res.data;
-                // const { patients } = this.state;
                 const currentPatient = (patient, data) => {
                     return {
                         key: patient.user.id,
