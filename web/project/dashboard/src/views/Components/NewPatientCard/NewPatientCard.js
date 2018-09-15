@@ -11,6 +11,7 @@ class NewPatientCard extends Component{
         super(props);
         this.toggle = this.toggle.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.checkboxSubmit = this.checkboxSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
         this.toggle_submit = this.toggle_submit.bind(this);
         if (props.location.state !== undefined) {
@@ -183,6 +184,14 @@ class NewPatientCard extends Component{
         });
     }
 
+    checkboxSubmit(params){
+        let headers = {
+            'Content-Type':'application/json'
+        };
+        let url = 'api/edit_record/' + params.record_key;
+        axios.put(url, {"update_user": true}, headers)
+    };
+
     render(){
         let renderPatientData = () => {
             const {firstname, all_records, all_symptoms, all_notes, new_note} = this.state;
@@ -196,6 +205,15 @@ class NewPatientCard extends Component{
                             <CardBody className="card-body">
                                 <div>
                                     <ReactTable
+                                        getTheadTrProps={
+                                            () => {
+                                                return {
+                                                    style: {
+                                                        backgroundColor: "#5f9ea0"
+                                                    }
+                                                }
+                                            }
+                                        }
                                         className="-striped -highlight"
                                         filterable
                                         defaultFilterMethod={(filter, row) =>
@@ -267,6 +285,8 @@ class NewPatientCard extends Component{
                                             }
                                         ]}
                                         defaultPageSize={5}
+                                        minRows={3}
+                                        noDataText='No Patient Records Yet'
                                     />
                                 </div>
                                 <UncontrolledTooltip placement="top" target="SOB">
@@ -291,6 +311,15 @@ class NewPatientCard extends Component{
 
                                 <div>
                                     <ReactTable
+                                        getTheadTrProps={
+                                            () => {
+                                                return {
+                                                    style: {
+                                                        backgroundColor:  "#008aff"
+                                                    }
+                                                }
+                                            }
+                                        }
                                         className="-striped -highlight"
                                         filterable
                                         defaultFilterMethod={(filter, row) =>
@@ -311,11 +340,22 @@ class NewPatientCard extends Component{
                                                 accessor: "score"
                                             }]}
                                         defaultPageSize={5}
+                                        minRows={3}
+                                        noDataText='No Symptoms Recorded'
                                     />
                                 </div>
 
                                 <div>
                                     <ReactTable
+                                        getTheadTrProps={
+                                            () => {
+                                                return {
+                                                    style: {
+                                                        backgroundColor:  "#e7ff00"
+                                                    }
+                                                }
+                                            }
+                                        }
                                         className="-striped -highlight"
                                         filterable
                                         defaultFilterMethod={(filter, row) =>
@@ -332,6 +372,8 @@ class NewPatientCard extends Component{
                                                 accessor: "note"
                                             }]}
                                         defaultPageSize={5}
+                                        minRows={3}
+                                        noDataText='No Notes Recorded'
                                     />
                                 </div>
 
