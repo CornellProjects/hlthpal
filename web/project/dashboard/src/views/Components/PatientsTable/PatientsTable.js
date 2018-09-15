@@ -4,9 +4,8 @@ import axios from 'axios';
 import 'react-table/react-table.css';
 import {
     Row, Col, Modal, ModalHeader, ModalBody, ModalFooter,
-    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip
-} from "reactstrap";
-import PatientCard from "../PatientCard/PatientCard";
+    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
+// import PatientCard from "../PatientCard/PatientCard";
 
 
 class PatientsTable extends Component {
@@ -79,12 +78,14 @@ class PatientsTable extends Component {
                     allPatients: patients.map((patient) => {
                         if (patient.data.length > 0) {
                             let data = [];
-                            let length = 5;
-                            for (let i = 0; i < patient.data.length; i++){
-                                data.push(patient.data[i].answer)
-                            }
-                            while (data.length < length){
-                                data.push(null)
+                            for (let i = 0; i < 12; i++){
+                                // if (patient.data[i].length === 0 || patient.data[i].answer === null){
+                                if (patient.data[i] === undefined || patient.data[i].length === 0 || patient.data[i].answer === null){
+                                    data.push(null);
+                                }
+                                else {
+                                    data.push(patient.data[i].answer);
+                                }
                             }
                             return {
                                 ...currentPatient(patient, data)
