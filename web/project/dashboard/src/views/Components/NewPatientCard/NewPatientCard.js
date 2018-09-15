@@ -1,9 +1,11 @@
 import React, {Component} from "react";
-import { Table, Button, Card, CardBody, CardBlock, CardHeader, CardFooter, Row, Col, Label, Modal,
-    ModalHeader, ModalBody, ModalFooter, Input, FormGroup, UncontrolledTooltip } from "reactstrap";
-import axios from 'axios';
 import PatientDetail from "../PatientDetail/PatientDetail"
-
+import ReactTable from 'react-table';
+import axios from 'axios';
+import 'react-table/react-table.css';
+import {
+    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, CardBlock,
+    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
 
 class NewPatientCard extends Component{
     constructor(props){
@@ -19,16 +21,13 @@ class NewPatientCard extends Component{
                 firstname: props.location.state.detail.firstname,
                 lastname: props.location.state.detail.lastname,
                 sector: props.location.state.detail.sector,
-                pain: props.location.state.detail.pain,
-                breath: props.location.state.detail.breath,
-                nausea: props.location.state.detail.nausea,
-                fatigue: props.location.state.detail.fatigue,
-                constipation: props.location.state.detail.constipation,
-                last_note:props.location.state.detail.note,
                 modal: false,
                 modal_submit: false,
                 records:[],
                 notes:[],
+                all_records: [],
+                all_symptoms: [],
+                all_notes: [],
                 new_note:"",
                 redirect: false
             };
@@ -44,18 +43,75 @@ class NewPatientCard extends Component{
 
     componentWillMount(){
         if (!this.state.redirect) {
-            let headers = {
-                'Content-Type': 'application/json'
-            };
             let data = {
                 username:this.state.username
             };
 
             axios.post('api/patient/history', data).then(
-                (res) => this.setState({
-                    records: res.data.reverse()
-                })
-            );
+                (res) => {
+                    this.setState({
+                        records: res.data.reverse()
+                    });
+                    const singlePatientRecords = (record, data) => {
+                        return {
+                            key: record.record.id,
+                            date: record.record.date.substring(0,10),
+                            pain: data[0],
+                            breath: data[1],
+                            fatigue: data[2],
+                            nausea: data[3],
+                            vomiting: data[4],
+                            poor_appetite: data[5],
+                            constipation: data[6],
+                            q3: data[7],
+                            q4: data[8],
+                            q5: data[9],
+                            q6: data[10],
+                            q7: data[11],
+                            record_key: record.record.id,
+                            user: record.record.signed
+                        };
+                    };
+                    let {records} = this.state;
+                    this.setState({
+                        all_records: records.map((record) => {
+                            if (record.data.length > 0) {
+                                let data = [];
+                                for (let i = 0; i < 12; i++){
+                                    if (record.data[i] === undefined || record.data[i].length === 0 || record.data[i].answer === null){
+                                        data.push(null);
+                                    }
+                                    else {
+                                        data.push(record.data[i].answer);
+                                    }
+                                }
+                                return {
+                                    ...singlePatientRecords(record, data)
+                                }
+                            }
+                            else{
+                                return {...singlePatientRecords(record, Array(12).fill(null))}
+                            }
+                        })
+                    });
+
+                    // if a record was submitted but no other symptoms were mentioned, we skip display
+                    let symptom_data = [];
+                    for (let i = 0; i < records.length; i++){
+                        symp = records[i].symp;
+                        for (let j = 0; j <  symp.length; j++){
+                            if (symp[j] !== undefined || symp[j] !== null){
+                                data.push({date: records[i].date.substring(0,10),
+                                    symptom: symp[j].symptom,
+                                    score: symp[j].answer})
+                            }
+                        }
+                    }
+                    this.setState({
+                        all_symptoms: symptom_data
+                    });
+
+                });
         }
     }
 
@@ -71,10 +127,21 @@ class NewPatientCard extends Component{
                 username: this.state.username
             };
             axios.post('api/notes/history', data, headers).then(
-                (res) => this.setState(
-                    {notes: res.data.reverse()}
-                ),
-            );
+                (res) => {
+                    this.setState(
+                    {
+                        notes: res.data.reverse()
+                    });
+                    let {notes} = this.state;
+                    this.setState({
+                        all_notes: notes.map((each_note) => {
+                            return {
+                                date: each_note.date.substring(0, 10),
+                                note: each_note.notes
+                            }
+                        })
+                    });
+                });
         }
     }
 
@@ -92,10 +159,21 @@ class NewPatientCard extends Component{
             username:this.state.username
         };
         axios.post('api/notes/history', data, headers).then(
-            (res) => this.setState(
-                {notes:res.data.reverse()}
-            ),
-        );
+            (res) => {
+                this.setState(
+                    {
+                        notes: res.data.reverse()
+                    });
+                let {notes} = this.state;
+                this.setState({
+                    all_notes: notes.map((each_note) => {
+                        return {
+                            date: each_note.date.substring(0, 10),
+                            note: each_note.notes
+                        }
+                    })
+                });
+            });
     }
     onSubmit(e) {
         e.preventDefault();
@@ -118,225 +196,211 @@ class NewPatientCard extends Component{
             [e.target.name]: e.target.value
         });
     }
+
     render(){
+        let renderPatientData = () => {
+            const {firstname, all_records, all_symptoms, all_notes, new_note} = this.state;
+            return (
+                <Row>
+                    <Col>
+                        <Card>
+                            <CardHeader>
+                                {firstname}
+                            </CardHeader>
+                            <CardBody className="card-body">
+                                <div>
+                                    <ReactTable
+                                        filterable
+                                        defaultFilterMethod={(filter, row) =>
+                                            String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
+                                        }
+                                        data={all_records}
+                                        columns={[
+                                            {
+                                                Header: "Last Submission",
+                                                accessor: "date"
+                                            },
+                                            {
+                                                Header: 'Pain',
+                                                accessor: "pain"
+                                            },
+                                            {
+                                                Header: () => <span id="SOB"> SOB</span>,
+                                                accessor: "breath"
+                                            },
+                                            {
+                                                Header: 'Nausea',
+                                                accessor: "nausea"
+                                            },
+                                            {
+                                                Header: 'Fatigue',
+                                                accessor: "fatigue"
+                                            },
+                                            {
+                                                Header: 'Constipation',
+                                                accessor: "constipation"
+                                            },
+                                            {
+                                                Header: () => <span id="q3">Q3</span>,
+                                                accessor: "q3"
+                                            },
+                                            {
+                                                Header: () => <span id="q4">Q4</span>,
+                                                accessor: "q4"
+                                            },
+                                            {
+                                                Header: () => <span id="q5">Q5</span>,
+                                                accessor: "q5"
+                                            },
+                                            {
+                                                Header: () => <span id="q6">Q6</span>,
+                                                accessor: "q6"
+                                            },
+                                            {
+                                                Header: () => <span id="q7">Q7</span>,
+                                                accessor: "q7"
+                                            },
+                                            {
+                                                Header: 'Signed',
+                                                accessor: 'user',
+                                                filterable: false,
+                                                Cell: cellData => {
+                                                    if ((cellData.original.record_key !== null) && (cellData.original.user !== null)) {
+                                                        return (<div>
+                                                            <Input addon type="checkbox" defaultChecked
+                                                                   onClick={() => this.checkboxSubmit(cellData.original)}/>
+                                                            <span>{cellData.original.user.first_name}</span>
+                                                        </div>)
+                                                    }
+                                                    else if ((cellData.original.record_key !== null) && (cellData.original.user === null)) {
+                                                        return (<Input addon type="checkbox"
+                                                                       onClick={() => this.checkboxSubmit(cellData.original)}/>)
+                                                    }
+                                                }
+                                            }
+                                        ]}
+                                        defaultPageSize={5}
+                                    />
+                                </div>
+                                <UncontrolledTooltip placement="top" target="SOB">
+                                    Shortness of Breath
+                                </UncontrolledTooltip>
+                                <UncontrolledTooltip placement="top" target="q3">
+                                    Have you been feeling worried about your illness in the past 3 days?
+                                </UncontrolledTooltip>
+                                <UncontrolledTooltip placement="top" target="q4">
+                                    Over the past 3 days, have you been able to share how you are feeling with your
+                                    family or friends?
+                                </UncontrolledTooltip>
+                                <UncontrolledTooltip placement="top" target="q5">
+                                    Over the past 3 days have you felt that life was worthwhile?
+                                </UncontrolledTooltip>
+                                <UncontrolledTooltip placement="top" target="q6">
+                                    Over the past 3 days, have you felt at peace?
+                                </UncontrolledTooltip>
+                                <UncontrolledTooltip placement="top" target="q7">
+                                    Have you had enough help and advice for your family to plan for the future?
+                                </UncontrolledTooltip>
 
-        let { records } = this.state;
-        const {date, username, firstname, lastname, sector, pain, breath, nausea, fatigue, constipation, modal, last_note, new_note} = this.state;
-        let {notes} = this.state;
-        let renderPatients = () => {
-            return records.map((record) => {
-                let data = [];
-//                let data = new Array(5);
-//                console.log({firstname}, record.data);
-                let length = 12;
-                for (let i=0; i < record.data.length; i++){
-                    data.push(record.data[i].answer);
-                }
-                while (data.length < length){
-                    data.push(null);
-                }
-                return (
-                    <PatientDetail
-                        key={record.record.id}
-                        username={username}
-                        firstname={firstname}
-                        lastname={lastname}
-                        sector={sector}
-                        date={record.record.date.substring(0,10)}
-                        pain={data[0]}
-                        breath={data[1]}
-                        fatigue={data[2]}
-                        nausea={data[3]}
-                        vomiting={data[4]}
-                        poor_appetite={data[5]}
-                        constipation={data[6]}
-                        q3={data[7]}
-                        q4={data[8]}
-                        q5={data[9]}
-                        q6={data[10]}
-                        q7={data[11]}
-                    />
-                );
-            })
-        };
+                                <div>
+                                    <ReactTable
+                                    filterable
+                                    defaultFilterMethod={(filter, row) =>
+                                        String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
+                                    }
+                                    data={all_symptoms}
+                                    columns={[
+                                        {
+                                            Header: "Last Submission",
+                                            accessor: "date"
+                                        },
+                                        {
+                                            Header: "Symptom",
+                                            accessor: "symptom"
+                                        },
+                                        {
+                                            Header: "Score",
+                                            accessor: "score"
+                                        }]}
+                                    defaultPageSize={5}
+                                    />
+                                </div>
 
-        let renderSymptoms = () => {
-          return records.map((record) => {
-            return record.symp.map((symptom) => {
-                return (<tr>
-                        <td scope="row">{record.record.date.substring(0,10)}</td>
-                        <td>{symptom.symptom}</td>
-                        <td>{symptom.answer}</td>
-                        </tr>)
-            });
-          });
-        };
+                                <div>
+                                    <ReactTable
+                                        filterable
+                                        defaultFilterMethod={(filter, row) =>
+                                            String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
+                                        }
+                                        data={all_notes}
+                                        columns={[
+                                            {
+                                                Header: "Last Submission",
+                                                accessor: "date"
+                                            },
+                                            {
+                                                Header: "Note",
+                                                accessor: "note"
+                                            }]}
+                                        defaultPageSize={5}
+                                    />
+                                </div>
 
-        let renderFullSymptoms = () => {
-            let table_symptoms = renderSymptoms();
-            if (table_symptoms.flat().length > 0){
-                return (<Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-default">
-                    <tr>
-                        <th>Date</th>
-                        <th>Other Symptoms</th>
-                        <th>Score</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    { table_symptoms }
-                    </tbody>
-                    </Table>);
-            }
-        };
+                                <Row>
+                                    <Col xs="12" md="12">
+                                        <Card>
+                                            <CardHeader>
+                                                Create Note for {firstname}
+                                            </CardHeader>
+                                            <CardBody>
+                                                <FormGroup row>
+                                                    <Col md="3">
+                                                        <Label>Note</Label>
+                                                    </Col>
+                                                    <Col xs="12" md="9">
+                                                        <Input type="new_note"
+                                                               name="new_note"
+                                                               value={new_note}
+                                                               placeholder="Enter your note"
+                                                               onChange={this.onChange}/>
+                                                    </Col>
+                                                </FormGroup>
+                                            </CardBody>
 
-        let renderNotes = () => {
-            return notes.map((eachnote) => {
-                return (
-                    <tr>
-                        <td scope="row">{eachnote.date.substring(0,10)}</td>
-                        <td>{eachnote.notes}</td>
-                    </tr>
-                );
-            })
-        };
-
-        let renderFullNotes = () => {
-            let table_notes = renderNotes();
-            if (table_notes.flat().length > 0){
-                return (<Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-                    <thead className="thead-default">
-                    <tr>
-                        <th>Date</th>
-                        <th>Note</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    { table_notes }
-                    </tbody>
-                    </Table>);
-            }
-        };
-
-        return(
-            //Add a key value somewhere, see react errors for more info
-            <Row>
-                <Col>
-                    <Card>
-                        <CardHeader>
-                            <Row>
-                                <Col md="3">
-                                    <Label>Patient Name: {firstname + " " + lastname}</Label>
-                                </Col>
-                                <Col md="3">
-                                    <Label>Sector: {sector}</Label>
-                                </Col>
-                            </Row>
-                        </CardHeader>
-                        <CardBody className="card-body">
-                            <Row>
-                                <Col>
-                                    <Table hover responsive className="table-outline mb-0 d-none d-sm-table">
-                                        <thead className="thead-default">
-                                        <tr>
-                                            <th>Last Submission</th>
-                                            <th>Pain</th>
-                                            <th id="SOB">SOB</th>
-                                            <th>Nausea</th>
-                                            <th>Fatigue</th>
-                                            <th>Constipation</th>
-                                            <th id="q3">Q3</th>
-                                            <th id="q4">Q4</th>
-                                            <th id="q5">Q5</th>
-                                            <th id="q6">Q6</th>
-                                            <th id="q7">Q7</th>
-                                            <UncontrolledTooltip placement="top" target="SOB">
-                                                Shortness of Breath
-                                            </UncontrolledTooltip>
-                                            <UncontrolledTooltip placement="top" target="q3">
-                                             Have you been feeling worried about your illness in the past 3 days?
-                                            </UncontrolledTooltip>
-                                            <UncontrolledTooltip placement="top" target="q4">
-                                             Over the past 3 days, have you been able to share how you are feeling with your family or friends?
-                                            </UncontrolledTooltip>
-                                            <UncontrolledTooltip placement="top" target="q5">
-                                              Over the past 3 days have you felt that life was worthwhile?
-                                            </UncontrolledTooltip>
-                                            <UncontrolledTooltip placement="top" target="q6">
-                                             Over the past 3 days, have you felt at peace?
-                                            </UncontrolledTooltip>
-                                            <UncontrolledTooltip placement="top" target="q7">
-                                             Have you had enough help and advice for your family to plan for the future?
-                                            </UncontrolledTooltip>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        { renderPatients() }
-                                        </tbody>
-
-                                    </Table>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    {renderFullSymptoms()}
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    {renderFullNotes()}
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <Card>
-                                        <CardHeader>
-                                            Create Note for {firstname}
-                                        </CardHeader>
-                                        <CardBody>
-                                            <FormGroup row>
-                                                <Col md="3">
-                                                    <Label>Note</Label>
-                                                </Col>
-                                                <Col xs="12" md="9">
-                                                    <Input type="new_note"
-                                                           name="new_note"
-                                                           value={new_note}
-                                                           placeholder="Enter your note"
-                                                           onChange={this.onChange}/>
-                                                </Col>
-                                            </FormGroup>
-                                        </CardBody>
-
-                                        <CardFooter>
-                                            <Row>
-                                                <Col >
-                                                    <Button color="success" size="sm" className="float-right" onClick={this.onSubmit}>Submit</Button>{' '}
-                                                </Col>
-                                                {/*<Col >*/}
+                                            <CardFooter>
+                                                <Row>
+                                                    <Col >
+                                                        <Button color="success" size="sm" className="float-right" onClick={this.onSubmit}>Submit</Button>{' '}
+                                                    </Col>
+                                                    {/*<Col >*/}
                                                     {/*<Button color="danger" size="sm" className="float-right" onClick={this.toggle}>Close</Button>{' '}*/}
-                                                {/*</Col>*/}
-                                            </Row>
-                                            <Modal isOpen={this.state.modal_submit}>
-                                                <ModalHeader toggle={this.toggle_submit}>Success!</ModalHeader>
-                                                <ModalBody>
-                                                    You have successfully created a note!
-                                                </ModalBody>
-                                                <ModalFooter>
-                                                    <Button color="primary" onClick={this.toggle_submit}>Okay</Button>{' '}
-                                                </ModalFooter>
-                                            </Modal>
-                                        </CardFooter>
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </CardBody>
+                                                    {/*</Col>*/}
+                                                </Row>
+                                                <Modal isOpen={this.state.modal_submit}>
+                                                    <ModalHeader toggle={this.toggle_submit}>Success!</ModalHeader>
+                                                    <ModalBody>
+                                                        You have successfully created a note!
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button color="primary" onClick={this.toggle_submit}>Okay</Button>{' '}
+                                                    </ModalFooter>
+                                                </Modal>
+                                            </CardFooter>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                            </CardBody>
 
-                    </Card>
-                </Col>
-            </Row>
-        );
+                        </Card>
+                    </Col>
+                </Row>
+            );
+        };
+
+        return renderPatientData();
     }
+
+
 }
 
 export default (NewPatientCard);
