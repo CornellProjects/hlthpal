@@ -57,6 +57,7 @@ class Patient(models.Model):
 
 # Model to associate questions with answers
 class Question(models.Model):
+    question_number = models.IntegerField(unique=True, null=True, blank=True)
     question = models.CharField(
         max_length=255,
         blank=True, 
