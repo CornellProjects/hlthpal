@@ -14,7 +14,7 @@ class PatientsTable extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.checkboxSubmit = this.checkboxSubmit.bind(this);
         this.state = {
-            patients: [],
+            // patients: [],
             allPatients: [],
             modal: false
             // modal_submit: false,
@@ -28,10 +28,11 @@ class PatientsTable extends Component {
         }
         axios.get('api/patients/data')
             .then((res) => {
-                this.setState({
-                    patients: res.data
-                });
-                const { patients } = this.state;
+                // this.setState({
+                //     patients: res.data
+                // });
+                let patients = res.data;
+                // const { patients } = this.state;
                 const currentPatient = (patient, data) => {
                     return {
                         key: patient.user.id,
@@ -147,9 +148,7 @@ class PatientsTable extends Component {
                         <CardBody className="card-body">
                             <div>
                                 <ReactTable
-                                    // TableComponent={Table}
-                                    // TheadComponent={Table}
-                                    // TrComponent={PatientCard}
+                                    className="-striped -highlight"
                                     filterable
                                     defaultFilterMethod={(filter, row) =>
                                         String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
