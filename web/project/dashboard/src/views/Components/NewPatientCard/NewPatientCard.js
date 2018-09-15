@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import PatientDetail from "../PatientDetail/PatientDetail"
 import ReactTable from 'react-table';
 import axios from 'axios';
 import 'react-table/react-table.css';
@@ -23,8 +22,6 @@ class NewPatientCard extends Component{
                 sector: props.location.state.detail.sector,
                 modal: false,
                 modal_submit: false,
-                records:[],
-                notes:[],
                 all_records: [],
                 all_symptoms: [],
                 all_notes: [],
@@ -49,9 +46,7 @@ class NewPatientCard extends Component{
 
             axios.post('api/patient/history', data).then(
                 (res) => {
-                    this.setState({
-                        records: res.data.reverse()
-                    });
+                    let records = res.data.reverse();
                     const singlePatientRecords = (record, data) => {
                         return {
                             key: record.record.id,
@@ -72,7 +67,6 @@ class NewPatientCard extends Component{
                             user: record.record.signed
                         };
                     };
-                    let {records} = this.state;
                     this.setState({
                         all_records: records.map((record) => {
                             if (record.data.length > 0) {
@@ -95,7 +89,7 @@ class NewPatientCard extends Component{
                         })
                     });
 
-                    // if a record was submitted but no other symptoms were mentioned, we skip display
+                    // if a record was submitted but no other symptoms were mentioned, we skip display unlike singlePatientRecords
                     let symptom_data = [];
                     for (let i = 0; i < records.length; i++){
                         symp = records[i].symp;
@@ -128,11 +122,7 @@ class NewPatientCard extends Component{
             };
             axios.post('api/notes/history', data, headers).then(
                 (res) => {
-                    this.setState(
-                    {
-                        notes: res.data.reverse()
-                    });
-                    let {notes} = this.state;
+                    let notes = res.data.reverse();
                     this.setState({
                         all_notes: notes.map((each_note) => {
                             return {
@@ -160,11 +150,7 @@ class NewPatientCard extends Component{
         };
         axios.post('api/notes/history', data, headers).then(
             (res) => {
-                this.setState(
-                    {
-                        notes: res.data.reverse()
-                    });
-                let {notes} = this.state;
+                let notes = res.data.reverse();
                 this.setState({
                     all_notes: notes.map((each_note) => {
                         return {
@@ -210,6 +196,7 @@ class NewPatientCard extends Component{
                             <CardBody className="card-body">
                                 <div>
                                     <ReactTable
+                                        className="-striped -highlight"
                                         filterable
                                         defaultFilterMethod={(filter, row) =>
                                             String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
@@ -304,30 +291,32 @@ class NewPatientCard extends Component{
 
                                 <div>
                                     <ReactTable
-                                    filterable
-                                    defaultFilterMethod={(filter, row) =>
-                                        String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
-                                    }
-                                    data={all_symptoms}
-                                    columns={[
-                                        {
-                                            Header: "Last Submission",
-                                            accessor: "date"
-                                        },
-                                        {
-                                            Header: "Symptom",
-                                            accessor: "symptom"
-                                        },
-                                        {
-                                            Header: "Score",
-                                            accessor: "score"
-                                        }]}
-                                    defaultPageSize={5}
+                                        className="-striped -highlight"
+                                        filterable
+                                        defaultFilterMethod={(filter, row) =>
+                                            String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
+                                        }
+                                        data={all_symptoms}
+                                        columns={[
+                                            {
+                                                Header: "Last Submission",
+                                                accessor: "date"
+                                            },
+                                            {
+                                                Header: "Symptom",
+                                                accessor: "symptom"
+                                            },
+                                            {
+                                                Header: "Score",
+                                                accessor: "score"
+                                            }]}
+                                        defaultPageSize={5}
                                     />
                                 </div>
 
                                 <div>
                                     <ReactTable
+                                        className="-striped -highlight"
                                         filterable
                                         defaultFilterMethod={(filter, row) =>
                                             String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
