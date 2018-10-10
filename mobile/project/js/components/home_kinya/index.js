@@ -14,7 +14,7 @@ import { Container,
          Thumbnail,
          Right,
          View} from 'native-base';
-import { Grid, Row } from 'react-native-easy-grid';
+import { Grid, Row,Col } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
 import { directoryExists } from '../../handlers/fileHandler';
 import { submitOfflineRecords } from '../../actions/records';
@@ -67,6 +67,24 @@ class Home extends Component {
     Actions.Instructions_K();
   }
 
+  // redirects to pages in English
+  onButtonPressEng() {
+    // redirect successful login to homepage
+    Actions.home();
+   }
+
+  renderButtons() {
+        const { loading } = this.props;
+
+        return <Grid>
+           <Col>
+               <Button block bordered style={styles.center} onPress={this.onButtonPressEng.bind(this)} active={!this.props.loading}>
+                 <Text>Tap to switch to English</Text>
+               </Button>
+           </Col>
+        </Grid>;
+    }
+
   render() {
      return (
       <Container style={styles.container}>
@@ -94,10 +112,12 @@ class Home extends Component {
                 <Button rounded style={styles.round} onPress={() => this.onButtonPress()}>
                     <Text style={styles.btn}>Fata amajwi</Text>
                 </Button>
+
                 {/*<Button light rounded style={styles.light} onPress={() => this.onButtonPress()}>
                     <Text style={styles.btn}>View Past Data</Text>
                 </Button>*/}
             </View>
+            {this.renderButtons()}
          </View>
         </Content>
       </Container>

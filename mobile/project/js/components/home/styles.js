@@ -35,5 +35,10 @@ export default {
   buttons:{
     marginTop: 50,
     marginBottom:18,
-  }
+  },
+  center:{
+      alignSelf: 'center',
+      marginTop: 150,
+      marginBottom: 10
+    },
 };
