@@ -41,7 +41,7 @@ class QtwoEleven extends Component {
   onBackPress() {
     const { answersArray } = this.props;
     answersArray.pop();
-    Actions.qtwoNine();
+    Actions.qtwoTen();
   }
 
   onButtonPress() {
