@@ -140,7 +140,7 @@ const loginUserSuccess = (dispatch, token, username, password) => {
 //        payload: token
     });
     // redirect successful login to homepage
-    Actions.home();
+    Actions.home_k();
 };
 
 const getCurrentUser = (dispatch, firstName) => {
