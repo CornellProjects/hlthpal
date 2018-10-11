@@ -26,7 +26,7 @@ SECRET_KEY = '-4y=cq=mm^=tp$yav3q-!$0qs-o)#)5)bnvl-ks3@h8^l*ws^w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '100.64.0.251', 'dhcp-nyc-12.eduroam.cornell.edu']
+ALLOWED_HOSTS = ['localhost', '100.64.0.251', '10.132.129.218', 'dhcp-nyc-12.eduroam.cornell.edu']
 
 
 # Application definition

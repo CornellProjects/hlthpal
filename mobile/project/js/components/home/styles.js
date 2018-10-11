@@ -11,9 +11,18 @@ export default {
   },
   text:{
     color: '#F16C00',
-    marginTop:20,
-    fontSize: 20,
+    fontSize: 16,
+    alignSelf:'center',
+    justifyContent: 'center',
+    marginLeft: 10,
+    marginRight:10,
+    marginTop: 30,
     fontFamily: 'sans-serif-condensed',
+  },
+  contentContainer:{
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    marginTop:160,
   },
   input:{
     marginTop:60,

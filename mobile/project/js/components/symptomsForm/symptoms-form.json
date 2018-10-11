@@ -1,0 +1,14 @@
+{
+    "english":{
+        "placeholder":"Enter Symptom Here...",
+        "add":"Add",
+        "cancel": "Cancel",
+        "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
+    },
+    "kr":{
+        "placeholder":"Injiza ikimenyetso hano...",
+        "add":"Ongeramo",
+        "cancel": "Reka",
+        "options":["Ntanarimwe", "Sikenshi", "Rimwe narimwe", "Kenshi cyane", "Yego"]
+    }
+}
