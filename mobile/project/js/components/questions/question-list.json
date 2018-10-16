@@ -38,27 +38,27 @@
         "8":{
             "question": "Question 8",
             "title": "Have you been feeling worried about your illness in the past 3 days?",
-            "options":["Not at all", "Occasionally", "Sometimes", "Most of the time", "Yes"]
+            "options":["Yes", "Most of the time", "Sometimes", "Occasionally", "Not at all"]
         },
         "9":{
             "question": "Question 9",
             "title": "Over the past 3 days, have you been able to share how you are feeling with your family or friends?",
-            "options":["Not at all", "Occasionally", "Sometimes", "Most of the time", "Yes"]
+            "options":["Yes", "Most of the time", "Sometimes", "Occasionally", "Not at all"]
         },
         "10":{
             "question": "Question 10",
             "title": "Over the past 3 days have you felt that life was worthwhile?",
-            "options":["Not at all", "Occasionally", "Sometimes", "Most of the time", "Yes"]
+            "options":["Yes", "Most of the time", "Sometimes", "Occasionally", "Not at all"]
         },
         "11":{
             "question": "Question 11",
             "title": "Over the past 3 days, have you felt at peace?",
-            "options":["Not at all", "Occasionally", "Sometimes", "Most of the time", "Yes"]
+            "options":["Yes", "Most of the time", "Sometimes", "Occasionally", "Not at all"]
         },
         "12":{
             "question": "Question 12",
             "title": "Have you had enough help and advice for your family to plan for the future?",
-            "options":["Not at all", "Occasionally", "Sometimes", "Most of the time", "Yes"]
+            "options":["Yes", "Most of the time", "Sometimes", "Occasionally", "Not at all"]
         },
         "button":{
             "back": "Back",
@@ -104,27 +104,27 @@
         "8":{
             "question": "Ibibazo 8",
             "title": "Waba warigeze wumva utewe ubwoba nuburwayi bwawe muminsi itatu ishize?",
-            "options":["Ntanarimwe", "Sikenshi", "Rimwe narimwe", "Kenshi cyane", "Yego"]
+            "options":["Yego", "Kenshi cyane", "Rimwe narimwe", "Sikenshi", "Ntanarimwe"]
         },
         "9":{
             "question": "Ibibazo 9",
             "title": "Waba warigeze usangiza umuryango wawe cyangwa incuti uko umerewe muminsi itatu ishize?",
-            "options":["Ntanarimwe", "Sikenshi", "Rimwe narimwe", "Kenshi cyane", "Yego"]
+            "options":["Yego", "Kenshi cyane", "Rimwe narimwe", "Sikenshi", "Ntanarimwe"]
         },
         "10":{
             "question": "Ibibazo 10",
             "title": "Waba warigeze wumva kubaho bifite akamaro muminsi itatu ishize?",
-            "options":["Ntanarimwe", "Sikenshi", "Rimwe narimwe", "Kenshi cyane", "Yego"]
+            "options":["Yego", "Kenshi cyane", "Rimwe narimwe", "Sikenshi", "Ntanarimwe"]
         },
         "11":{
             "question": "Ibibazo 11",
             "title": "Waba warigeze wumva ufite amahoro muminsi itatu ishize?",
-            "options":["Ntanarimwe", "Sikenshi", "Rimwe narimwe", "Kenshi cyane", "Yego"]
+            "options":["Yego", "Kenshi cyane", "Rimwe narimwe", "Sikenshi", "Ntanarimwe"]
         },
         "12":{
             "question": "Ibibazo 12",
             "title": "Waba warigeze uhabwa ubufasha unagirwa inama numuryango wawe mugutegura ahazaza?",
-            "options":["Ntanarimwe", "Sikenshi", "Rimwe narimwe", "Kenshi cyane", "Yego"]
+            "options":["Yego", "Kenshi cyane", "Rimwe narimwe", "Sikenshi", "Ntanarimwe"]
         },
         "button":{
             "back": "Subira inyuma",

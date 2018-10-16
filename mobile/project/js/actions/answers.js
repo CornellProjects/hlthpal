@@ -76,7 +76,12 @@ export const answerChanged = (rating) => {
         'Slightly':       1,
         'Moderately':     2,
         'Severely':       3,
-        'Overwhelmingly': 4
+        'Overwhelmingly': 4,
+        'Ntanarimwe':     0,
+        'Bukeya':       1,
+        'Buringaniye':     2,
+        'Byinshi':       3,
+        'Byinshi cyane': 4
     };
 
     return {
@@ -91,7 +96,12 @@ export const answerModified = (rating) => {
         'Most of the time': 1,
         'Sometimes':        2,
         'Occasionally':     3,
-        'Not at all':       4
+        'Not at all':       4,
+        'Yego':     0,
+        'Kenshi cyane':       1,
+        'Rimwe narimwe':     2,
+        'Sikenshi':       3,
+        'Ntanarimwe': 4
     };
 
     return {

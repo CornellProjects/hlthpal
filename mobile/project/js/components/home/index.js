@@ -23,6 +23,8 @@ import { openDrawer } from '../../actions/drawer';
 
 import styles from './styles';
 
+import Perf from 'ReactPerf';
+
 const homeLang = require('./home.json');
 var lang = "kr";
 
