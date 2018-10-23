@@ -5,6 +5,7 @@ import 'react-table/react-table.css';
 import {
     Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardHeader, CardBody,
     CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
+import Pagination from "../NewPatientCard/new_pagination";
 
 
 class PatientsTable extends Component {
@@ -143,6 +144,7 @@ class PatientsTable extends Component {
                         <CardBody className="card-body">
                             <div>
                                 <ReactTable
+                                    PaginationComponent={Pagination}
                                     getTableProps={
                                         () => {
                                             return {

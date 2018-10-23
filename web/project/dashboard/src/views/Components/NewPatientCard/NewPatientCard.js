@@ -3,14 +3,10 @@ import ReactTable from 'react-table';
 import axios from 'axios';
 import 'react-table/react-table.css';
 import {
-    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, CardBlock,
-    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
+    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup,
+    Card, CardHeader, CardBody, CardFooter, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
 import Pagination from './new_pagination.js';
-import { ReactTableDefaults } from 'react-table';
-
-// Object.assign(ReactTableDefaults, {
-//     PaginationComponent: Pagination
-// })
+import './styles.css';
 
 class NewPatientCard extends Component{
     constructor(props){
@@ -189,6 +185,7 @@ class NewPatientCard extends Component{
         axios.post('api/notes/create', data, headers).then(
             (res) => this.setState({
                 modal_submit: !this.state.modal_submit,
+                new_note: ""
             })
         );
 
@@ -218,16 +215,16 @@ class NewPatientCard extends Component{
                             <CardHeader>
                                 <Row>
                                     <Col md="3">
-                                        <Label>Patient Name: {firstname + " " + lastname}</Label>
+                                        <Label className="title-header">Patient Name: {firstname + " " + lastname}</Label>
                                     </Col>
                                     <Col md="3">
-                                        <Label>Sector: {sector}</Label>
+                                        <Label className="title-header">Sector: {sector}</Label>
                                     </Col>
                                 </Row>
                             </CardHeader>
                             <CardBody className="card-body">
-                                <CardHeader>
-                                    Summary of Records
+                                <CardHeader className="title-head">
+                                    Patient Submissions
                                 </CardHeader>
                                 <div>
                                     <ReactTable
@@ -377,8 +374,46 @@ class NewPatientCard extends Component{
                                 <UncontrolledTooltip placement="top" target="q7">
                                     Have you had enough help and advice for your family to plan for the future?
                                 </UncontrolledTooltip>
+                                <br/>
+                                <Row>
+                                    <Col xs="12" md="12">
+                                        <Card>
+                                            <CardHeader className="title-head">
+                                                Add a Note for {firstname}
+                                            </CardHeader>
+                                            <CardBody>
+                                                <FormGroup>
+                                                    <Col xs="12" md="12" lg="6">
+                                                        <Input type="textarea" rows={4}
+                                                               name="new_note"
+                                                               value={new_note}
+                                                               placeholder="Enter your note here"
+                                                               onChange={this.onChange}/>
+                                                    </Col>
+                                                </FormGroup>
+                                            </CardBody>
 
-                                <CardHeader>
+                                            <CardFooter>
+                                                <Row>
+                                                    <Col xs="12" md="12" lg="6">
+                                                        <Button color="success" size="sm" className="float-right" onClick={this.onSubmit}>Submit Note</Button>{' '}
+                                                    </Col>
+                                                </Row>
+                                                <Modal isOpen={this.state.modal_submit}>
+                                                    <ModalHeader toggle={this.toggle_submit}>Success!</ModalHeader>
+                                                    <ModalBody>
+                                                        You have successfully created a note!
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button color="primary" round onClick={this.toggle_submit}>Okay</Button>{' '}
+                                                    </ModalFooter>
+                                                </Modal>
+                                            </CardFooter>
+                                        </Card>
+                                    </Col>
+                                </Row>
+
+                                <CardHeader className="title-head">
                                     Medical Notes
                                 </CardHeader>
                                 <div>
@@ -417,8 +452,6 @@ class NewPatientCard extends Component{
                                                 }
                                             }
                                         }
-                                        // className="-striped -highlight"
-                                        // filterable
                                         defaultFilterMethod={(filter, row) =>
                                             String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
                                         }
@@ -438,50 +471,6 @@ class NewPatientCard extends Component{
                                         noDataText='No Notes Recorded'
                                     />
                                 </div>
-                                <Row/>
-                                <Row>
-                                    <Col xs="12" md="12">
-                                        <Card>
-                                            <CardHeader>
-                                                Add a Note for {firstname}
-                                            </CardHeader>
-                                            <CardBody>
-                                                <FormGroup row>
-                                                    <Col md="3">
-                                                        <Label>Note</Label>
-                                                    </Col>
-                                                    <Col xs="12" md="9">
-                                                        <Input type="new_note"
-                                                               name="new_note"
-                                                               value={new_note}
-                                                               placeholder="Enter your note"
-                                                               onChange={this.onChange}/>
-                                                    </Col>
-                                                </FormGroup>
-                                            </CardBody>
-
-                                            <CardFooter>
-                                                <Row>
-                                                    <Col >
-                                                        <Button color="success" size="sm" className="float-right" onClick={this.onSubmit}>Submit</Button>{' '}
-                                                    </Col>
-                                                    {/*<Col >*/}
-                                                    {/*<Button color="danger" size="sm" className="float-right" onClick={this.toggle}>Close</Button>{' '}*/}
-                                                    {/*</Col>*/}
-                                                </Row>
-                                                <Modal isOpen={this.state.modal_submit}>
-                                                    <ModalHeader toggle={this.toggle_submit}>Success!</ModalHeader>
-                                                    <ModalBody>
-                                                        You have successfully created a note!
-                                                    </ModalBody>
-                                                    <ModalFooter>
-                                                        <Button color="primary" onClick={this.toggle_submit}>Okay</Button>{' '}
-                                                    </ModalFooter>
-                                                </Modal>
-                                            </CardFooter>
-                                        </Card>
-                                    </Col>
-                                </Row>
                             </CardBody>
 
                         </Card>
