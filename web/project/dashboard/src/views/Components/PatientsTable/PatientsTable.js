@@ -143,7 +143,39 @@ class PatientsTable extends Component {
                         <CardBody className="card-body">
                             <div>
                                 <ReactTable
-                                    className="-striped -highlight"
+                                    getTableProps={
+                                        () => {
+                                            return {
+                                                style: {
+                                                    border: "1px solid #5ca3c9"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    getTdProps={
+                                        () => {
+                                            return {
+                                                style: {
+                                                    borderTop: "1px solid #5ca3c9",
+                                                    borderRight: "none"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    getTheadTrProps={
+                                        () => {
+                                            return {
+                                                style: {
+                                                    backgroundColor: "#c2cfd6",
+                                                    color: "#3e515b",
+                                                    fontWeight: "bold",
+                                                    borderRight: "none",
+                                                    padding: "4px"
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // className="-striped -highlight"
                                     filterable
                                     defaultFilterMethod={(filter, row) =>
                                         String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
@@ -180,8 +212,16 @@ class PatientsTable extends Component {
                                             accessor: "nausea"
                                         },
                                         {
+                                            Header: 'Vomiting',
+                                            accessor: "vomiting"
+                                        },
+                                        {
                                             Header: 'Fatigue',
                                             accessor: "fatigue"
+                                        },
+                                        {
+                                            Header: 'Poor Appetite',
+                                            accessor: "poor_appetite"
                                         },
                                         {
                                             Header: 'Constipation',
@@ -195,9 +235,10 @@ class PatientsTable extends Component {
                                             Header: 'Signed',
                                             accessor: 'user',
                                             filterable: false,
-                                            Cell: cellData => {if ((cellData.original.record_key !== null) && (cellData.original.user !== null)) {
+                                            Cell: cellData =>
+                                                {if ((cellData.original.record_key !== null) && (cellData.original.user !== null)) {
                                                 // console.log(cellData.original.user.first_name, cellData.original.user);
-                                                return (<div>
+                                                    return (<div>
                                                                 <Input addon type="checkbox" defaultChecked
                                                                       onClick={() => this.checkboxSubmit(cellData.original)} />
                                                                 <span>{cellData.original.user.first_name}</span>
@@ -211,8 +252,8 @@ class PatientsTable extends Component {
                                             Header: 'More Info',
                                             sortable: false,
                                             filterable: false,
-                                            Cell: cellData => (<Button color="primary" size="sm"
-                                                                  onClick={() => this.onSubmit(cellData.original)}> More </Button>)
+                                            Cell: cellData => (<div style={{textAlign: "center"}}><Button outline color="primary" size="sm" style={{borderRadius: "15px"}}
+                                                                            onClick={() => this.onSubmit(cellData.original)}> More </Button></div>)
 
                                         }
                                     ]}
