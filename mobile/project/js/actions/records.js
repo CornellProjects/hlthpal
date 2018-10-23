@@ -13,7 +13,6 @@ const base64 = require('base-64');
 
 function calculateRecordScore(myArray) {
     var count = 0;
-
     myArray.forEach(function(item) {
         if (!isNaN(parseInt(item.answer))){
             count += parseInt(item.answer);
@@ -99,6 +98,10 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                 if (callback) {
                     callback();
                 }});
+        }
+        else if(response.status == 500){
+            console.log("500 error");
+            console.log(response);
         }
 
     });
@@ -229,7 +232,7 @@ export const createRecord = ({ token, username, password, answersArray, mySympto
                 console.log('There is network connectivity, submitting the record online.');
                 timestamp = new Date();
 //                submitCreateRecordCall(token, answersArray, mySymptoms, totalScore, timestamp.getTime());
-                console.log("Usernam", username, "password", password);
+                console.log("Username", username, "password", password);
                 submitCreateRecordCallNoToken(username, password, answersArray, mySymptoms, totalScore, timestamp.getTime());
             } else {
                 console.log('No network connectivity, persisting the record locally.');

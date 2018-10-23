@@ -10,6 +10,8 @@ import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import { SegmentedControls } from 'react-native-radio-buttons'
 import styles from './styles';
+import { createRecord, retrieveAnswersFromLocalStorage } from '../../actions/records';
+
 
 const questionListLang = require('./question-list.json');
 
@@ -47,7 +49,16 @@ class Question extends Component {
   }
 
   onButtonPress() {
-    const { question, record, rating, answersArray } = this.props;
+    const {
+                question,
+                record,
+                rating,
+                answersArray,
+                mySymptoms,
+                score,
+                token,
+                username,
+                password} = this.props;
 
     let text = '';
 
@@ -60,6 +71,8 @@ class Question extends Component {
         Actions.questions({questionName: parseInt(this.props.questionName) + 1, lang: this.props.lang});
     }
     else{
+//        console.log(answersArray);
+        this.props.createRecord({ token, username, password, answersArray, mySymptoms, score });
         Actions.home({lang: this.props.lang});
     }
   }
@@ -129,17 +142,24 @@ function bindAction(dispatch) {
     resetRating: rating => dispatch(resetRating(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
     setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
+    createRecord: (token, username, password, answersArray, mySymptoms, score) => dispatch(createRecord(token, username, password, answersArray, mySymptoms, score)),
+
   };
 }
 
 const mapStateToProps = (state) => ({
   name: state.user.name,
-  list: state.list.list,
   token: state.user.token,
+  username: state.user.username,
+  password: state.user.password,
+  list: state.list.list,
   question: state.answers.question,
   record: state.records.record,
+  score: state.records.score,
   rating: state.answers.rating,
   answersArray: state.records.answersArray,
+  mySymptoms: state.records.mySymptoms,
+  connectionState: state.connectionState,
 });
 
 export default connect(mapStateToProps, bindAction)(Question);

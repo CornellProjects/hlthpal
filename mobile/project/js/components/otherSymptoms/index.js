@@ -49,7 +49,7 @@ class otherSymptoms extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>Other Symptoms</Title>
+            <Title>{otherSymptoms["othersymptoms"]}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>

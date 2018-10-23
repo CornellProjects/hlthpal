@@ -12,7 +12,7 @@
         },
         "3":{
             "question": "Question 3",
-            "title": "Fatique",
+            "title": "Fatigue",
             "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "4":{

@@ -78,10 +78,10 @@ export const answerChanged = (rating) => {
         'Severely':       3,
         'Overwhelmingly': 4,
         'Ntanarimwe':     0,
-        'Bukeya':       1,
-        'Buringaniye':     2,
-        'Byinshi':       3,
-        'Byinshi cyane': 4
+        'Bukeya':         1,
+        'Buringaniye':    2,
+        'Byinshi':        3,
+        'Byinshi cyane':  4
     };
 
     return {
@@ -97,11 +97,11 @@ export const answerModified = (rating) => {
         'Sometimes':        2,
         'Occasionally':     3,
         'Not at all':       4,
-        'Yego':     0,
-        'Kenshi cyane':       1,
-        'Rimwe narimwe':     2,
-        'Sikenshi':       3,
-        'Ntanarimwe': 4
+        'Yego':             0,
+        'Kenshi cyane':     1,
+        'Rimwe narimwe':    2,
+        'Sikenshi':         3,
+        'Ntanarimwe':       4
     };
 
     return {
@@ -182,7 +182,7 @@ export const createSymptomObject = ({ record, symptom, rating }) => {
 
 export const updateAnswer = ({ token, record, question, rating, text }) => {
     return (dispatch) => {
-
+        console.log("Updating the answer and calling the api to send the answer responses");
         fetch(myUrl + '/api/edit_answer/' + record + '/' + question, {
                    method: 'PUT',
                    headers: {
