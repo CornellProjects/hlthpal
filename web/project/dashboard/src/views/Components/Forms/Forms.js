@@ -10,7 +10,7 @@ import {
   Card,
   CardHeader,
   CardFooter,
-  CardBlock,
+  CardBody,
   Form,
   FormGroup,
   FormText,
@@ -83,9 +83,7 @@ class Forms extends Component {
         mobile:this.state.mobile,
         category:this.state.category,
         referral:this.state.referral,
-        // street:this.state.street,
         address:this.state.address,
-        // city:this.state.city,
         sector:this.state.sector
         // state:this.state.state,
         // country:this.state.country
@@ -103,23 +101,26 @@ class Forms extends Component {
             modal:!self.state.modal
         });
     }).catch(function(err) {
-        console.error(JSON.stringify(err));
-        let message1 = '';
+        // console.error(JSON.stringify(err));
+        let message = '';
         if (err.response.status === 400){
             for (let property in err.response.data) {
                 if (property === 'patient'){
                     for (let item in err.response.data[property]) {
-                        message1 = message1 + item + ':' + err.response.data[property][item] + '\n ';
-                        console.log(message1, item);
+                            message += item + ': ' + err.response.data[property][item] + '\n';
+                        // }
+                        // console.log(message, item);
                     }
                 }
                 else{
-                    message1 = message1 + property + ':' + err.response.data[property] + '\n ';
+                    if (property !== 'username') {
+                        message += property + ': ' + err.response.data[property] + '\n ';
+                    }
                 }
             }
             self.setState({
                 header:'Failure',
-                message: message1,
+                message: message,
                 modal:!self.state.modal
             });
         }
@@ -166,13 +167,13 @@ class Forms extends Component {
               <CardHeader>
                 <strong>Patient Info</strong>
               </CardHeader>
-              <CardBlock className="card-body">
+              <CardBody>
                 <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
                   <FormGroup row>
-                    <Col md="3">
-                      <Label>Firstname</Label>
+                    <Col md="2">
+                      <Label>Firstname*</Label>
                     </Col>
-                    <Col xs="12" md="9">
+                    <Col xs="12" md="7">
                       <Input
                             type="first_name"
                             id="first_name-input"
@@ -186,10 +187,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                    <Col md="3">
+                    <Col md="2">
                       <Label>Lastname</Label>
                     </Col>
-                    <Col xs="12" md="9">
+                    <Col xs="12" md="7">
                       <Input
                             type="last_name"
                             id="last_name-input"
@@ -202,10 +203,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="email-input">Email Address</Label>
+                    <Col md="2">
+                      <Label htmlFor="email-input">Email Address*</Label>
                     </Col>
-                    <Col xs="12" md="9">
+                    <Col xs="12" md="7">
                       <Input type="email"
                              id="email-input"
                              name="email"
@@ -217,10 +218,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="password-input">Password</Label>
+                    <Col md="2">
+                      <Label htmlFor="password-input">Password*</Label>
                     </Col>
-                    <Col xs="12" md="9">
+                    <Col xs="12" md="7">
                       <Input type="password"
                              id="password-input"
                              name="password"
@@ -234,10 +235,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                      <Col md="3">
+                      <Col md="2">
                           <Label htmlFor="gender-input">Gender</Label>
                       </Col>
-                      <Col xs="12" md="9">
+                      <Col xs="12" md="7">
                           <Input type="gender"
                                  id="gender-input"
                                  name="gender"
@@ -249,10 +250,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                      <Col md="3">
+                      <Col md="2">
                           <Label htmlFor="category-input">Category</Label>
                       </Col>
-                      <Col xs="12" md="9">
+                      <Col xs="12" md="7">
                           <Input type="category"
                                  id="category-input"
                                  name="category"
@@ -264,10 +265,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                      <Col md="3">
+                      <Col md="2">
                           <Label htmlFor="mobile-input">Mobile</Label>
                       </Col>
-                      <Col xs="12" md="9">
+                      <Col xs="12" md="7">
                           <Input type="mobile"
                                  id="mobile-input"
                                  name="mobile"
@@ -279,10 +280,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                      <Col md="3">
+                      <Col md="2">
                           <Label htmlFor="street-input">Home Address</Label>
                       </Col>
-                      <Col xs="12" md="9">
+                      <Col xs="12" md="7">
                           <Input type="address"
                                  id="address-input"
                                  name="address"
@@ -294,10 +295,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                      <Col md="3">
-                          <Label htmlFor="sector-input">Sector</Label>
+                      <Col md="2">
+                          <Label htmlFor="sector-input">Sector*</Label>
                       </Col>
-                      <Col xs="12" md="9">
+                      <Col xs="12" md="7">
                           <Input type="sector"
                                  id="sector-input"
                                  name="sector"
@@ -309,10 +310,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                    <Col md="3">
+                    <Col md="2">
                       <Label htmlFor="address-input">Diagnosis</Label>
                     </Col>
-                    <Col xs="12" md="9">
+                    <Col xs="12" md="7">
                       <Input type="diagnosis"
                              id="diagnosis-input"
                              name="diagnosis"
@@ -324,10 +325,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                      <Col md="3">
+                      <Col md="2">
                           <Label htmlFor="address-input">Referred From</Label>
                       </Col>
-                      <Col xs="12" md="9">
+                      <Col xs="12" md="7">
                           <Input type="referral"
                                  id="referral-input"
                                  name="referral"
@@ -339,10 +340,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                    <Col md="3">
+                    <Col md="2">
                       <Label htmlFor="care_giver-input">Care giver</Label>
                     </Col>
-                    <Col xs="12" md="9">
+                    <Col xs="12" md="7">
                       <Input type="care_giver"
                              id="care_giver-input"
                              name="care_giver"
@@ -354,10 +355,10 @@ class Forms extends Component {
                   </FormGroup>
 
                   <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="doctor-input">Doctor</Label>
+                    <Col md="2">
+                      <Label htmlFor="doctor-input">Doctor*</Label>
                     </Col>
-                    <Col xs="12" md="9">
+                    <Col xs="12" md="7">
                       <Input type="doctor"
                              id="doctor-input"
                              name="doctor"
@@ -367,76 +368,13 @@ class Forms extends Component {
                       <FormText className="help-block">Please enter a doctor name</FormText>
                     </Col>
                   </FormGroup>
-
-                  {/*<FormGroup row>*/}
-                      {/*<Col md="3">*/}
-                          {/*<Label htmlFor="street-input">Street</Label>*/}
-                      {/*</Col>*/}
-                      {/*<Col xs="12" md="9">*/}
-                          {/*<Input type="street"*/}
-                                 {/*id="street-input"*/}
-                                 {/*name="street"*/}
-                                 {/*placeholder="Enter street"*/}
-                                 {/*value={street}*/}
-                                 {/*onChange={this.onChange}/>*/}
-                          {/*<FormText className="help-block">Please enter street</FormText>*/}
-                      {/*</Col>*/}
-                  {/*</FormGroup>*/}
-
-                  {/*<FormGroup row>*/}
-                    {/*<Col md="3">*/}
-                      {/*<Label htmlFor="city-input">City</Label>*/}
-                    {/*</Col>*/}
-                    {/*<Col xs="12" md="9">*/}
-                      {/*<Input type="city"*/}
-                             {/*id="city-input"*/}
-                             {/*name="city"*/}
-                             {/*placeholder="Enter city"*/}
-                             {/*value={city}*/}
-                             {/*onChange={this.onChange}/>*/}
-                      {/*<FormText className="help-block">Please enter city</FormText>*/}
-                    {/*</Col>*/}
-                  {/*</FormGroup>*/}
-
-
-                  {/*<FormGroup row>*/}
-                    {/*<Col md="3">*/}
-                      {/*<Label htmlFor="state-input">State</Label>*/}
-                    {/*</Col>*/}
-                    {/*<Col xs="12" md="9">*/}
-                      {/*<Input type="state"*/}
-                             {/*id="state-input"*/}
-                             {/*name="state"*/}
-                             {/*placeholder="Enter state"*/}
-                             {/*value={state}*/}
-                             {/*onChange={this.onChange}/>*/}
-                      {/*<FormText className="help-block">Please enter state</FormText>*/}
-                    {/*</Col>*/}
-                  {/*</FormGroup>*/}
-
-                  {/*<FormGroup row>*/}
-                    {/*<Col md="3">*/}
-                      {/*<Label htmlFor="country-input">Country</Label>*/}
-                    {/*</Col>*/}
-                    {/*<Col xs="12" md="9">*/}
-                      {/*<Input type="country"*/}
-                             {/*id="country-input"*/}
-                             {/*name="country"*/}
-                             {/*placeholder="Enter country"*/}
-                             {/*value={country}*/}
-                             {/*onChange={this.onChange}/>*/}
-                      {/*<FormText className="help-block">Please enter country</FormText>*/}
-                    {/*</Col>*/}
-                  {/*</FormGroup>*/}
-
                 </Form>
-              </CardBlock>
+              </CardBody>
               <CardFooter>
               <Row>
-              <Col md="1">
+              <Col sm="2" md="1">
               <Button type="submit" size="sm" color="primary" onClick={this.onSubmit}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-              </Col>
-              <Col md="1">
+              </Col><Col sm="2" md="1">
               <Button type="reset" size="sm" color="danger" onClick={this.onReset}><i className="fa fa-ban"></i> Reset</Button>
               </Col>
               </Row>
@@ -444,7 +382,7 @@ class Forms extends Component {
               <Modal isOpen={this.state.modal}>
                 <ModalHeader toggle={this.toggle}>{this.state.header}</ModalHeader>
                 <ModalBody>
-                    {this.state.message}
+                    <div>{this.state.message}</div>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" onClick={this.toggle}>Okay</Button>{' '}
