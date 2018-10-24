@@ -107,7 +107,7 @@ class UserCreateSerializer(ModelSerializer):
                 address=validated_data['patient']['address'],
                 category=validated_data['patient']['category'],
                 referral=validated_data['patient']['referral'],
-                # country=validated_data['patient']['country'],
+                care_giver=validated_data['patient']['care_giver'],
                 sector=validated_data['patient']['sector']
             )
 
