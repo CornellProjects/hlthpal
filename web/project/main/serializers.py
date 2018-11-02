@@ -27,7 +27,8 @@ class PatientCreateSerializer(ModelSerializer):
             'address',
             'sector',
             'category',
-            'referral'
+            'referral',
+            'care_giver'
         ]
 
 
@@ -98,7 +99,8 @@ class UserCreateSerializer(ModelSerializer):
 
             # call Patient create and map the data into the Patient table
             # call it after User has been created and saved; One-To-One Relationship
-            patient_data = Patient.objects.create(
+            try:
+                Patient.objects.create(
                 user=user_obj,
                 mobile=validated_data['patient']['mobile'],
                 diagnosis=validated_data['patient']['diagnosis'],
@@ -109,7 +111,9 @@ class UserCreateSerializer(ModelSerializer):
                 referral=validated_data['patient']['referral'],
                 care_giver=validated_data['patient']['care_giver'],
                 sector=validated_data['patient']['sector']
-            )
+                )
+            except Exception as e:
+                print(e)
 
             return validated_data
 

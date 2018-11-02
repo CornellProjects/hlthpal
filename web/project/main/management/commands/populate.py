@@ -1,36 +1,29 @@
 from django.core.management.base import BaseCommand
-from main.models import Question, Answer
+from main.models import Question
 
 # creating django-admin command test
 class Command(BaseCommand):
     help = 'Populate questions'
 
     def handle(self, *args, **options):
-        questions = [
-            'What have been your main problems or concerns over the past week?',
-            'Pain',
-            'Shortness of breath',
-            'Weakness or lack of energy',
-            'Nausea (feeling like you are going to be sick',
-            'Vomiting (being sick)',
-            'Poor appetite',
-            'Constipation',
-            'Sore or dry mouth',
-            'Drowsiness',
-            'Poor mobility',
-            'Have you been feeling anxious or worried about your illness or treatment?',
-            'Have any of your family or friends been anxious or worried about you?',
-            'Have you been feeling depressed?',
-            'Have you felt at peace',
-            'Have you been able to share how you are feeling with your family or friends'
-            ' as much as you wanted?',
-            'Have you had as much information as you wanted?',
-            'Have any practical problems resulting from your illness been addressed? '
-            '(such as financial or personal)',
-            'How did you complete this questionnaire?'
-        ]
+        questions = {
+            '1': 'Pain',
+            '2': 'Shortness of Breath',
+            '3': 'Fatigue',
+            '4': 'Nausea',
+            '5': 'Vomiting',
+            '6': 'Poor Appetite',
+            '7': 'Constipation',
+            '8': 'Have you been feeling worried about your illness in the past 3 days?',
+            '9': 'Over the past 3 days, have you been able to share how you are feeling with your family or friends?',
+            '10': 'Over the past 3 days have you felt that life was worthwhile?',
+            '11': 'Over the past 3 days, have you felt at peace?',
+            '12': 'Have you had enough help and advice for your family to plan for the future?'
+        }
+        if len(Question.objects.all()) == 0: # Questions ahve not been populated yet
+            for question_number in questions:
+                q = Question.objects.create(question_number=question_number, question=questions[question_number])
 
-        for question in questions:
-            q = Question.objects.create(question=question)
-
-        self.stdout.write(self.style.SUCCESS('Questions have been populated'))
+            self.stdout.write(self.style.SUCCESS('Questions were successfully populated'))
+        else:
+            self.stdout.write(self.style.SUCCESS('Questions are already present in the database'))

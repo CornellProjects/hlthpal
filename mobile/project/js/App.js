@@ -10,10 +10,10 @@ import ProgressBar from './components/loaders/ProgressBar';
 
 import theme from './themes/base-theme';
 
-//import { URL } from './localUrl.js';
-//global.myUrl = URL;
+import { URL } from './localUrl.js';
+global.myUrl = URL;
 
-global.myUrl = 'http://hlthpal.com';
+//global.myUrl = 'http://hlthpal.com';
 
 const styles = StyleSheet.create({
   container: {
@@ -102,7 +102,7 @@ class App extends Component {
                     <Text
                       style={{
                         color: theme.brandPrimary,
-                        textAlign: 'center',
+                         textAlign: 'center',
                         marginBottom: 15,
                         fontSize: 15,
                       }}
