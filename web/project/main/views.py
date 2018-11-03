@@ -160,6 +160,18 @@ class UserLoginView(APIView):
                 Log.objects.create(user=request.user, activity='failed_sign_in') # failed sign in or sign out.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UserValidateEmail(CreateAPIView):
+    serializer_class = UserLoginSerializer
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    def post(self, request, *args, **kwargs):
+        '''Validates if user can be registered by checking email/username doesn't already exist'''
+        data = request.data
+        if User.objects.filter(username=data['email']) or User.objects.filter(email=data['email']):
+            return Response({'status': False}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status': True}, status=status.HTTP_200_OK)
+
 
 class UserProfileView(APIView):
     '''API to GET user profile information.'''
