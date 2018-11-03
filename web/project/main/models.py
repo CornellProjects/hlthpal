@@ -49,7 +49,7 @@ class Patient(models.Model):
     category = models.CharField(max_length=200, null=True, blank=True)
     referral = models.CharField(max_length=200, null=True, blank=True)
     street = models.CharField(max_length=200, null=True, blank=True)
-    sector = models.CharField(max_length=200, null=True)
+    sector = models.CharField(max_length=200, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     state = models.CharField(max_length=100, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
