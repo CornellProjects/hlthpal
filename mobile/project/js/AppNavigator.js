@@ -21,6 +21,7 @@ import QtwoNine from './components/qtwoNine';
 import QtwoTen from './components/qtwoTen';
 import QtwoEleven from './components/qtwoEleven';
 import QtwoTwelve from './components/qtwoTwelve';
+import finalScreen from './components/finalScreen';
 import otherSymptoms from './components/otherSymptoms';
 import FillInfo from './components/fillInfo';
 import RecordList from './components/RecordList';
@@ -98,6 +99,8 @@ class AppNavigator extends Component {
         return <RecordList />
       case 'Instructions':
         return <Instructions />
+      case 'finalScreen':
+        return <finalScreen />
       default:
         return <Login />;
     }
@@ -158,6 +161,7 @@ class AppNavigator extends Component {
             <Scene key="symptomsForm" component={symptomsForm} />
             <Scene key="RecordList" component={RecordList} />
             <Scene key="Instructions" component={Instructions} />
+            <Scene key="finalScreen" component={finalScreen} />
           </Scene>
         </RouterWithRedux>
       </Drawer>
