@@ -43,6 +43,8 @@ import symptomsForm_K from './components/symptomsForm_kinya';
 import Instructions from './components/instructions';
 import Instructions_K from './components/instructions_kinya';
 import Languages from './components/languages';
+import finalScreen from './components/finalScreen';
+import finalScreen_K from './components/finalScreen_kinya';
 
 const RouterWithRedux = connect()(Router);
 
@@ -149,6 +151,10 @@ class AppNavigator extends Component {
         return <Instructions_K />
       case 'Languages':
         return <Languages />
+      case 'finalScreen':
+        return <finalScreen />
+      case 'finalScreen_k':
+        return <finalScreen_K />
       default:
         return <Login />;
     }
@@ -219,6 +225,8 @@ class AppNavigator extends Component {
             <Scene key="qtwoTwelve" component={QtwoTwelve} />
             <Scene key="qtwoTwelve_k" component={QtwoTwelve_K} />
             <Scene key="otherSymptoms" component={otherSymptoms} />
+            <Scene key="finalScreen" component={finalScreen} />
+            <Scene key="finalScreen_k" component={finalScreen_K} />
             <Scene key="otherSymptoms_k" component={otherSymptoms_K} />
             <Scene key="symptomsForm" component={symptomsForm} />
             <Scene key="symptomsForm_k" component={symptomsForm_K} />

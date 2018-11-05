@@ -70,7 +70,7 @@ class QtwoTwelve extends Component {
     answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
     this.props.resetRating(rating);
     this.props.createRecord({ token, username, password, answersArray, mySymptoms, score });
-    Actions.home_k();
+    Actions.finalScreen_k();
   }
 
   render() {
