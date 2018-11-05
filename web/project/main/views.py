@@ -501,7 +501,8 @@ class PatientDataGetView(ListAPIView):
     queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        patients = User.objects.filter(is_staff=False, is_active=True, date_joined__gte=datetime.date(2018, 06, 28))
+        # patients = User.objects.filter(is_staff=False, is_active=True, date_joined__gte=datetime.date(2018, 06, 28))
+        patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
         if not request.user.is_anonymous:
             Log.objects.create(user=request.user, activity='view_dashboard')

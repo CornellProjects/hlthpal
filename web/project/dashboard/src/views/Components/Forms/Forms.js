@@ -49,14 +49,27 @@ class Forms extends Component {
       // country:'',
       modal:false,
       header: 'Success!',
-      message: 'You have successfully created a patient!'
+      message: 'You have successfully created a patient!',
+      validate:false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onReset = this.onReset.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.onChangeEmail = validateEmail(e);
   }
-  componentWillMount(){
+    validateEmail() {
+        const emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const { validate } = this.state;
+        if (emailRex.test(e.target.value)) {
+            validate.emailState = 'has-success'
+        } else {
+            validate.emailState = 'has-danger'
+        }
+        this.setState({ validate })
+    }
+
+    componentWillMount(){
     const token = localStorage.getItem('jwtToken');
     if (!token){
       this.props.history.push('/login');
@@ -115,6 +128,12 @@ class Forms extends Component {
                 }
                 else{
                     message1 = message1 + property + ':' + err.response.data[property] + '\n ';
+                    if (property !== 'username') {
+                        message += property + ': ' + err.response.data[property] + '\n ';
+                    }
+                    else if (err.response.data[property] === "A user with that username already exists"){
+                        message += property + ': ' + "This email already exists in the system" + '\n ';
+                    }
                 }
             }
             self.setState({
@@ -172,7 +191,11 @@ class Forms extends Component {
                     <Col md="3">
                       <Label>Firstname</Label>
                     </Col>
-                    <Col xs="12" md="9">
+                    <Col xs="12" md="7">
+                        {/*<Input invalid />*/}
+                        {/*<FormFeedback>Oh noes! that name is already taken</FormFeedback>*/}
+                        {/*<FormFeedback valid>Sweet! that name is available</FormFeedback>*/}
+                        {/*<FormText>Example help text that remains unchanged.</FormText>*/}
                       <Input
                             type="first_name"
                             id="first_name-input"
@@ -205,14 +228,20 @@ class Forms extends Component {
                     <Col md="3">
                       <Label htmlFor="email-input">Email Address</Label>
                     </Col>
-                    <Col xs="12" md="9">
-                      <Input type="email"
-                             id="email-input"
+                    <Col xs="12" md="7">
+                      <Input type="email" valid={this.state.validate.emailState === 'has-success'}
+                             id="email-input" invalid={this.state.validate.emailState === 'has-danger'}
                              name="email"
                              placeholder="Enter Email"
                              value={email}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter patient email</FormText>
+                             onChange={this.onChangeEmail}/>
+                        <FormFeedback valid>
+                            That's a tasty looking email you've got there.
+                        </FormFeedback>
+                        <FormFeedback invalid>
+                            Uh oh! Looks like there is an issue with your email. Please input a correct email.
+                        </FormFeedback>
+                        <FormText className="help-block">Please enter patient email</FormText>
                     </Col>
                   </FormGroup>
 

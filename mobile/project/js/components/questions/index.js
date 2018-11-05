@@ -40,7 +40,7 @@ class Question extends Component {
   onBackPress() {
     const { answersArray } = this.props;
     answersArray.pop();
-    if(this.props.questionName == "1"){
+    if(parseInt(this.props.questionName) == 1){
         Actions.home({lang: this.props.lang});
     }
     else{
