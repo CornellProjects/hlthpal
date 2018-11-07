@@ -499,6 +499,11 @@ class DoctorCreateView(CreateAPIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = User.objects.all()
 
+class DoctorGetView(ListAPIView):
+    '''API to get doctor users '''
+    serializer_class = DoctorCreateSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = User.objects.filter(doctor__isnull=False)
 
 class PatientGetView(ListAPIView):
     '''API to Get a list of all patients '''
