@@ -6,13 +6,14 @@ from django.contrib.sessions.models import Session
 from .models import Patient, Doctor, Question, Answer, Record, Symptom, Notes, Entity, Log
 
 class PatientAdmin(admin.ModelAdmin):
-	list_display = [field.name for field in Patient._meta.get_fields()]
+	print [field.name for field in Patient._meta.get_fields()]
+	list_display = [field.name for field in Patient._meta.get_fields() if field.name != 'doctor']
 
 class LogAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Log._meta.get_fields()]
 
 class DoctorAdmin(admin.ModelAdmin):
-	list_display = [field.name for field in Doctor._meta.get_fields()]
+	list_display = [field.name for field in Doctor._meta.get_fields() if field.name != 'patient']
 
 class AnswerAdmin(admin.ModelAdmin):
 	list_display = [field.name for field in Answer._meta.get_fields()]
