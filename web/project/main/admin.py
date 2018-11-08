@@ -6,7 +6,6 @@ from django.contrib.sessions.models import Session
 from .models import Patient, Doctor, Question, Answer, Record, Symptom, Notes, Entity, Log
 
 class PatientAdmin(admin.ModelAdmin):
-	print [field.name for field in Patient._meta.get_fields()]
 	list_display = [field.name for field in Patient._meta.get_fields() if field.name != 'doctor']
 
 class LogAdmin(admin.ModelAdmin):
