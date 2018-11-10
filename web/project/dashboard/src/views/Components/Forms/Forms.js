@@ -10,6 +10,7 @@ import {
   Card,
   CardHeader,
   CardFooter,
+  CardBlock,
   CardBody,
   Form,
   FormGroup,
@@ -51,7 +52,16 @@ class Forms extends Component {
       valid_email_format: true,
       valid_first_name: true,
       valid_last_name: true,
-      valid_password: true
+      valid_password: true,
+      doctor_options: ["Dr. Christian Ntizimira", "Dr. Vincent Karamuka", "Dr. Olive Mukeshimana", "Dr. Vianney Mbitse"],
+      newdoctor_first_name: "",
+      newdoctor_last_name: "",
+      newdoctor_username: "",
+      newdoctor_password: "",
+      newdoctor_email: "",
+      entity: "",
+      modal: false,
+      modalOpen: false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -61,6 +71,11 @@ class Forms extends Component {
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onReset = this.onReset.bind(this);
     this.toggle = this.toggle.bind(this);
+
+    this.onDoctorChange = this.onDoctorChange.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.addNewDoctor = this.addNewDoctor.bind(this);
   }
 
   componentWillMount(){
@@ -69,6 +84,20 @@ class Forms extends Component {
       this.props.history.push('/login');
     }
   }
+
+  componentDidMount(){
+      axios.get('api/all_doctors').then(response => {
+        let names = []
+        for(let x = 0; x < response["data"].length; x++){
+            let res = response["data"][x];
+            names.push("Dr. " + res["first_name"] + " " + res["last_name"]);
+        }
+        this.setState({
+            doctor_options: names
+        });
+      });
+  }
+
   onChange(e){
     this.setState({
       [e.target.name]: e.target.value
@@ -111,6 +140,49 @@ class Forms extends Component {
       else {
           this.setState({valid_password: true});
       }
+  }
+
+  onDoctorChange(e){
+    if(e.target.value === "Add New Doctor"){
+        this.openModal();
+    }
+    else{
+        this.setState({doctor: e.target.value});
+    }
+  }
+
+  openModal(){
+      this.setState({modalOpen: true});
+  }
+
+  closeModal(){
+      this.setState({modalOpen: false});
+  }
+
+  addNewDoctor(e){
+    e.preventDefault();
+    var headers = {
+        'Content-Type':'application/json'
+      }
+      var data = {
+        doctor:{
+          entity: this.state.entity
+        },
+        first_name: this.state.newdoctor_first_name,
+        last_name: this.state.newdoctor_last_name,
+        password: this.state.newdoctor_password,
+        username: this.state.newdoctor_email,
+        email: this.state.newdoctor_email
+      }
+      axios.post('api/doctor', data, headers);
+      this.setState({
+        modal:!this.state.modal,
+        newdoctor_first_name: "",
+        newdoctor_last_name: "",
+        newdoctor_password: "",
+        newdoctor_email: ""
+      });
+      this.closeModal();
   }
 
   onSubmit(e) {
@@ -220,13 +292,114 @@ class Forms extends Component {
       header: 'Success: Your form was submitted'
     });
   }
+
   render() {
     // const {first_name, last_name, password, email, diagnosis, care_giver, address, doctor, gender, mobile, street, city, sector, state, country} = this.state;
     const {first_name, last_name, password, email, diagnosis, care_giver, address, doctor, gender, mobile, sector, category, referral} = this.state;
 
       return (
           <div className="animated fadeIn">
+              <Modal
+                isOpen={this.state.modalOpen}
+                onRequestClose={this.closeModal}
+                contentLabel="Add New Doctor">
+                    <Card>
+                    <CardHeader>
+                    <Row>
+                        <Col md="9"><strong>Add a New Doctor</strong></Col>
+                    </Row>
+                    </CardHeader>
+                    <CardBlock className="card-body">
+                        <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label>First Name</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="newdoctor_firstname"
+                                    name="newdoctor_first_name"
+                                    value={this.state.newdoctor_first_name}
+                                    placeholder="Enter first name"
+                                    onChange={this.onChange}/>
+                            <FormText color="muted">Please enter doctor first name</FormText>
+                            </Col>
+                        </FormGroup>
 
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label>Last Name</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="newdoctor_lastname"
+                                    name="newdoctor_last_name"
+                                    value={this.state.newdoctor_last_name}
+                                    placeholder="Enter last name"
+                                    onChange={this.onChange}/>
+                            <FormText color="muted">Please enter doctor last name</FormText>
+                            </Col>
+                        </FormGroup>
+
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label>Doctor entity</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="entity"
+                                    name="entity"
+                                    value={this.state.entity}
+                                    placeholder="Enter entity"
+                                    onChange={this.onChange}/>
+                            <FormText color="muted">Please enter doctor entity</FormText>
+                            </Col>
+                        </FormGroup>
+
+
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label htmlFor="email-input">Email Address</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="email"
+                                    name="newdoctor_email"
+                                    value={this.state.newdoctor_email}
+                                    placeholder="Enter email"
+                                    onChange={this.onChange}/>
+                            <FormText className="help-block">Please enter email</FormText>
+                            </Col>
+                        </FormGroup>
+
+
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label htmlFor="password-input">Password</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="password"
+                                    name="newdoctor_password"
+                                    value={this.state.newdoctor_password}
+                                    placeholder="Password"
+                                    onChange={this.onChange}/>
+                            <FormText className="help-block">Please enter a complex password</FormText>
+                            </Col>
+                        </FormGroup>
+
+                        </Form>
+                    </CardBlock>
+                    <CardFooter>
+                    <Row>
+                    <Col md="1" style={{marginLeft: "10px", marginRight: "105px"}}>
+                        <Button type="submit" size="sm" style={{borderRadius: "15px", color: "white"}} color="submit" onClick={this.addNewDoctor}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                    </Col>
+                    <Col md="4"></Col>
+                    <Col md="1">
+                            <Button size="sm" color="danger" 
+                            style={{borderRadius: "15px", marginLeft:"25px"}} 
+                            onClick={this.closeModal}> <i className="fa fa-ban"></i> Cancel</Button>
+                    </Col>
+                    </Row>
+                    </CardFooter>
+                    </Card>
+                </Modal>
               <Row>
                   <Col xs="12" md="12">
                       <Card>
@@ -440,7 +613,7 @@ class Forms extends Component {
 
                                   <FormGroup row>
                                       <Col md="2">
-                                          <Label htmlFor="care_giver-input">Care giver</Label>
+                                          <Label htmlFor="care_giver-input">Caregiver</Label>
                                       </Col>
                                       <Col xs="12" md="7">
                                           <Input type="care_giver"
@@ -458,26 +631,28 @@ class Forms extends Component {
                                           <Label htmlFor="doctor-input">Doctor</Label>
                                       </Col>
                                       <Col xs="12" md="7">
-                                          <Input type="doctor"
-                                                 id="doctor-input"
-                                                 name="doctor"
-                                                 placeholder="Enter a Doctor Name"
-                                                 value={doctor}
-                                                 onChange={this.onChange}/>
-                                          <FormText className="help-block">Please enter a doctor name</FormText>
+                                        <select type="doctor" name="doctor" id="doctor-input" value={doctor} onChange={this.onDoctorChange} placeholder="Select Doctor's Name">
+                                            {
+                                                this.state.doctor_options.map((doc) => 
+                                                    <option value={doc}>{doc}</option>
+                                            )}
+                                            <option></option>
+                                            <option value="Add New Doctor"> + Add New Doctor</option>
+                                        </select>
                                       </Col>
                                   </FormGroup>
                               </Form>
                           </CardBody>
                           <CardFooter>
                               <Row>
-                                  <Col sm="2" md="1">
-                                      <Button type="submit" size="sm" color="primary" onClick={this.onSubmit}><i
+                                <Col sm="2" md="1" style={{marginLeft:"50px", marginRight:"70px"}}>
+                                    <Button style={{borderRadius: "15px", color: "white"}} type="submit" size="sm" color="submit" onClick={this.onSubmit}><i
                                           className="fa fa-dot-circle-o"></i> Submit</Button>
-                                  </Col><Col sm="2" md="1">
-                                  <Button type="reset" size="sm" color="danger" onClick={this.onReset}><i
-                                      className="fa fa-ban"></i> Reset</Button>
-                              </Col>
+                                </Col>
+                                <Col sm="2" md="1">
+                                    <Button style={{borderRadius: "15px"}} type="reset" size="sm" color="danger" onClick={this.onReset}><i
+                                      className="fa fa-ban"></i> Reset&nbsp;</Button>
+                                </Col>
                               </Row>
                           </CardFooter>
                           <Modal isOpen={this.state.modal}>
@@ -485,11 +660,9 @@ class Forms extends Component {
                               <ModalHeader toggle={this.toggle} style={{color: 'red'}}>{this.state.header}</ModalHeader>}
                               {this.state.header==='Success: Your form was submitted' &&
                               <ModalHeader toggle={this.toggle} style={{color: 'green'}}>{this.state.header}</ModalHeader>}
-                              <ModalBody>
-                                  {this.state.message}
-                              </ModalBody>
-                              <ModalFooter>
-                                  <Button color="primary" onClick={this.toggle}>Okay</Button>{' '}
+
+                              <ModalFooter style={{justifyContent: "center", paddingTop: "30px", paddingBottom: "20px"}}>
+                                <Button style={{borderRadius: "15px", color: "white"}} color="submit" onClick={this.toggle}>Okay</Button>{' '}
                               </ModalFooter>
                           </Modal>
                       </Card>

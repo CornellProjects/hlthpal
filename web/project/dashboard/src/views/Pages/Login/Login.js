@@ -104,7 +104,7 @@ class Login extends Component {
                     </InputGroup>
                     <Row>
                       <Col xs="6">
-                        <Button color="primary" className="px-4" onClick={this.onSubmit} disabled={isLoading}>Login</Button>
+                        <Button color="primary" style={{borderRadius:"15px", marginLeft:"20px"}} className="px-4" onClick={this.onSubmit} disabled={isLoading}>Login</Button>
                       </Col>
                       <Col xs="6" className="text-right">
                         <a href="../password-reset/"><Button color="link" className="px-0">Forgot password?</Button></a>
