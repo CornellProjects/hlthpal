@@ -424,7 +424,7 @@ class Forms extends Component {
 
                                           {this.state.valid_first_name === false &&
                                           <FormFeedback>
-                                              Uh oh! This field cannot be empty or contain spaces.
+                                              This field cannot be empty or contain spaces.
                                           </FormFeedback>}
 
                                           <FormText color="muted">Please enter firstname</FormText>
@@ -447,7 +447,7 @@ class Forms extends Component {
 
                                           {this.state.valid_last_name === false &&
                                           <FormFeedback>
-                                              Uh oh! This field cannot be empty or contain spaces.
+                                            This field cannot be empty or contain spaces.
                                           </FormFeedback>}
 
                                           <FormText color="muted">Please enter lastname</FormText>
@@ -469,12 +469,12 @@ class Forms extends Component {
 
                                           {(this.state.valid_email_format === true && this.state.valid_email === false) &&
                                           <FormFeedback>
-                                              Uh oh! Looks like your email is taken. Please enter another one.
+                                            Looks like your email is taken. Please enter another one.
                                           </FormFeedback>
                                           }
                                           {this.state.valid_email_format === false &&
                                           <FormFeedback>
-                                              Uh oh! Your email should be of the form "username@email.com"
+                                            Your email should be of the form "username@email.com"
                                           </FormFeedback>
                                           }
 
@@ -498,7 +498,7 @@ class Forms extends Component {
 
                                           {this.state.valid_password === false &&
                                           <FormFeedback>
-                                              Uh oh! The password field cannot be empty or contain spaces.
+                                            The password field cannot be empty or contain spaces.
                                           </FormFeedback>
                                           }
                                           <FormText className="help-block">Please enter a complex password</FormText>
@@ -662,7 +662,7 @@ class Forms extends Component {
                               <ModalHeader toggle={this.toggle} style={{color: 'green'}}>{this.state.header}</ModalHeader>}
 
                               <ModalFooter style={{justifyContent: "center", paddingTop: "30px", paddingBottom: "20px"}}>
-                                <Button style={{borderRadius: "15px", color: "white"}} color="submit" onClick={this.toggle}>Okay</Button>{' '}
+                                <Button style={{borderRadius: "15px", color: "white"}} color="primary" onClick={this.toggle}>Okay</Button>{' '}
                               </ModalFooter>
                           </Modal>
                       </Card>
