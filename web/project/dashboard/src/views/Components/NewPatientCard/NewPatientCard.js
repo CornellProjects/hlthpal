@@ -214,11 +214,11 @@ class NewPatientCard extends Component{
                         <Card>
                             <CardHeader>
                                 <Row>
-                                    <Col md="3">
-                                        <Label className="title-header">Patient Name: {firstname + " " + lastname}</Label>
+                                    <Col md="4">
+                                        <Label className="title-header">Patient Name: &nbsp;{firstname + " " + lastname}</Label>
                                     </Col>
                                     <Col md="3">
-                                        <Label className="title-header">Sector: {sector}</Label>
+                                        <Label className="title-header">Sector: &nbsp;{sector}</Label>
                                     </Col>
                                 </Row>
                             </CardHeader>
@@ -396,7 +396,7 @@ class NewPatientCard extends Component{
                                             <CardFooter>
                                                 <Row>
                                                     <Col xs="12" md="12" lg="6">
-                                                        <Button color="success" size="sm" className="float-right" onClick={this.onSubmit}>Submit Note</Button>{' '}
+                                                        <Button  style={{borderRadius: "15px", marginRight: "10px"}} color="success" size="sm" className="float-right" onClick={this.onSubmit}>Submit Note</Button>{' '}
                                                     </Col>
                                                 </Row>
                                                 <Modal isOpen={this.state.modal_submit}>
