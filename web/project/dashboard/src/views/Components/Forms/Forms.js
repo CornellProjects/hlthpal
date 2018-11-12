@@ -510,13 +510,11 @@ class Forms extends Component {
                                           <Label htmlFor="gender-input">Gender</Label>
                                       </Col>
                                       <Col xs="12" md="7">
-                                          <Input type="gender"
-                                                 id="gender-input"
-                                                 name="gender"
-                                                 placeholder="Enter patient gender"
-                                                 value={gender}
-                                                 onChange={this.onChange}/>
-                                          <FormText className="help-block">Please enter gender</FormText>
+                                        <select type="gender" name="gender" id="gender-input" value={gender} onChange={this.onChange} placeholder="Select Gender">
+                                            <option></option>
+                                            <option value="Male"> Male</option>
+                                            <option value="Female"> Female</option>
+                                        </select>
                                       </Col>
                                   </FormGroup>
 
