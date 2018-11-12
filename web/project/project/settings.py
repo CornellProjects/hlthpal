@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'main',
-    'webpack_loader'
+    'webpack_loader',
+    'import_export'
 ]
 
 MIDDLEWARE = [
