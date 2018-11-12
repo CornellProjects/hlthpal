@@ -417,7 +417,7 @@ class Forms extends Component {
                                               type="first_name" invalid={!this.state.valid_first_name}
                                               id="first_name-input"
                                               name="first_name"
-                                              placeholder="Enter Firstname"
+                                              placeholder="Enter firstname"
                                               value={first_name}
                                               onChange={this.onChange}
                                               onBlur={this.onChangeFirstName} />
@@ -440,7 +440,7 @@ class Forms extends Component {
                                               type="last_name" invalid={!this.state.valid_last_name}
                                               id="last_name-input"
                                               name="last_name"
-                                              placeholder="Enter Lastname"
+                                              placeholder="Enter lastname"
                                               value={last_name}
                                               onChange={this.onChange}
                                               onBlur={this.onChangeLastName} />
@@ -462,7 +462,7 @@ class Forms extends Component {
                                           <Input type="email" invalid={!(this.state.valid_email_format && this.state.valid_email)}
                                                  id="email-input"
                                                  name="email"
-                                                 placeholder="Enter Email"
+                                                 placeholder="Enter email"
                                                  value={email}
                                                  onChange={this.onChange}
                                                  onBlur={this.onChangeEmail} />
@@ -491,7 +491,7 @@ class Forms extends Component {
                                                  id="password-input"
                                                  name="password"
 
-                                                 placeholder="Enter Password"
+                                                 placeholder="Enter password"
                                                  value={password}
                                                  onChange={this.onChange}
                                                  onBlur={this.onChangePassword} />
@@ -515,6 +515,7 @@ class Forms extends Component {
                                             <option value="Male"> Male</option>
                                             <option value="Female"> Female</option>
                                         </select>
+                                        <FormText className="help-block">Please select gender</FormText>
                                       </Col>
                                   </FormGroup>
 
@@ -526,7 +527,7 @@ class Forms extends Component {
                                           <Input type="category"
                                                  id="category-input"
                                                  name="category"
-                                                 placeholder="Enter enter social category"
+                                                 placeholder="Enter social category"
                                                  value={category}
                                                  onChange={this.onChange}/>
                                           <FormText className="help-block">Please enter social category</FormText>
@@ -541,7 +542,7 @@ class Forms extends Component {
                                           <Input type="mobile"
                                                  id="mobile-input"
                                                  name="mobile"
-                                                 placeholder="Enter mobile phone number"
+                                                 placeholder="Enter phone number"
                                                  value={mobile}
                                                  onChange={this.onChange}/>
                                           <FormText className="help-block">Please enter mobile phone number</FormText>
@@ -586,7 +587,7 @@ class Forms extends Component {
                                           <Input type="diagnosis"
                                                  id="diagnosis-input"
                                                  name="diagnosis"
-                                                 placeholder="Enter Patient Diagnosis"
+                                                 placeholder="Enter patient diagnosis"
                                                  value={diagnosis}
                                                  onChange={this.onChange}/>
                                           <FormText className="help-block">Please enter diagnosis</FormText>
@@ -617,7 +618,7 @@ class Forms extends Component {
                                           <Input type="care_giver"
                                                  id="care_giver-input"
                                                  name="care_giver"
-                                                 placeholder="Enter a Caregiver Name"
+                                                 placeholder="Enter a caregiver name"
                                                  value={care_giver}
                                                  onChange={this.onChange}/>
                                           <FormText className="help-block">Please enter a caregiver name</FormText>
@@ -637,6 +638,7 @@ class Forms extends Component {
                                             <option></option>
                                             <option value="Add New Doctor"> + Add New Doctor</option>
                                         </select>
+                                        <FormText className="help-block">Please select doctor's Name</FormText>
                                       </Col>
                                   </FormGroup>
                               </Form>
