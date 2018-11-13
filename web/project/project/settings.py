@@ -160,9 +160,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PAGINATION_SERIALIZER_CLASS'
     'PAGINATE_BY': 25
@@ -171,7 +171,7 @@ REST_FRAMEWORK = {
 
 # JSON Web Token settings
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=60 * 10000), # in seconds
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=60 * 60 * 24 * 30), # in seconds (same token valid for 30 days)
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=100),
 }
