@@ -13,6 +13,7 @@ urlpatterns = [
     # User APIs
     url(r'^api/register', views.UserCreateView.as_view(), name="register"),
     url(r'^api/login', views.UserLoginView.as_view(), name="login"),
+    url(r'^api/logout', views.UserLogoutView.as_view(), name="logout"),
     url(r'^api/valid_email', views.UserValidateEmail.as_view(), name="validate_email"),
     url(r'^api/user', views.CurrentUserView.as_view(), name="user"),
     url(r'^api/profile', views.UserProfileView.as_view(), name="profile"),
