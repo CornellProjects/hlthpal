@@ -65,7 +65,6 @@ class UserCreateSerializer(ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
-        print validated_data
         username = validated_data['username']
         email = validated_data['email']
         password = validated_data['password']
@@ -142,7 +141,6 @@ class DoctorCreateSerializer(ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
-        print validated_data
         username = validated_data['username']
         email = validated_data['email']
         password = validated_data['password']
@@ -202,17 +200,16 @@ class UserLoginSerializer(ModelSerializer):
         user_obj = None
 
         if not email and not username:
-            serializers.ValidationError("A username or email address is required.")
+            raise serializers.ValidationError("A username or email address is required.")
+            return
 
         if email:
             user = User.objects.filter(Q(email=email)).distinct()
         elif username:
             user = User.objects.filter(Q(username=username)).distinct()
 
-        #print "Users: ", user
         if user.exists() and user.count() == 1:
             user_obj = user.first()
-            print user_obj
         else:
             raise serializers.ValidationError("The username or email is not valid.")
             return
