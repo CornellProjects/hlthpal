@@ -45,7 +45,6 @@ class Forms extends Component {
       sector: '',
       category: '',
       referral: '',
-      modal:false,
       header: 'Success: Your form was submitted',
       message: [],
       valid_email:true,
@@ -490,12 +489,10 @@ class Forms extends Component {
                                           <Input type="password" invalid={!this.state.valid_password}
                                                  id="password-input"
                                                  name="password"
-
                                                  placeholder="Enter password"
                                                  value={password}
                                                  onChange={this.onChange}
                                                  onBlur={this.onChangePassword} />
-
                                           {this.state.valid_password === false &&
                                           <FormFeedback>
                                             The password field cannot be empty or contain spaces.

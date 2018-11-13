@@ -13,8 +13,8 @@ class PatientsTable extends Component {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.checkboxSubmit = this.checkboxSubmit.bind(this);
+        this.toggle = this.toggle.bind(this);
         this.state = {
-            // patients: [],
             allPatients: [],
             modal: false
             // modal_submit: false,
@@ -23,95 +23,106 @@ class PatientsTable extends Component {
 
     componentWillMount(){
         const token = localStorage.getItem('jwtToken');
-        if (!token){
+        if (!token) {
             this.props.history.push('/login');
         }
-        axios.get('api/patients/data')
-            .then((res) => {
-                let patients = res.data;
-                const currentPatient = (patient, data) => {
-                    return {
-                        key: patient.user.id,
-                        date: patient.record.date.substring(0,10),
-                        username: patient.user.username,
-                        name: patient.user.first_name + ' ' + patient.user.last_name,
-                        firstname: patient.user.first_name,
-                        lastname: patient.user.last_name,
-                        sector: patient.location.sector,
-                        pain: data[0],
-                        breath: data[1],
-                        fatigue: data[2],
-                        nausea: data[3],
-                        vomiting: data[4],
-                        poor_appetite: data[5],
-                        constipation: data[6],
-                        note: patient.notes.notes,
-                        record_key: patient.record.id,
-                        user: patient.record.signed
+        axios.post('api/token-verify', {'token': token}, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then((res) => {
+            axios.get('api/patients/data').then((res) => {
+                    let patients = res.data;
+                    const currentPatient = (patient, data) => {
+                        return {
+                            key: patient.user.id,
+                            date: patient.record.date.substring(0,10),
+                            username: patient.user.username,
+                            name: patient.user.first_name + ' ' + patient.user.last_name,
+                            firstname: patient.user.first_name,
+                            lastname: patient.user.last_name,
+                            sector: patient.location.sector,
+                            pain: data[0],
+                            breath: data[1],
+                            fatigue: data[2],
+                            nausea: data[3],
+                            vomiting: data[4],
+                            poor_appetite: data[5],
+                            constipation: data[6],
+                            note: patient.notes.notes,
+                            record_key: patient.record.id,
+                            user: patient.record.signed
+                        };
                     };
-                };
-                const newPatient = (patient) => {
-                    return {
-                        key: patient.user.id,
-                        date: '',
-                        name: patient.user.first_name + ' ' + patient.user.last_name,
-                        username: patient.user.username,
-                        firstname: patient.user.first_name,
-                        lastname: patient.user.last_name,
-                        sector: patient.location.sector,
-                        pain: '',
-                        breath: '',
-                        nausea: '',
-                        fatigue: '',
-                        vomiting: '',
-                        poor_appetite: '',
-                        constipation: '',
-                        note: patient.notes.notes,
-                        record_key: null,
-                        user: null
+                    const newPatient = (patient) => {
+                        return {
+                            key: patient.user.id,
+                            date: '',
+                            name: patient.user.first_name + ' ' + patient.user.last_name,
+                            username: patient.user.username,
+                            firstname: patient.user.first_name,
+                            lastname: patient.user.last_name,
+                            sector: patient.location.sector,
+                            pain: '',
+                            breath: '',
+                            nausea: '',
+                            fatigue: '',
+                            vomiting: '',
+                            poor_appetite: '',
+                            constipation: '',
+                            note: patient.notes.notes,
+                            record_key: null,
+                            user: null
+                        };
                     };
-                };
-                this.setState({
-                    allPatients: patients.map((patient) => {
-                        if (patient.data.length > 0) {
-                            let data = [];
-                            for (let i = 0; i < 12; i++){
-                                // if (patient.data[i].length === 0 || patient.data[i].answer === null){
-                                if (patient.data[i] === undefined || patient.data[i].length === 0 || patient.data[i].answer === null){
-                                    data.push(null);
+                    this.setState({
+                        allPatients: patients.map((patient) => {
+                            if (patient.data.length > 0) {
+                                let data = [];
+                                for (let i = 0; i < 12; i++){
+                                    // if (patient.data[i].length === 0 || patient.data[i].answer === null){
+                                    if (patient.data[i] === undefined || patient.data[i].length === 0 || patient.data[i].answer === null){
+                                        data.push(null);
+                                    }
+                                    else {
+                                        data.push(patient.data[i].answer);
+                                    }
                                 }
-                                else {
-                                    data.push(patient.data[i].answer);
+                                return {
+                                    ...currentPatient(patient, data)
                                 }
+                            } else {
+                                return {
+                                    ...newPatient(patient)
+                                };
                             }
-                            return {
-                                ...currentPatient(patient, data)
-                            }
-                        } else {
-                            return {
-                                ...newPatient(patient)
-                            };
-                        }
-                    })
-                });
-            })
-            .catch((error) => {
-                // console.log(error.response.data);
-                if (error.response) {
+                        })
+                    });
+                })
+                .catch((error) => {
                     // console.log(error.response.data);
-                    // console.log(error.response.status);
-                    // console.log(error.response.headers);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                    // http.ClientRequest in node.js
-                    // console.log(error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    // console.log('Error', error.message);
-                }
+                    if (error.response) {
+                        // console.log(error.response.data);
+                        // console.log(error.response.status);
+                        // console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        // console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        // console.log('Error', error.message);
+                    }
 
+                });
+        })
+            .catch((error) => {
+                this.setState({
+                    modal: true
+                });
             });
+
     };
 
 
@@ -122,6 +133,13 @@ class PatientsTable extends Component {
         })
 
     };
+
+    toggle() {
+        this.setState({
+            modal: false
+        });
+        this.props.history.push('/login');
+    }
 
     checkboxSubmit(params){
         let headers = {
@@ -268,8 +286,18 @@ class PatientsTable extends Component {
                             </UncontrolledTooltip>
                         </CardBody>
                     </Card>
+                    <Modal isOpen={this.state.modal}>
+                        <ModalHeader toggle={this.toggle} style={{color: 'red'}}>Alert!</ModalHeader>
+                        <ModalBody>
+                            Your previous session has expired. You should log in again to restart your session.
+                        </ModalBody>
+                        <ModalFooter style={{justifyContent: "center", paddingTop: "30px", paddingBottom: "20px"}}>
+                            <Button style={{borderRadius: "15px", color: "white"}} color="primary" onClick={this.toggle}>Log-in</Button>{' '}
+                        </ModalFooter>
+                    </Modal>
                 </Col>
             </Row>
+
 
 
         );
