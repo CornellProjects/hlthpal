@@ -9,6 +9,7 @@ export function login(data){
       'Content-Type':'application/json'
   };
   return dispatch => {
+      delete axios.defaults.headers.common['Authorization'];
       return axios.post('api/login', data, headers).then(
         res => {
           const is_staff = res.data.is_staff;
@@ -20,5 +21,6 @@ export function login(data){
           }
         }
       )
-}}
+  }
+}
 
