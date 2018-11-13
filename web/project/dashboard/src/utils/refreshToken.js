@@ -11,5 +11,5 @@ export default function refreshToken(){
           }
         )
   }
-  setInterval(fetchToken, 10 * 60 * 1000) // in milliseconds
+  setInterval(fetchToken, 60 * 60 * 1000) // in milliseconds | refreshes every 60 mins
 }
