@@ -117,9 +117,9 @@ class UserCreateSerializer(ModelSerializer):
 class DoctorSerializer(ModelSerializer):
     class Meta:
         model = Doctor
-        fields = [
-            'entity'
-        ]
+        # fields = [
+        #     'entity'
+        # ]
 
 class DoctorCreateSerializer(ModelSerializer):
     email = EmailField(label="Email address")
@@ -171,7 +171,7 @@ class DoctorCreateSerializer(ModelSerializer):
 
             doctor_data = Doctor.objects.create(
                 user=user_obj,
-                entity=validated_data['doctor']['entity']
+                # entity=validated_data['doctor']['entity']
             )
 
             return validated_data
