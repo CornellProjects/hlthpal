@@ -48,11 +48,13 @@ class Forms extends Component {
       header: 'Success: Your form was submitted',
       message: [],
       valid_email:true,
+      valid_doctor_email:true,
       valid_email_format: true,
+      valid_doctor_email_format: true,
       valid_first_name: true,
       valid_last_name: true,
       valid_password: true,
-      doctor_options: ["Dr. Christian Ntizimira", "Dr. Vincent Karamuka", "Dr. Olive Mukeshimana", "Dr. Vianney Mbitse"],
+      doctor_options: [["Dr. Christian Ntizimira", 0], ["Dr. Vincent Karamuka", 1], ["Dr. Olive Mukeshimana", 2], ["Dr. Vianney Mbitse", 3]],
       newdoctor_first_name: "",
       newdoctor_last_name: "",
       newdoctor_username: "",
@@ -65,6 +67,7 @@ class Forms extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangeDoctorEmail = this.onChangeDoctorEmail.bind(this);
     this.onChangeFirstName = this.onChangeFirstName.bind(this);
     this.onChangeLastName = this.onChangeLastName.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -86,10 +89,10 @@ class Forms extends Component {
 
   componentDidMount(){
       axios.get('api/all_doctors').then(response => {
-        let names = []
+        let names = [];
         for(let x = 0; x < response["data"].length; x++){
             let res = response["data"][x];
-            names.push("Dr. " + res["first_name"] + " " + res["last_name"]);
+            names.push(["Dr. " + res["user"]["first_name"] + " " + res["user"]["last_name"], res["id"]]);
         }
         this.setState({
             doctor_options: names
@@ -113,6 +116,20 @@ class Forms extends Component {
           axios.post('api/valid_email', data).then(response => {
               let res = response['data']['status'];
               this.setState({valid_email: res});
+          });
+      }
+  }
+  onChangeDoctorEmail(){
+      let emailRex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      let data = {email: this.state.newdoctor_email};
+      if (!emailRex.test(data['email'])) {
+          this.setState({ valid_doctor_email_format: false });
+      }
+      else {
+          this.setState({ valid_doctor_email_format: true });
+          axios.post('api/valid_email', data).then(response => {
+              let res = response['data']['status'];
+              this.setState({valid_doctor_email: res});
           });
       }
   }
@@ -162,26 +179,37 @@ class Forms extends Component {
     e.preventDefault();
     var headers = {
         'Content-Type':'application/json'
-      }
-      var data = {
-        doctor:{
-          entity: this.state.entity
-        },
-        first_name: this.state.newdoctor_first_name,
-        last_name: this.state.newdoctor_last_name,
-        password: this.state.newdoctor_password,
-        username: this.state.newdoctor_email,
-        email: this.state.newdoctor_email
-      }
-      axios.post('api/doctor', data, headers);
-      this.setState({
-        modal:!this.state.modal,
-        newdoctor_first_name: "",
-        newdoctor_last_name: "",
-        newdoctor_password: "",
-        newdoctor_email: ""
+      };
+    var data = {
+        user: {
+            first_name: this.state.newdoctor_first_name,
+            last_name: this.state.newdoctor_last_name,
+            password: this.state.newdoctor_password,
+            username: this.state.newdoctor_email,
+            email: this.state.newdoctor_email
+        }
+    };
+      axios.post('api/doctor', data, headers).then(response => {
+          let res = response.data;
+          let names = this.state.doctor_options;
+          names.push(["Dr. " + res["user"]["first_name"] + " " + res["user"]["last_name"], res["id"]]);
+          this.setState({
+              doctor_options: names
+          });
+          this.setState({
+              modal:!this.state.modal,
+              newdoctor_first_name: "",
+              newdoctor_last_name: "",
+              newdoctor_password: "",
+              newdoctor_email: "",
+              valid_doctor_email:true,
+              valid_doctor_email_format: true,
+          });
+          this.closeModal();
+      }).catch(function(err) {
+          // console.log(err.response.data);
+          //nothing for now
       });
-      this.closeModal();
   }
 
   onSubmit(e) {
@@ -202,8 +230,6 @@ class Forms extends Component {
         referral:this.state.referral,
         address:this.state.address,
         sector:this.state.sector
-        // state:this.state.state,
-        // country:this.state.country
       }
     };
 
@@ -226,16 +252,26 @@ class Forms extends Component {
         };
         if (err.response.status === 400){
             for (let property in err.response.data) {
-                if (err.response.data.hasOwnProperty('patient')) {
+                if (property === 'patient') {
                     for (let item in err.response.data['patient']) {
-                        let text = item + ': ' + err.response.data[property][item];
-                        message.push(<div style={styles} key={i}>{text}</div>);
+                        if (item === 'doctor'){
+                            let text = 'The doctor you chose is not in the database. Please refresh the page to get up-to-date options';
+                            message.push(<div style={styles} key={i}>{text}</div>);
+                        }
+                        else {
+                            let text = item + ': ' + err.response.data[property][item];
+                            message.push(<div style={styles} key={i}>{text}</div>);
+                        }
                     }
                 }
                 else {
                     if (property === 'username'){
-                        if (err.response.data[property] === "A user with that username already exists"){
-                            let text = 'email: ' + "This email already exists in the system";
+                        if (err.response.data[property][0] === "A user with that username already exists."){
+                            let text = "The email you entered already exists in the system";
+                            message.push(<div style={styles} key={i}>{text}</div>);
+                        }
+                        else {
+                            let text = property + ': ' + err.response.data[property];
                             message.push(<div style={styles} key={i}>{text}</div>);
                         }
                     }
@@ -298,17 +334,16 @@ class Forms extends Component {
 
       return (
           <div className="animated fadeIn">
-              <Modal
-                isOpen={this.state.modalOpen}
-                onRequestClose={this.closeModal}
-                contentLabel="Add New Doctor">
+              <Modal isOpen={this.state.modalOpen}
+                // onRequestClose={this.closeModal} contentLabel="Add New Doctor"
+              >
                     <Card>
                     <CardHeader>
                     <Row>
                         <Col md="9"><strong>Add a New Doctor</strong></Col>
                     </Row>
                     </CardHeader>
-                    <CardBlock className="card-body">
+                    <CardBody className="card-body">
                         <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
                         <FormGroup row>
                             <Col md="3">
@@ -338,19 +373,19 @@ class Forms extends Component {
                             </Col>
                         </FormGroup>
 
-                        <FormGroup row>
-                            <Col md="3">
-                            <Label>Doctor entity</Label>
-                            </Col>
-                            <Col xs="12" md="9">
-                            <Input type="entity"
-                                    name="entity"
-                                    value={this.state.entity}
-                                    placeholder="Enter entity"
-                                    onChange={this.onChange}/>
-                            <FormText color="muted">Please enter doctor entity</FormText>
-                            </Col>
-                        </FormGroup>
+                        {/*<FormGroup row>*/}
+                            {/*<Col md="3">*/}
+                            {/*<Label>Doctor entity</Label>*/}
+                            {/*</Col>*/}
+                            {/*<Col xs="12" md="9">*/}
+                            {/*<Input type="entity"*/}
+                                    {/*name="entity"*/}
+                                    {/*value={this.state.entity}*/}
+                                    {/*placeholder="Enter entity"*/}
+                                    {/*onChange={this.onChange}/>*/}
+                            {/*<FormText color="muted">Please enter doctor entity</FormText>*/}
+                            {/*</Col>*/}
+                        {/*</FormGroup>*/}
 
 
                         <FormGroup row>
@@ -358,14 +393,26 @@ class Forms extends Component {
                             <Label htmlFor="email-input">Email Address</Label>
                             </Col>
                             <Col xs="12" md="9">
-                            <Input type="email"
+                            <Input type="email" invalid={!(this.state.valid_doctor_email_format && this.state.valid_doctor_email)}
                                     name="newdoctor_email"
                                     value={this.state.newdoctor_email}
                                     placeholder="Enter email"
-                                    onChange={this.onChange}/>
+                                    onChange={this.onChange}
+                                    onBlur={this.onChangeDoctorEmail}/>
                             <FormText className="help-block">Please enter email</FormText>
+                            {(this.state.valid_doctor_email_format === true && this.state.valid_doctor_email === false) &&
+                            <FormFeedback>
+                                Looks like this account taken. If you'll like to continue please enter another email account.
+                            </FormFeedback>
+                            }
+                            {this.state.valid_doctor_email_format === false &&
+                            <FormFeedback>
+                                Your email should be of the form "username@email.com"
+                            </FormFeedback>
+                            }
                             </Col>
                         </FormGroup>
+
 
 
                         <FormGroup row>
@@ -383,7 +430,7 @@ class Forms extends Component {
                         </FormGroup>
 
                         </Form>
-                    </CardBlock>
+                    </CardBody>
                     <CardFooter>
                     <Row>
                     <Col md="1" style={{marginLeft: "10px", marginRight: "105px"}}>
@@ -391,8 +438,8 @@ class Forms extends Component {
                     </Col>
                     <Col md="4"></Col>
                     <Col md="1">
-                            <Button size="sm" color="danger" 
-                            style={{borderRadius: "15px", marginLeft:"25px"}} 
+                            <Button size="sm" color="danger"
+                            style={{borderRadius: "15px", marginLeft:"25px"}}
                             onClick={this.closeModal}> <i className="fa fa-ban"></i> Cancel</Button>
                     </Col>
                     </Row>
@@ -628,10 +675,7 @@ class Forms extends Component {
                                       </Col>
                                       <Col xs="12" md="7">
                                         <select type="doctor" name="doctor" id="doctor-input" value={doctor} onChange={this.onDoctorChange} placeholder="Select Doctor's Name">
-                                            {
-                                                this.state.doctor_options.map((doc) => 
-                                                    <option value={doc}>{doc}</option>
-                                            )}
+                                            {this.state.doctor_options.map((doc) => <option value={doc[1]} key={doc[1]}>{doc[0]}</option> )}
                                             <option></option>
                                             <option value="Add New Doctor"> + Add New Doctor</option>
                                         </select>
@@ -657,7 +701,11 @@ class Forms extends Component {
                               <ModalHeader toggle={this.toggle} style={{color: 'red'}}>{this.state.header}</ModalHeader>}
                               {this.state.header==='Success: Your form was submitted' &&
                               <ModalHeader toggle={this.toggle} style={{color: 'green'}}>{this.state.header}</ModalHeader>}
-
+                              {this.state.header === 'Error: Your form could not be submitted' &&
+                              <ModalBody>
+                                  {this.state.message}
+                              </ModalBody>
+                              }
                               <ModalFooter style={{justifyContent: "center", paddingTop: "30px", paddingBottom: "20px"}}>
                                 <Button style={{borderRadius: "15px", color: "white"}} color="primary" onClick={this.toggle}>Okay</Button>{' '}
                               </ModalFooter>
