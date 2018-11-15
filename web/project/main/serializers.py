@@ -113,39 +113,30 @@ class UserCreateSerializer(ModelSerializer):
 
             return validated_data
 
-
-class DoctorSerializer(ModelSerializer):
-    class Meta:
-        model = Doctor
-        # fields = [
-        #     'entity'
-        # ]
-
-class DoctorCreateSerializer(ModelSerializer):
-    email = EmailField(label="Email address")
-    password = CharField(style={'input_type': 'password'})
-
-    # Pass PatientCreateSerializer and include it in fields
-    doctor = DoctorSerializer()
-
+class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'doctor',
             'first_name',
             'last_name',
             'username',
             'password',
             'email',
         ]
-        extra_kwargs = {"password": {"write_only": True}}
+
+class DoctorSerializer(ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = Doctor
+        fields = ['id', 'user'] #'__all__' #['id']
+        read_only_fields = ('id',)
 
     def create(self, validated_data):
-        username = validated_data['username']
-        email = validated_data['email']
-        password = validated_data['password']
-        first_name = validated_data['first_name']
-        last_name = validated_data['last_name']
+        username = validated_data['user']['username']
+        email = validated_data['user']['email']
+        password = validated_data['user']['password']
+        first_name = validated_data['user']['first_name']
+        last_name = validated_data['user']['last_name']
 
         # Require user's first name
         if first_name.strip() == '':
@@ -170,11 +161,67 @@ class DoctorCreateSerializer(ModelSerializer):
             user_obj.save()
 
             doctor_data = Doctor.objects.create(
-                user=user_obj,
-                # entity=validated_data['doctor']['entity']
+                user=user_obj
             )
 
-            return validated_data
+            return doctor_data #validated_data
+
+# class DoctorCreateSerializer(ModelSerializer):
+#     email = EmailField(label="Email address")
+#     password = CharField(style={'input_type': 'password'})
+
+#     # Pass PatientCreateSerializer and include it in fields
+#     # doctor = DoctorSerializer()
+#     # user = UserSerializer
+
+#     class Meta:
+#         model = User
+#         fields = [
+#             'doctor',
+#             'first_name',
+#             'last_name',
+#             'username',
+#             'password',
+#             'email',
+#         ]
+#         extra_kwargs = {"password": {"write_only": True}}
+
+#     def create(self, validated_data):
+#         username = validated_data['username']
+#         email = validated_data['email']
+#         password = validated_data['password']
+#         first_name = validated_data['first_name']
+#         last_name = validated_data['last_name']
+
+#         # Require user's first name
+#         if first_name.strip() == '':
+#             raise serializers.ValidationError("First name is required.")
+#             return
+
+#         if User.objects.filter(email=email):
+#             raise serializers.ValidationError('This email address is already in use. '
+#                                               'Please try a different email address.')
+#             return email.lower()
+#         else:
+#             # Then there is no other users with the new email
+#             # Do whatever you have to do, return true or update user
+#             user_obj = User(username=username,
+#                             email=email,
+#                             password=password,
+#                             first_name=first_name,
+#                             last_name=last_name,
+#                             is_staff=1
+#                             )
+#             user_obj.set_password(password)
+#             user_obj.save()
+
+#             doctor_data = Doctor.objects.create(
+#                 user=user_obj
+#                 # entity=validated_data['doctor']['entity']
+#             )
+#             validated_data['doctor'] = doctor_data.id
+
+#             return validated_data
 
 
 # New user register serializer

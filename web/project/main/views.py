@@ -19,7 +19,7 @@ from rest_framework import generics
 from django.db import IntegrityError
 
 # Custom models
-from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient, Log
+from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient, Log, Doctor
 
 # Serializers import
 from .serializers import (
@@ -30,7 +30,8 @@ from .serializers import (
     AnswerSerializer,
     AnswerGetSerializer,
     RecordSerializer,
-    DoctorCreateSerializer,
+    # DoctorCreateSerializer,
+    DoctorSerializer,
     EntityCreateSerializer,
     QuestionGetSerializer,
     SymptomSerializer,
@@ -510,15 +511,15 @@ class EntityCreateView(CreateAPIView):
 
 class DoctorCreateView(CreateAPIView):
     '''API to create a new doctor user '''
-    serializer_class = DoctorCreateSerializer
+    serializer_class = DoctorSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = User.objects.all()
+    queryset = Doctor.objects.all()
 
 class DoctorGetView(ListAPIView):
     '''API to get doctor users '''
-    serializer_class = DoctorCreateSerializer
+    serializer_class = DoctorSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = User.objects.filter(doctor__isnull=False)
+    queryset = Doctor.objects.all()
 
 class PatientGetView(ListAPIView):
     '''API to Get a list of all patients '''
