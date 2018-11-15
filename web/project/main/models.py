@@ -30,7 +30,7 @@ class Entity(models.Model):
 # Model to extend User class on the creation of a new doctor
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor')
-    entity = models.ForeignKey(Entity)
+    # entity = models.ForeignKey(Entity)
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
@@ -40,7 +40,6 @@ class Doctor(models.Model):
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
     doctor = models.ForeignKey(Doctor, null=True, blank=True)
-    # doctor = models.CharField(max_length=100, null=True, blank=True)
     care_giver = models.CharField(max_length=100, null=True, blank=True)
     diagnosis = models.CharField(max_length=50, null=True, blank=True)
     gender = models.CharField(max_length=6, null=True, blank=True)
