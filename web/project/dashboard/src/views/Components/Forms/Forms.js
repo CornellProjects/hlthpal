@@ -62,6 +62,7 @@ class Forms extends Component {
       newdoctor_email: "",
       entity: "",
       modal: false,
+      session_modal:false,
       modalOpen: false
     };
     this.onSubmit = this.onSubmit.bind(this);
@@ -73,6 +74,7 @@ class Forms extends Component {
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onReset = this.onReset.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.session_toggle = this.session_toggle.bind(this);
 
     this.onDoctorChange = this.onDoctorChange.bind(this);
     this.openModal = this.openModal.bind(this);
@@ -97,6 +99,10 @@ class Forms extends Component {
         this.setState({
             doctor_options: names
         });
+      }).catch((error) => {
+          this.setState({
+              session_modal: true
+          });
       });
   }
 
@@ -326,6 +332,12 @@ class Forms extends Component {
       modal: !this.state.modal,
       header: 'Success: Your form was submitted'
     });
+  }
+  session_toggle() {
+    this.setState({
+      session_modal: false
+    });
+    this.props.history.push('/login');
   }
 
   render() {
@@ -708,6 +720,15 @@ class Forms extends Component {
                               }
                               <ModalFooter style={{justifyContent: "center", paddingTop: "30px", paddingBottom: "20px"}}>
                                 <Button style={{borderRadius: "15px", color: "white"}} color="primary" onClick={this.toggle}>Okay</Button>{' '}
+                              </ModalFooter>
+                          </Modal>
+                          <Modal isOpen={this.state.session_modal}>
+                              <ModalHeader toggle={this.session_toggle} style={{color: 'red'}}>Alert!</ModalHeader>
+                              <ModalBody>
+                                  Your previous session has expired. You should log in again to restart your session.
+                              </ModalBody>
+                              <ModalFooter style={{justifyContent: "center", paddingTop: "30px", paddingBottom: "20px"}}>
+                                  <Button style={{borderRadius: "15px", color: "white"}} color="primary" onClick={this.session_toggle}>Log-in</Button>{' '}
                               </ModalFooter>
                           </Modal>
                       </Card>

@@ -17,7 +17,6 @@ class PatientsTable extends Component {
         this.state = {
             allPatients: [],
             modal: false
-            // modal_submit: false,
         };
     }
 
@@ -26,102 +25,78 @@ class PatientsTable extends Component {
         if (!token) {
             this.props.history.push('/login');
         }
-        axios.post('api/token-verify', {'token': token}, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then((res) => {
-            axios.get('api/patients/data').then((res) => {
-                    let patients = res.data;
-                    const currentPatient = (patient, data) => {
-                        return {
-                            key: patient.user.id,
-                            date: patient.record.date.substring(0,10),
-                            username: patient.user.username,
-                            name: patient.user.first_name + ' ' + patient.user.last_name,
-                            firstname: patient.user.first_name,
-                            lastname: patient.user.last_name,
-                            sector: patient.location.sector,
-                            pain: data[0],
-                            breath: data[1],
-                            fatigue: data[2],
-                            nausea: data[3],
-                            vomiting: data[4],
-                            poor_appetite: data[5],
-                            constipation: data[6],
-                            note: patient.notes.notes,
-                            record_key: patient.record.id,
-                            user: patient.record.signed
-                        };
-                    };
-                    const newPatient = (patient) => {
-                        return {
-                            key: patient.user.id,
-                            date: '',
-                            name: patient.user.first_name + ' ' + patient.user.last_name,
-                            username: patient.user.username,
-                            firstname: patient.user.first_name,
-                            lastname: patient.user.last_name,
-                            sector: patient.location.sector,
-                            pain: '',
-                            breath: '',
-                            nausea: '',
-                            fatigue: '',
-                            vomiting: '',
-                            poor_appetite: '',
-                            constipation: '',
-                            note: patient.notes.notes,
-                            record_key: null,
-                            user: null
-                        };
-                    };
-                    this.setState({
-                        allPatients: patients.map((patient) => {
-                            if (patient.data.length > 0) {
-                                let data = [];
-                                for (let i = 0; i < 12; i++){
-                                    // if (patient.data[i].length === 0 || patient.data[i].answer === null){
-                                    if (patient.data[i] === undefined || patient.data[i].length === 0 || patient.data[i].answer === null){
-                                        data.push(null);
-                                    }
-                                    else {
-                                        data.push(patient.data[i].answer);
-                                    }
-                                }
-                                return {
-                                    ...currentPatient(patient, data)
-                                }
-                            } else {
-                                return {
-                                    ...newPatient(patient)
-                                };
+        axios.get('api/patients/data').then((res) => {
+            let patients = res.data;
+            const currentPatient = (patient, data) => {
+                return {
+                    key: patient.user.id,
+                    date: patient.record.date.substring(0,10),
+                    username: patient.user.username,
+                    name: patient.user.first_name + ' ' + patient.user.last_name,
+                    firstname: patient.user.first_name,
+                    lastname: patient.user.last_name,
+                    sector: patient.location.sector,
+                    pain: data[0],
+                    breath: data[1],
+                    fatigue: data[2],
+                    nausea: data[3],
+                    vomiting: data[4],
+                    poor_appetite: data[5],
+                    constipation: data[6],
+                    note: patient.notes.notes,
+                    record_key: patient.record.id,
+                    user: patient.record.signed
+                };
+            };
+            const newPatient = (patient) => {
+                return {
+                    key: patient.user.id,
+                    date: '',
+                    name: patient.user.first_name + ' ' + patient.user.last_name,
+                    username: patient.user.username,
+                    firstname: patient.user.first_name,
+                    lastname: patient.user.last_name,
+                    sector: patient.location.sector,
+                    pain: '',
+                    breath: '',
+                    nausea: '',
+                    fatigue: '',
+                    vomiting: '',
+                    poor_appetite: '',
+                    constipation: '',
+                    note: patient.notes.notes,
+                    record_key: null,
+                    user: null
+                };
+            };
+            this.setState({
+                allPatients: patients.map((patient) => {
+                    if (patient.data.length > 0) {
+                        let data = [];
+                        for (let i = 0; i < 12; i++){
+                            // if (patient.data[i].length === 0 || patient.data[i].answer === null){
+                            if (patient.data[i] === undefined || patient.data[i].length === 0 || patient.data[i].answer === null){
+                                data.push(null);
                             }
-                        })
-                    });
-                })
-                .catch((error) => {
-                    // console.log(error.response.data);
-                    if (error.response) {
-                        // console.log(error.response.data);
-                        // console.log(error.response.status);
-                        // console.log(error.response.headers);
-                    } else if (error.request) {
-                        // The request was made but no response was received
-                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                        // http.ClientRequest in node.js
-                        // console.log(error.request);
+                            else {
+                                data.push(patient.data[i].answer);
+                            }
+                        }
+                        return {
+                            ...currentPatient(patient, data)
+                        }
                     } else {
-                        // Something happened in setting up the request that triggered an Error
-                        // console.log('Error', error.message);
+                        return {
+                            ...newPatient(patient)
+                        };
                     }
-
-                });
-        })
-            .catch((error) => {
-                this.setState({
-                    modal: true
-                });
+                })
             });
+        }).catch((error) => {
+            this.setState({
+                modal: true
+            });
+        });
 
     };
 
@@ -131,7 +106,6 @@ class PatientsTable extends Component {
             pathname: '/viewPatient',
             state: {detail: params}
         })
-
     };
 
     toggle() {
