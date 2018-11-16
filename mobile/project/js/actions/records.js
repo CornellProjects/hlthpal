@@ -95,6 +95,8 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                body: JSON.stringify(mySymptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
+                answersArray.length = 0;
+                mySymptoms.length = 0;
                 if (callback) {
                     callback();
                 }});
@@ -155,6 +157,8 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                body: JSON.stringify(mySymptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
+                answersArray.length = 0;
+                mySymptoms.length = 0;
                 if (callback) {
                     callback();
                 }});

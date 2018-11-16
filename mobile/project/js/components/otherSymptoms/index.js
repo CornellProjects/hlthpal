@@ -60,12 +60,12 @@ class otherSymptoms extends Component {
         <Content>
             <Grid style={styles.buttons}>
                 <Col>
-                    <Button rounded bordered onPress={() => Actions.questions({"questionName": "7"})} style={styles.center}>
+                    <Button rounded bordered onPress={() => Actions.questions({"questionName": "8"})} style={styles.center}>
                     <Text>{otherSymptoms["back"]}</Text>
                     </Button>
                 </Col>
                 <Col>
-                    <Button rounded onPress={() => Actions.questions({"questionName": "8", "lang":this.props.lang})} style={styles.center}>
+                    <Button rounded onPress={() => Actions.questions({"questionName": "9", "lang":this.props.lang})} style={styles.center}>
                     <Text>{otherSymptoms["next"]}</Text>
                     </Button>
                 </Col>

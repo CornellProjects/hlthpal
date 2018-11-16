@@ -64,7 +64,7 @@ class Question extends Component {
 
     answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
     this.props.resetRating(rating);
-    if(parseInt(this.props.questionName) == 7){
+    if(parseInt(this.props.questionName) == 8){
         Actions.otherSymptoms({lang: this.props.lang});
     }
     else if(parseInt(this.props.questionName) < 12){

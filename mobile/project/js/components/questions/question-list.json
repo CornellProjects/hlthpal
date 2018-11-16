@@ -2,43 +2,43 @@
     "english":{
         "1":{
             "question": "Question 1",
-            "title": "Pain",
+            "title": "Have you been feeling worried about your illness in the past 3 days?",
             "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "2":{
             "question": "Question 2",
-            "title": "Shortness of breath",
+            "title": "Pain",
             "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "3":{
             "question": "Question 3",
-            "title": "Fatigue",
+            "title": "Shortness of breath",
             "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "4":{
             "question": "Question 4",
-            "title": "Nausea",
+            "title": "Fatigue",
             "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "5":{
             "question": "Question 5",
-            "title": "Vomiting",
+            "title": "Nausea",
             "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "6":{
             "question": "Question 6",
-            "title": "Poor Appetite",
+            "title": "Vomiting",
             "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "7":{
             "question": "Question 7",
-            "title": "Constipation",
+            "title": "Poor Appetite",
             "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "8":{
             "question": "Question 8",
-            "title": "Have you been feeling worried about your illness in the past 3 days?",
-            "options":["Yes", "Most of the time", "Sometimes", "Occasionally", "Not at all"]
+            "title": "Constipation",
+            "options":["Not at all", "Slightly", "Moderately", "Severely", "Overwhelmingly"]
         },
         "9":{
             "question": "Question 9",
@@ -68,43 +68,43 @@
     "kr": {
         "1":{
             "question": "Ibibazo 1",
-            "title": "Uburibwe",
+            "title": "Waba warigeze wumva utewe ubwoba nuburwayi bwawe muminsi itatu ishize?",
             "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
         },
         "2":{
             "question": "Ibibazo 2",
-            "title": "Guhumeka nabi",
+            "title": "Uburibwe",
             "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
         },
         "3":{
             "question": "Ibibazo 3",
-            "title": "Umunaniro",
+            "title": "Guhumeka nabi",
             "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
         },
         "4":{
             "question": "Ibibazo 4",
-            "title": "Iseseme",
+            "title": "Umunaniro",
             "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
         },
         "5":{
             "question": "Ibibazo 5",
-            "title": "Kuruka",
+            "title": "Iseseme",
             "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
         },
         "6":{
             "question": "Ibibazo 6",
-            "title": "Kunanirwa kurya",
+            "title": "Kuruka",
             "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
         },
         "7":{
             "question": "Ibibazo 7",
-            "title": "Kutituma",
+            "title": "Kunanirwa kurya",
             "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
         },
         "8":{
             "question": "Ibibazo 8",
-            "title": "Waba warigeze wumva utewe ubwoba nuburwayi bwawe muminsi itatu ishize?",
-            "options":["Yego", "Kenshi cyane", "Rimwe narimwe", "Sikenshi", "Ntanarimwe"]
+            "title": "Kutituma",
+            "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
         },
         "9":{
             "question": "Ibibazo 9",
