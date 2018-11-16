@@ -24,11 +24,13 @@ function calculateRecordScore(myArray) {
 };
 
 function assignRecord(myArray, record) {
+    let myNewArray = []
     myArray.forEach(function(item) {
         item.record = record;
+        myNewArray.push(item)
     });
 
-    return myArray;
+    return myNewArray;
 };
 
 function prepareRecord(myArray) { //only push questions that have been filled
@@ -70,9 +72,9 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
             const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
             const parsed = JSON.parse(str).id;
 
-            answersArray = assignRecord(answersArray, parsed);
+            answers = assignRecord(answersArray, parsed);
             mySymptoms = assignRecord(mySymptoms, parsed);
-            newAnswersArray = prepareRecord(answersArray);
+//            newAnswersArray = prepareRecord(answersArray);
 
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
@@ -82,7 +84,7 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                    'Authorization': 'JWT '+ token,
                    },
 
-                   body: JSON.stringify(answersArray)
+                   body: JSON.stringify(answers)
             }).then(response => {console.log('ANSWERS', response)});
 
             fetch(myUrl + '/api/symptom', {
@@ -96,6 +98,8 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                body: JSON.stringify(mySymptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
+                answersArray.length = 0 //resets the answersArray after every submission
+                mySymptoms.length = 0
                 if (callback) {
                     callback();
                 }});
@@ -125,11 +129,11 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
             const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
             const parsed = JSON.parse(str).id;
 
-            answersArray = assignRecord(answersArray, parsed);
+            answers = assignRecord(answersArray, parsed);
             mySymptoms = assignRecord(mySymptoms, parsed);
             newAnswersArray = prepareRecord(answersArray);
 
-            console.log('answersarray', answersArray);
+//            console.log('answersarray', answersArray);
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
                    headers: {
@@ -138,7 +142,7 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                    'Authorization': 'Basic ' + base64.encode(username + ":" + password),
                    },
 
-                   body: JSON.stringify(answersArray)
+                   body: JSON.stringify(answers)
             }).then(response => {console.log('ANSWERS', response)});
 
             fetch(myUrl + '/api/symptom', {
@@ -152,6 +156,8 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                body: JSON.stringify(mySymptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
+                answersArray.length = 0 //resets the answersArray after every submission
+                mySymptoms.length = 0
                 if (callback) {
                     callback();
                 }});
@@ -160,6 +166,7 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
             console.log(response);
         }
         });
+
 
 }
 
@@ -229,7 +236,6 @@ export const createRecord = ({ token, username, password, answersArray, mySympto
                 console.log('There is network connectivity, submitting the record online.');
                 timestamp = new Date();
 //                submitCreateRecordCall(token, answersArray, mySymptoms, totalScore, timestamp.getTime());
-                console.log("Usernam", username, "password", password);
                 submitCreateRecordCallNoToken(username, password, answersArray, mySymptoms, totalScore, timestamp.getTime());
             } else {
                 console.log('No network connectivity, persisting the record locally.');

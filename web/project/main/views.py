@@ -19,7 +19,7 @@ from rest_framework import generics
 from django.db import IntegrityError
 
 # Custom models
-from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient, Log
+from .models import Record, Answer, Entity, Question, Symptom, Notes, Patient, Log, Doctor
 
 # Serializers import
 from .serializers import (
@@ -30,7 +30,8 @@ from .serializers import (
     AnswerSerializer,
     AnswerGetSerializer,
     RecordSerializer,
-    DoctorCreateSerializer,
+    # DoctorCreateSerializer,
+    DoctorSerializer,
     EntityCreateSerializer,
     QuestionGetSerializer,
     SymptomSerializer,
@@ -127,7 +128,7 @@ class UserCreateView(CreateAPIView):
                 Log.objects.create(user=request.user, activity='add_new_patient')
             return self.create(request, *args, **kwargs)
         except:
-            print(serializer.errors)
+            # print(serializer.errors)
             # print('Errors')
             if not request.user.is_anonymous:
                 Log.objects.create(user=request.user, activity='fail_add_new_patient') # failed sign in or sign out.
@@ -159,6 +160,33 @@ class UserLoginView(APIView):
             if not request.user.is_anonymous:
                 Log.objects.create(user=request.user, activity='failed_sign_in') # failed sign in or sign out.
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserLogoutView(APIView):
+    '''API to logout and delete an auth token for TokenAuthentication Method'''
+    serializer_class = UserLoginSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    # queryset = User.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        try:
+            request.user.auth_token.delete()
+        except Exception as e:
+            print(e)
+            return Response({"failure": "Not found."}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"success": "Successfully logged out."}, status=status.HTTP_204_OK)
+
+class UserValidateEmail(CreateAPIView):
+    serializer_class = UserLoginSerializer
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    def post(self, request, *args, **kwargs):
+        '''Validates if user can be registered by checking email/username doesn't already exist'''
+        data = request.data
+        if User.objects.filter(username=data['email']) or User.objects.filter(email=data['email']):
+            return Response({'status': False}, status=status.HTTP_200_OK)
+        else:
+            return Response({'status': True}, status=status.HTTP_200_OK)
 
 
 class UserProfileView(APIView):
@@ -483,10 +511,15 @@ class EntityCreateView(CreateAPIView):
 
 class DoctorCreateView(CreateAPIView):
     '''API to create a new doctor user '''
-    serializer_class = DoctorCreateSerializer
+    serializer_class = DoctorSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = User.objects.all()
+    queryset = Doctor.objects.all()
 
+class DoctorGetView(ListAPIView):
+    '''API to get doctor users '''
+    serializer_class = DoctorSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Doctor.objects.all()
 
 class PatientGetView(ListAPIView):
     '''API to Get a list of all patients '''
@@ -501,7 +534,8 @@ class PatientDataGetView(ListAPIView):
     queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        patients = User.objects.filter(is_staff=False, is_active=True, date_joined__gte=datetime.date(2018, 06, 28))
+        # patients = User.objects.filter(is_staff=False, is_active=True, date_joined__gte=datetime.date(2018, 06, 28))
+        patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
         if not request.user.is_anonymous:
             Log.objects.create(user=request.user, activity='view_dashboard')
@@ -518,10 +552,10 @@ class PatientDataGetView(ListAPIView):
             if patient is not None:
                 sector_serial = PatientSectorSerializer(patient)
                 entry['location'] = sector_serial.data
-                print(patient,' sector: ', sector_serial.data)
+                # print(patient,' sector: ', sector_serial.data)
             else:
                 entry['location'] = { 'sector': ''}
-                print(patient, 'no sector')
+                # print(patient, 'no sector')
 
             # Get latest score
             notes = Notes.objects.filter(patient=user).last()
@@ -545,7 +579,7 @@ class PatientDataGetView(ListAPIView):
                 entry['data'] = []
                 result.append(entry)
 
-        result = sorted(result, key=lambda x: float(parse_datetime(x['record']['date']).strftime('%s')), reverse=True) #datetime.datetime(2012,4,1,0,0).timestamp()
+        result = sorted(result, key=lambda x: float(parse_datetime(x['record']['date']).strftime('%s')), reverse=True) 
         return Response(result)
 
 
@@ -625,7 +659,7 @@ class NotesCreateView(APIView):
                 saved_notes = Notes.objects.create(author=auth_user, patient=user, notes=notes, dosage=dosage)
 
             notes_serial =  NotesCreateSerializer(saved_notes)
-            print notes_serial.data
+            # print notes_serial.data
             return Response(notes_serial.data, status=status.HTTP_201_CREATED)
         else:
             error = "username does not exist!"

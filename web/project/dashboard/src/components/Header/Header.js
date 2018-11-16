@@ -14,6 +14,7 @@ import {
 import PropTypes from 'prop-types';
 import {browserHistory} from 'react-router';
 
+
 class Header extends Component {
 
   constructor(props, contexts) {
@@ -65,7 +66,6 @@ class Header extends Component {
           <NavItem>
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle className="nav-link dropdown-toggle">
-                <img src={'img/avatars/6.jpg'} className="img-avatar" alt="admin@cornell.edu"/>
                 <span className="d-md-down-none">admin</span>
               </DropdownToggle>
               <DropdownMenu right className={this.state.dropdownOpen ? 'show' : ''}>

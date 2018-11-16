@@ -11,9 +11,11 @@ import {
   CardHeader,
   CardFooter,
   CardBlock,
+  CardBody,
   Form,
   FormGroup,
   FormText,
+  FormFeedback,
   Label,
   Input,
   InputGroup,
@@ -40,33 +42,182 @@ class Forms extends Component {
       doctor:'',
       gender:'',
       mobile:'',
-      // street:'',
-      // city:'',
       sector: '',
       category: '',
       referral: '',
-      // state:'',
-      // country:'',
-      modal:false,
-      header: 'Success!',
-      message: 'You have successfully created a patient!'
+      header: 'Success: Your form was submitted',
+      message: [],
+      valid_email:true,
+      valid_doctor_email:true,
+      valid_email_format: true,
+      valid_doctor_email_format: true,
+      valid_first_name: true,
+      valid_last_name: true,
+      valid_password: true,
+      doctor_options: [["Dr. Christian Ntizimira", 0], ["Dr. Vincent Karamuka", 1], ["Dr. Olive Mukeshimana", 2], ["Dr. Vianney Mbitse", 3]],
+      newdoctor_first_name: "",
+      newdoctor_last_name: "",
+      newdoctor_username: "",
+      newdoctor_password: "",
+      newdoctor_email: "",
+      entity: "",
+      modal: false,
+      session_modal:false,
+      modalOpen: false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangeDoctorEmail = this.onChangeDoctorEmail.bind(this);
+    this.onChangeFirstName = this.onChangeFirstName.bind(this);
+    this.onChangeLastName = this.onChangeLastName.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
     this.onReset = this.onReset.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.session_toggle = this.session_toggle.bind(this);
+
+    this.onDoctorChange = this.onDoctorChange.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.addNewDoctor = this.addNewDoctor.bind(this);
   }
+
   componentWillMount(){
     const token = localStorage.getItem('jwtToken');
     if (!token){
       this.props.history.push('/login');
     }
   }
+
+  componentDidMount(){
+      axios.get('api/all_doctors').then(response => {
+        let names = [];
+        for(let x = 0; x < response["data"].length; x++){
+            let res = response["data"][x];
+            names.push(["Dr. " + res["user"]["first_name"] + " " + res["user"]["last_name"], res["id"]]);
+        }
+        this.setState({
+            doctor_options: names
+        });
+      }).catch((error) => {
+          this.setState({
+              session_modal: true
+          });
+      });
+  }
+
   onChange(e){
     this.setState({
       [e.target.name]: e.target.value
     });
   }
+  onChangeEmail(){
+      let emailRex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      let data = {email: this.state.email};
+      if (!emailRex.test(data['email'])) {
+          this.setState({ valid_email_format: false });
+      }
+      else {
+          this.setState({ valid_email_format: true });
+          axios.post('api/valid_email', data).then(response => {
+              let res = response['data']['status'];
+              this.setState({valid_email: res});
+          });
+      }
+  }
+  onChangeDoctorEmail(){
+      let emailRex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      let data = {email: this.state.newdoctor_email};
+      if (!emailRex.test(data['email'])) {
+          this.setState({ valid_doctor_email_format: false });
+      }
+      else {
+          this.setState({ valid_doctor_email_format: true });
+          axios.post('api/valid_email', data).then(response => {
+              let res = response['data']['status'];
+              this.setState({valid_doctor_email: res});
+          });
+      }
+  }
+  onChangeFirstName(){
+      if (this.state.first_name.trim() === '' || /\s/g.test(this.state.first_name.trim())){
+          this.setState({valid_first_name: false});
+      }
+      else {
+          this.setState({valid_first_name: true});
+      }
+  }
+  onChangeLastName(){
+      if (this.state.last_name.trim() === '' || /\s/g.test(this.state.last_name.trim())){
+          this.setState({valid_last_name: false});
+      }
+      else {
+          this.setState({valid_last_name: true});
+      }
+  }
+  onChangePassword(){
+      if (this.state.password.trim() === '' || /\s/g.test(this.state.password.trim())){
+          this.setState({valid_password: false});
+      }
+      else {
+          this.setState({valid_password: true});
+      }
+  }
+
+  onDoctorChange(e){
+    if(e.target.value === "Add New Doctor"){
+        this.openModal();
+    }
+    else{
+        this.setState({doctor: e.target.value});
+    }
+  }
+
+  openModal(){
+      this.setState({modalOpen: true});
+  }
+
+  closeModal(){
+      this.setState({modalOpen: false});
+  }
+
+  addNewDoctor(e){
+    e.preventDefault();
+    var headers = {
+        'Content-Type':'application/json'
+      };
+    var data = {
+        user: {
+            first_name: this.state.newdoctor_first_name,
+            last_name: this.state.newdoctor_last_name,
+            password: this.state.newdoctor_password,
+            username: this.state.newdoctor_email,
+            email: this.state.newdoctor_email
+        }
+    };
+      axios.post('api/doctor', data, headers).then(response => {
+          let res = response.data;
+          let names = this.state.doctor_options;
+          names.push(["Dr. " + res["user"]["first_name"] + " " + res["user"]["last_name"], res["id"]]);
+          this.setState({
+              doctor_options: names
+          });
+          this.setState({
+              modal:!this.state.modal,
+              newdoctor_first_name: "",
+              newdoctor_last_name: "",
+              newdoctor_password: "",
+              newdoctor_email: "",
+              valid_doctor_email:true,
+              valid_doctor_email_format: true,
+          });
+          this.closeModal();
+      }).catch(function(err) {
+          // console.log(err.response.data);
+          //nothing for now
+      });
+  }
+
   onSubmit(e) {
     e.preventDefault();
     var data = {
@@ -83,12 +234,8 @@ class Forms extends Component {
         mobile:this.state.mobile,
         category:this.state.category,
         referral:this.state.referral,
-        // street:this.state.street,
         address:this.state.address,
-        // city:this.state.city,
         sector:this.state.sector
-        // state:this.state.state,
-        // country:this.state.country
       }
     };
 
@@ -98,29 +245,60 @@ class Forms extends Component {
     var self = this;
 
     axios.post('api/register', data, headers).then(response => {
-        console.log('Mistake');
         self.setState({
-            modal:!self.state.modal
+            modal:!self.state.modal,
+            message: ["No errors found"]
         });
+        this.onReset();
     }).catch(function(err) {
-        console.error(JSON.stringify(err));
-        let message1 = '';
+        let message = []; let i = 0;
+        let styles = {
+            fontSize: '15px',
+            fontWeight: 'bold'
+        };
         if (err.response.status === 400){
             for (let property in err.response.data) {
-                if (property === 'patient'){
-                    for (let item in err.response.data[property]) {
-                        message1 = message1 + item + ':' + err.response.data[property][item] + '\n ';
-                        console.log(message1, item);
+                if (property === 'patient') {
+                    for (let item in err.response.data['patient']) {
+                        if (item === 'doctor'){
+                            let text = 'The doctor you chose is not in the database. Please refresh the page to get up-to-date options';
+                            message.push(<div style={styles} key={i}>{text}</div>);
+                        }
+                        else {
+                            let text = item + ': ' + err.response.data[property][item];
+                            message.push(<div style={styles} key={i}>{text}</div>);
+                        }
                     }
                 }
-                else{
-                    message1 = message1 + property + ':' + err.response.data[property] + '\n ';
+                else {
+                    if (property === 'username'){
+                        if (err.response.data[property][0] === "A user with that username already exists."){
+                            let text = "The email you entered already exists in the system";
+                            message.push(<div style={styles} key={i}>{text}</div>);
+                        }
+                        else {
+                            let text = property + ': ' + err.response.data[property];
+                            message.push(<div style={styles} key={i}>{text}</div>);
+                        }
+                    }
+                    else {
+                        let text = property + ': ' + err.response.data[property];
+                        message.push(<div style={styles} key={i}>{text}</div>);
+                    }
                 }
+                i += 1;
             }
             self.setState({
-                header:'Failure',
-                message: message1,
+                header:'Error: Your form could not be submitted',
+                message: message,
                 modal:!self.state.modal
+            });
+            message = [];
+        }
+        else {
+            self.setState({
+                modal:!self.state.modal,
+                message: message
             });
         }
     });
@@ -139,323 +317,426 @@ class Forms extends Component {
       address: '',
       category: '',
       referral: '',
-      // street:'',
-      // city:'',
-      sector:''
-      // state:'',
-      // country:''
+      sector:'',
+      header: 'Success: Your form was submitted',
+      message: [],
+      valid_email:true,
+      valid_email_format: true,
+      valid_first_name: true,
+      valid_last_name: true,
+      valid_password: true
     });
   }
   toggle() {
     this.setState({
       modal: !this.state.modal,
-      header: 'Success!',
-      message: 'You have successfully created a patient!'
+      header: 'Success: Your form was submitted'
     });
   }
+  session_toggle() {
+    this.setState({
+      session_modal: false
+    });
+    this.props.history.push('/login');
+  }
+
   render() {
     // const {first_name, last_name, password, email, diagnosis, care_giver, address, doctor, gender, mobile, street, city, sector, state, country} = this.state;
     const {first_name, last_name, password, email, diagnosis, care_giver, address, doctor, gender, mobile, sector, category, referral} = this.state;
 
-    return (
-      <div className="animated fadeIn">
+      return (
+          <div className="animated fadeIn">
+              <Modal isOpen={this.state.modalOpen}
+                // onRequestClose={this.closeModal} contentLabel="Add New Doctor"
+              >
+                    <Card>
+                    <CardHeader>
+                    <Row>
+                        <Col md="9"><strong>Add a New Doctor</strong></Col>
+                    </Row>
+                    </CardHeader>
+                    <CardBody className="card-body">
+                        <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label>First Name</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="newdoctor_firstname"
+                                    name="newdoctor_first_name"
+                                    value={this.state.newdoctor_first_name}
+                                    placeholder="Enter first name"
+                                    onChange={this.onChange}/>
+                            <FormText color="muted">Please enter doctor first name</FormText>
+                            </Col>
+                        </FormGroup>
 
-        <Row>
-          <Col xs="12" md="12">
-            <Card>
-              <CardHeader>
-                <strong>Patient Info</strong>
-              </CardHeader>
-              <CardBlock className="card-body">
-                <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label>Firstname</Label>
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label>Last Name</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="newdoctor_lastname"
+                                    name="newdoctor_last_name"
+                                    value={this.state.newdoctor_last_name}
+                                    placeholder="Enter last name"
+                                    onChange={this.onChange}/>
+                            <FormText color="muted">Please enter doctor last name</FormText>
+                            </Col>
+                        </FormGroup>
+
+                        {/*<FormGroup row>*/}
+                            {/*<Col md="3">*/}
+                            {/*<Label>Doctor entity</Label>*/}
+                            {/*</Col>*/}
+                            {/*<Col xs="12" md="9">*/}
+                            {/*<Input type="entity"*/}
+                                    {/*name="entity"*/}
+                                    {/*value={this.state.entity}*/}
+                                    {/*placeholder="Enter entity"*/}
+                                    {/*onChange={this.onChange}/>*/}
+                            {/*<FormText color="muted">Please enter doctor entity</FormText>*/}
+                            {/*</Col>*/}
+                        {/*</FormGroup>*/}
+
+
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label htmlFor="email-input">Email Address</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="email" invalid={!(this.state.valid_doctor_email_format && this.state.valid_doctor_email)}
+                                    name="newdoctor_email"
+                                    value={this.state.newdoctor_email}
+                                    placeholder="Enter email"
+                                    onChange={this.onChange}
+                                    onBlur={this.onChangeDoctorEmail}/>
+                            <FormText className="help-block">Please enter email</FormText>
+                            {(this.state.valid_doctor_email_format === true && this.state.valid_doctor_email === false) &&
+                            <FormFeedback>
+                                Looks like this account taken. If you'll like to continue please enter another email account.
+                            </FormFeedback>
+                            }
+                            {this.state.valid_doctor_email_format === false &&
+                            <FormFeedback>
+                                Your email should be of the form "username@email.com"
+                            </FormFeedback>
+                            }
+                            </Col>
+                        </FormGroup>
+
+
+
+                        <FormGroup row>
+                            <Col md="3">
+                            <Label htmlFor="password-input">Password</Label>
+                            </Col>
+                            <Col xs="12" md="9">
+                            <Input type="password"
+                                    name="newdoctor_password"
+                                    value={this.state.newdoctor_password}
+                                    placeholder="Password"
+                                    onChange={this.onChange}/>
+                            <FormText className="help-block">Please enter a complex password</FormText>
+                            </Col>
+                        </FormGroup>
+
+                        </Form>
+                    </CardBody>
+                    <CardFooter>
+                    <Row>
+                    <Col md="1" style={{marginLeft: "10px", marginRight: "105px"}}>
+                        <Button type="submit" size="sm" style={{borderRadius: "15px", color: "white"}} color="submit" onClick={this.addNewDoctor}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                     </Col>
-                    <Col xs="12" md="9">
-                      <Input
-                            type="first_name"
-                            id="first_name-input"
-                            name="first_name"
-                            placeholder="Enter Firstname"
-                            value={first_name}
-                            onChange={this.onChange}
-                            />
-                      <FormText color="muted">Please enter firstname</FormText>
+                    <Col md="4"></Col>
+                    <Col md="1">
+                            <Button size="sm" color="danger"
+                            style={{borderRadius: "15px", marginLeft:"25px"}}
+                            onClick={this.closeModal}> <i className="fa fa-ban"></i> Cancel</Button>
                     </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label>Lastname</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input
-                            type="last_name"
-                            id="last_name-input"
-                            name="last_name"
-                            placeholder="Enter Lastname"
-                            value={last_name}
-                            onChange={this.onChange}/>
-                      <FormText color="muted">Please enter lastname</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="email-input">Email Address</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="email"
-                             id="email-input"
-                             name="email"
-                             placeholder="Enter Email"
-                             value={email}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter patient email</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="password-input">Password</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="password"
-                             id="password-input"
-                             name="password"
-
-                             placeholder="Enter Password"
-                             value={password}
-                             onChange={this.onChange}/>
-
-                      <FormText className="help-block">Please enter a complex password</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                      <Col md="3">
-                          <Label htmlFor="gender-input">Gender</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                          <Input type="gender"
-                                 id="gender-input"
-                                 name="gender"
-                                 placeholder="Enter patient gender"
-                                 value={gender}
-                                 onChange={this.onChange}/>
-                          <FormText className="help-block">Please enter gender</FormText>
-                      </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                      <Col md="3">
-                          <Label htmlFor="category-input">Category</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                          <Input type="category"
-                                 id="category-input"
-                                 name="category"
-                                 placeholder="Enter enter social category"
-                                 value={category}
-                                 onChange={this.onChange}/>
-                          <FormText className="help-block">Please enter social category</FormText>
-                      </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                      <Col md="3">
-                          <Label htmlFor="mobile-input">Mobile</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                          <Input type="mobile"
-                                 id="mobile-input"
-                                 name="mobile"
-                                 placeholder="Enter mobile phone number"
-                                 value={mobile}
-                                 onChange={this.onChange}/>
-                          <FormText className="help-block">Please enter mobile phone number</FormText>
-                      </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                      <Col md="3">
-                          <Label htmlFor="street-input">Home Address</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                          <Input type="address"
-                                 id="address-input"
-                                 name="address"
-                                 placeholder="Enter address"
-                                 value={address}
-                                 onChange={this.onChange}/>
-                          <FormText className="help-block">Please enter home address</FormText>
-                      </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                      <Col md="3">
-                          <Label htmlFor="sector-input">Sector</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                          <Input type="sector"
-                                 id="sector-input"
-                                 name="sector"
-                                 placeholder="Enter sector"
-                                 value={sector}
-                                 onChange={this.onChange}/>
-                          <FormText className="help-block">Please enter sector</FormText>
-                      </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="address-input">Diagnosis</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="diagnosis"
-                             id="diagnosis-input"
-                             name="diagnosis"
-                             placeholder="Enter Patient Diagnosis"
-                             value={diagnosis}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter diagnosis</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                      <Col md="3">
-                          <Label htmlFor="address-input">Referred From</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                          <Input type="referral"
-                                 id="referral-input"
-                                 name="referral"
-                                 placeholder="Please enter place where patient was referred from"
-                                 value={referral}
-                                 onChange={this.onChange}/>
-                          <FormText className="help-block">Please enter place where patient was referred from</FormText>
-                      </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="care_giver-input">Care giver</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="care_giver"
-                             id="care_giver-input"
-                             name="care_giver"
-                             placeholder="Enter a Caregiver Name"
-                             value={care_giver}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter a caregiver name</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label htmlFor="doctor-input">Doctor</Label>
-                    </Col>
-                    <Col xs="12" md="9">
-                      <Input type="doctor"
-                             id="doctor-input"
-                             name="doctor"
-                             placeholder="Enter a Doctor Name"
-                             value={doctor}
-                             onChange={this.onChange}/>
-                      <FormText className="help-block">Please enter a doctor name</FormText>
-                    </Col>
-                  </FormGroup>
-
-                  {/*<FormGroup row>*/}
-                      {/*<Col md="3">*/}
-                          {/*<Label htmlFor="street-input">Street</Label>*/}
-                      {/*</Col>*/}
-                      {/*<Col xs="12" md="9">*/}
-                          {/*<Input type="street"*/}
-                                 {/*id="street-input"*/}
-                                 {/*name="street"*/}
-                                 {/*placeholder="Enter street"*/}
-                                 {/*value={street}*/}
-                                 {/*onChange={this.onChange}/>*/}
-                          {/*<FormText className="help-block">Please enter street</FormText>*/}
-                      {/*</Col>*/}
-                  {/*</FormGroup>*/}
-
-                  {/*<FormGroup row>*/}
-                    {/*<Col md="3">*/}
-                      {/*<Label htmlFor="city-input">City</Label>*/}
-                    {/*</Col>*/}
-                    {/*<Col xs="12" md="9">*/}
-                      {/*<Input type="city"*/}
-                             {/*id="city-input"*/}
-                             {/*name="city"*/}
-                             {/*placeholder="Enter city"*/}
-                             {/*value={city}*/}
-                             {/*onChange={this.onChange}/>*/}
-                      {/*<FormText className="help-block">Please enter city</FormText>*/}
-                    {/*</Col>*/}
-                  {/*</FormGroup>*/}
-
-
-                  {/*<FormGroup row>*/}
-                    {/*<Col md="3">*/}
-                      {/*<Label htmlFor="state-input">State</Label>*/}
-                    {/*</Col>*/}
-                    {/*<Col xs="12" md="9">*/}
-                      {/*<Input type="state"*/}
-                             {/*id="state-input"*/}
-                             {/*name="state"*/}
-                             {/*placeholder="Enter state"*/}
-                             {/*value={state}*/}
-                             {/*onChange={this.onChange}/>*/}
-                      {/*<FormText className="help-block">Please enter state</FormText>*/}
-                    {/*</Col>*/}
-                  {/*</FormGroup>*/}
-
-                  {/*<FormGroup row>*/}
-                    {/*<Col md="3">*/}
-                      {/*<Label htmlFor="country-input">Country</Label>*/}
-                    {/*</Col>*/}
-                    {/*<Col xs="12" md="9">*/}
-                      {/*<Input type="country"*/}
-                             {/*id="country-input"*/}
-                             {/*name="country"*/}
-                             {/*placeholder="Enter country"*/}
-                             {/*value={country}*/}
-                             {/*onChange={this.onChange}/>*/}
-                      {/*<FormText className="help-block">Please enter country</FormText>*/}
-                    {/*</Col>*/}
-                  {/*</FormGroup>*/}
-
-                </Form>
-              </CardBlock>
-              <CardFooter>
+                    </Row>
+                    </CardFooter>
+                    </Card>
+                </Modal>
               <Row>
-              <Col md="1">
-              <Button type="submit" size="sm" color="primary" onClick={this.onSubmit}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-              </Col>
-              <Col md="1">
-              <Button type="reset" size="sm" color="danger" onClick={this.onReset}><i className="fa fa-ban"></i> Reset</Button>
-              </Col>
-              </Row>
-              </CardFooter>
-              <Modal isOpen={this.state.modal}>
-                <ModalHeader toggle={this.toggle}>{this.state.header}</ModalHeader>
-                <ModalBody>
-                    {this.state.message}
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="primary" onClick={this.toggle}>Okay</Button>{' '}
-                </ModalFooter>
-              </Modal>
-            </Card>
+                  <Col xs="12" md="12">
+                      <Card>
+                          <CardHeader>
+                              <strong>Patient Info</strong>
+                          </CardHeader>
+                          <CardBody>
+                              <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label>Firstname*</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input
+                                              type="first_name" invalid={!this.state.valid_first_name}
+                                              id="first_name-input"
+                                              name="first_name"
+                                              placeholder="Enter firstname"
+                                              value={first_name}
+                                              onChange={this.onChange}
+                                              onBlur={this.onChangeFirstName} />
 
-          </Col>
-        </Row>
-      </div>
-    )
+                                          {this.state.valid_first_name === false &&
+                                          <FormFeedback>
+                                              This field cannot be empty or contain spaces.
+                                          </FormFeedback>}
+
+                                          <FormText color="muted">Please enter firstname</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label>Lastname*</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input
+                                              type="last_name" invalid={!this.state.valid_last_name}
+                                              id="last_name-input"
+                                              name="last_name"
+                                              placeholder="Enter lastname"
+                                              value={last_name}
+                                              onChange={this.onChange}
+                                              onBlur={this.onChangeLastName} />
+
+                                          {this.state.valid_last_name === false &&
+                                          <FormFeedback>
+                                            This field cannot be empty or contain spaces.
+                                          </FormFeedback>}
+
+                                          <FormText color="muted">Please enter lastname</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="email-input">Email Address*</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="email" invalid={!(this.state.valid_email_format && this.state.valid_email)}
+                                                 id="email-input"
+                                                 name="email"
+                                                 placeholder="Enter email"
+                                                 value={email}
+                                                 onChange={this.onChange}
+                                                 onBlur={this.onChangeEmail} />
+
+                                          {(this.state.valid_email_format === true && this.state.valid_email === false) &&
+                                          <FormFeedback>
+                                            Looks like your email is taken. Please enter another one.
+                                          </FormFeedback>
+                                          }
+                                          {this.state.valid_email_format === false &&
+                                          <FormFeedback>
+                                            Your email should be of the form "username@email.com"
+                                          </FormFeedback>
+                                          }
+
+                                          <FormText className="help-block">Please enter patient email</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="password-input">Password*</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="password" invalid={!this.state.valid_password}
+                                                 id="password-input"
+                                                 name="password"
+                                                 placeholder="Enter password"
+                                                 value={password}
+                                                 onChange={this.onChange}
+                                                 onBlur={this.onChangePassword} />
+                                          {this.state.valid_password === false &&
+                                          <FormFeedback>
+                                            The password field cannot be empty or contain spaces.
+                                          </FormFeedback>
+                                          }
+                                          <FormText className="help-block">Please enter a complex password</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="gender-input">Gender</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                        <select type="gender" name="gender" id="gender-input" value={gender} onChange={this.onChange} placeholder="Select Gender">
+                                            <option></option>
+                                            <option value="Male"> Male</option>
+                                            <option value="Female"> Female</option>
+                                        </select>
+                                        <FormText className="help-block">Please select gender</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="category-input">Category</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="category"
+                                                 id="category-input"
+                                                 name="category"
+                                                 placeholder="Enter social category"
+                                                 value={category}
+                                                 onChange={this.onChange}/>
+                                          <FormText className="help-block">Please enter social category</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="mobile-input">Mobile</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="mobile"
+                                                 id="mobile-input"
+                                                 name="mobile"
+                                                 placeholder="Enter phone number"
+                                                 value={mobile}
+                                                 onChange={this.onChange}/>
+                                          <FormText className="help-block">Please enter mobile phone number</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="street-input">Home Address</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="address"
+                                                 id="address-input"
+                                                 name="address"
+                                                 placeholder="Enter address"
+                                                 value={address}
+                                                 onChange={this.onChange}/>
+                                          <FormText className="help-block">Please enter home address</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="sector-input">Sector</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="sector"
+                                                 id="sector-input"
+                                                 name="sector"
+                                                 placeholder="Enter sector"
+                                                 value={sector}
+                                                 onChange={this.onChange}/>
+                                          <FormText className="help-block">Please enter sector</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="address-input">Diagnosis</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="diagnosis"
+                                                 id="diagnosis-input"
+                                                 name="diagnosis"
+                                                 placeholder="Enter patient diagnosis"
+                                                 value={diagnosis}
+                                                 onChange={this.onChange}/>
+                                          <FormText className="help-block">Please enter diagnosis</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="address-input">Referred From</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="referral"
+                                                 id="referral-input"
+                                                 name="referral"
+                                                 placeholder="Please enter place where patient was referred from"
+                                                 value={referral}
+                                                 onChange={this.onChange}/>
+                                          <FormText className="help-block">Please enter place where patient was referred
+                                              from</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="care_giver-input">Caregiver</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                          <Input type="care_giver"
+                                                 id="care_giver-input"
+                                                 name="care_giver"
+                                                 placeholder="Enter a caregiver name"
+                                                 value={care_giver}
+                                                 onChange={this.onChange}/>
+                                          <FormText className="help-block">Please enter a caregiver name</FormText>
+                                      </Col>
+                                  </FormGroup>
+
+                                  <FormGroup row>
+                                      <Col md="2">
+                                          <Label htmlFor="doctor-input">Doctor</Label>
+                                      </Col>
+                                      <Col xs="12" md="7">
+                                        <select type="doctor" name="doctor" id="doctor-input" value={doctor} onChange={this.onDoctorChange} placeholder="Select Doctor's Name">
+                                            {this.state.doctor_options.map((doc) => <option value={doc[1]} key={doc[1]}>{doc[0]}</option> )}
+                                            <option></option>
+                                            <option value="Add New Doctor"> + Add New Doctor</option>
+                                        </select>
+                                        <FormText className="help-block">Please select doctor's Name</FormText>
+                                      </Col>
+                                  </FormGroup>
+                              </Form>
+                          </CardBody>
+                          <CardFooter>
+                              <Row>
+                                <Col sm="2" md="1" style={{marginLeft:"50px", marginRight:"70px"}}>
+                                    <Button style={{borderRadius: "15px", color: "white"}} type="submit" size="sm" color="submit" onClick={this.onSubmit}><i
+                                          className="fa fa-dot-circle-o"></i> Submit</Button>
+                                </Col>
+                                <Col sm="2" md="1">
+                                    <Button style={{borderRadius: "15px"}} type="reset" size="sm" color="danger" onClick={this.onReset}><i
+                                      className="fa fa-ban"></i> Reset&nbsp;</Button>
+                                </Col>
+                              </Row>
+                          </CardFooter>
+                          <Modal isOpen={this.state.modal}>
+                              {this.state.header==='Error: Your form could not be submitted' &&
+                              <ModalHeader toggle={this.toggle} style={{color: 'red'}}>{this.state.header}</ModalHeader>}
+                              {this.state.header==='Success: Your form was submitted' &&
+                              <ModalHeader toggle={this.toggle} style={{color: 'green'}}>{this.state.header}</ModalHeader>}
+                              {this.state.header === 'Error: Your form could not be submitted' &&
+                              <ModalBody>
+                                  {this.state.message}
+                              </ModalBody>
+                              }
+                              <ModalFooter style={{justifyContent: "center", paddingTop: "30px", paddingBottom: "20px"}}>
+                                <Button style={{borderRadius: "15px", color: "white"}} color="primary" onClick={this.toggle}>Okay</Button>{' '}
+                              </ModalFooter>
+                          </Modal>
+                          <Modal isOpen={this.state.session_modal}>
+                              <ModalHeader toggle={this.session_toggle} style={{color: 'red'}}>Alert!</ModalHeader>
+                              <ModalBody>
+                                  Your previous session has expired. You should log in again to restart your session.
+                              </ModalBody>
+                              <ModalFooter style={{justifyContent: "center", paddingTop: "30px", paddingBottom: "20px"}}>
+                                  <Button style={{borderRadius: "15px", color: "white"}} color="primary" onClick={this.session_toggle}>Log-in</Button>{' '}
+                              </ModalFooter>
+                          </Modal>
+                      </Card>
+
+                  </Col>
+              </Row>
+          </div>
+      );
   }
 }
 
