@@ -3,8 +3,10 @@ import ReactTable from 'react-table';
 import axios from 'axios';
 import 'react-table/react-table.css';
 import {
-    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, CardBlock,
-    Card, CardHeader, CardBody, CardFooter, CardTitle, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
+    Row, Col, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup,
+    Card, CardHeader, CardBody, CardFooter, Button, Label, Input, Table, UncontrolledTooltip} from "reactstrap";
+import Pagination from './new_pagination.js';
+import './styles.css';
 
 class NewPatientCard extends Component{
     constructor(props){
@@ -48,7 +50,7 @@ class NewPatientCard extends Component{
             axios.post('api/patient/history', data).then(
                 (res) => {
                     let records = res.data.reverse();
-                    const singlePatientRecords = (record, data) => {
+                    const singlePatientRecords = (record, data, symptom) => {
                         return {
                             key: record.record.id,
                             date: record.record.date.substring(0,10),
@@ -65,13 +67,22 @@ class NewPatientCard extends Component{
                             q6: data[10],
                             q7: data[11],
                             record_key: record.record.id,
-                            user: record.record.signed
+                            user: record.record.signed,
+                            symptoms: symptom
                         };
                     };
                     this.setState({
                         all_records: records.map((record) => {
+                            let symp = record.symp;
+                            let symptom = "";
+                            for (let j = 0; j <  symp.length; j++){
+                                if (symp[j] !== undefined || symp[j] !== null){
+                                    symptom += symp[j].symptom + "(" + symp[j].answer + ") "
+                                }
+                            }
                             if (record.data.length > 0) {
                                 let data = [];
+
                                 for (let i = 0; i < 12; i++){
                                     if (record.data[i] === undefined || record.data[i].length === 0 || record.data[i].answer === null){
                                         data.push(null);
@@ -81,11 +92,11 @@ class NewPatientCard extends Component{
                                     }
                                 }
                                 return {
-                                    ...singlePatientRecords(record, data)
+                                    ...singlePatientRecords(record, data, symptom)
                                 }
                             }
                             else{
-                                return {...singlePatientRecords(record, Array(12).fill(null))}
+                                return {...singlePatientRecords(record, Array(12).fill(null), symptom)}
                             }
                         })
                     });
@@ -96,7 +107,7 @@ class NewPatientCard extends Component{
                         symp = records[i].symp;
                         for (let j = 0; j <  symp.length; j++){
                             if (symp[j] !== undefined || symp[j] !== null){
-                                data.push({date: records[i].date.substring(0,10),
+                                symptom_data.push({date: records[i].date.substring(0,10),
                                     symptom: symp[j].symptom,
                                     score: symp[j].answer})
                             }
@@ -174,6 +185,7 @@ class NewPatientCard extends Component{
         axios.post('api/notes/create', data, headers).then(
             (res) => this.setState({
                 modal_submit: !this.state.modal_submit,
+                new_note: ""
             })
         );
 
@@ -193,6 +205,7 @@ class NewPatientCard extends Component{
     };
 
     render(){
+        let max_width = 80;
         let renderPatientData = () => {
             const {firstname, lastname, sector, all_records, all_symptoms, all_notes, new_note} = this.state;
             return (
@@ -201,31 +214,57 @@ class NewPatientCard extends Component{
                         <Card>
                             <CardHeader>
                                 <Row>
-                                    <Col md="3">
-                                        <Label>Patient Name: {firstname + " " + lastname}</Label>
+                                    <Col md="4">
+                                        <Label className="title-header">Patient Name: &nbsp;{firstname + " " + lastname}</Label>
                                     </Col>
                                     <Col md="3">
-                                        <Label>Sector: {sector}</Label>
+                                        <Label className="title-header">Sector: &nbsp;{sector}</Label>
                                     </Col>
                                 </Row>
                             </CardHeader>
                             <CardBody className="card-body">
-                                <CardHeader>
-                                    Summary of Records
+                                <CardHeader className="title-head">
+                                    Patient Submissions
                                 </CardHeader>
                                 <div>
                                     <ReactTable
-                                        getTheadTrProps={
+                                        PaginationComponent={Pagination}
+                                        getTableProps={
                                             () => {
                                                 return {
                                                     style: {
-                                                        backgroundColor: "#5f9ea0"
+                                                        border: "1px solid #5ca3c9"
                                                     }
                                                 }
                                             }
                                         }
-                                        className="-striped -highlight"
-                                        filterable
+                                        getTdProps={
+                                            () => {
+                                                return {
+                                                    style: {
+                                                        borderTop: "1px solid #5ca3c9",
+                                                        borderRight: "none",
+                                                        overflow: "visible",
+                                                        textAlign: "center"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        getTheadTrProps={
+                                            () => {
+                                                return {
+                                                    style: {
+                                                        backgroundColor: "#c2cfd6",
+                                                        color: "#3e515b",
+                                                        fontWeight: "bold",
+                                                        borderRight: "none",
+                                                        padding: "4px"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        filterable={false}
+                                        sortable={false}
                                         defaultFilterMethod={(filter, row) =>
                                             String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
                                         }
@@ -248,8 +287,16 @@ class NewPatientCard extends Component{
                                                 accessor: "nausea"
                                             },
                                             {
+                                                Header: 'Vomiting',
+                                                accessor: "vomiting"
+                                            },
+                                            {
                                                 Header: 'Fatigue',
                                                 accessor: "fatigue"
+                                            },
+                                            {
+                                                Header: 'Poor Appetite',
+                                                accessor: "poor_appetite"
                                             },
                                             {
                                                 Header: 'Constipation',
@@ -257,28 +304,33 @@ class NewPatientCard extends Component{
                                             },
                                             {
                                                 Header: () => <span id="q3">Q3</span>,
-                                                accessor: "q3"
+                                                accessor: "q3",
+                                                maxWidth: max_width
                                             },
                                             {
                                                 Header: () => <span id="q4">Q4</span>,
-                                                accessor: "q4"
+                                                accessor: "q4",
+                                                maxWidth: max_width
                                             },
                                             {
                                                 Header: () => <span id="q5">Q5</span>,
-                                                accessor: "q5"
+                                                accessor: "q5",
+                                                maxWidth: max_width
                                             },
                                             {
                                                 Header: () => <span id="q6">Q6</span>,
-                                                accessor: "q6"
+                                                accessor: "q6",
+                                                maxWidth: max_width
                                             },
                                             {
                                                 Header: () => <span id="q7">Q7</span>,
-                                                accessor: "q7"
+                                                accessor: "q7",
+                                                maxWidth: max_width
                                             },
                                             {
                                                 Header: 'Signed',
                                                 accessor: 'user',
-                                                filterable: false,
+                                                // filterable: false,
                                                 Cell: cellData => {
                                                     if ((cellData.original.record_key !== null) && (cellData.original.user !== null)) {
                                                         return (<div>
@@ -292,14 +344,15 @@ class NewPatientCard extends Component{
                                                                        onClick={() => this.checkboxSubmit(cellData.original)}/>)
                                                     }
                                                 }
+                                            },
+                                            {
+                                                Header: 'Symptoms',
+                                                accessor: "symptoms"
                                             }
                                         ]}
                                         defaultPageSize={5}
                                         minRows={3}
                                         noDataText='No Patient Records Yet'
-                                        // pageText= undefined
-                                        // ofText: undefined
-                                        // rowsText: undefined
                                     />
                                 </div>
                                 <UncontrolledTooltip placement="top" target="SOB">
@@ -321,60 +374,84 @@ class NewPatientCard extends Component{
                                 <UncontrolledTooltip placement="top" target="q7">
                                     Have you had enough help and advice for your family to plan for the future?
                                 </UncontrolledTooltip>
-                                <CardHeader>
-                                    Summary of Other Symptoms
-                                </CardHeader>
-                                <div>
-                                    <ReactTable
-                                        getTheadTrProps={
-                                            () => {
-                                                return {
-                                                    style: {
-                                                        backgroundColor:  "#008aff"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        className="-striped -highlight"
-                                        filterable
-                                        defaultFilterMethod={(filter, row) =>
-                                            String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
-                                        }
-                                        data={all_symptoms}
-                                        columns={[
-                                            {
-                                                Header: "Last Submission",
-                                                accessor: "date"
-                                            },
-                                            {
-                                                Header: "Symptom",
-                                                accessor: "symptom"
-                                            },
-                                            {
-                                                Header: "Score",
-                                                accessor: "score"
-                                            }]}
-                                        defaultPageSize={5}
-                                        minRows={3}
-                                        noDataText='No Symptoms Recorded'
-                                    />
-                                </div>
-                                <CardHeader>
+                                <br/>
+                                <Row>
+                                    <Col xs="12" md="12">
+                                        <Card>
+                                            <CardHeader className="title-head">
+                                                Add a Note for {firstname}
+                                            </CardHeader>
+                                            <CardBody>
+                                                <FormGroup>
+                                                    <Col xs="12" md="12" lg="6">
+                                                        <Input type="textarea" rows={4}
+                                                               name="new_note"
+                                                               value={new_note}
+                                                               placeholder="Enter your note here"
+                                                               onChange={this.onChange}/>
+                                                    </Col>
+                                                </FormGroup>
+                                            </CardBody>
+
+                                            <CardFooter>
+                                                <Row>
+                                                    <Col xs="12" md="12" lg="6">
+                                                        <Button  style={{borderRadius: "15px", marginRight: "10px"}} color="success" size="sm" className="float-right" onClick={this.onSubmit}>Submit Note</Button>{' '}
+                                                    </Col>
+                                                </Row>
+                                                <Modal isOpen={this.state.modal_submit}>
+                                                    <ModalHeader toggle={this.toggle_submit}>Success!</ModalHeader>
+                                                    <ModalBody>
+                                                        You have successfully created a note!
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button color="primary" round onClick={this.toggle_submit}>Okay</Button>{' '}
+                                                    </ModalFooter>
+                                                </Modal>
+                                            </CardFooter>
+                                        </Card>
+                                    </Col>
+                                </Row>
+
+                                <CardHeader className="title-head">
                                     Medical Notes
                                 </CardHeader>
                                 <div>
                                     <ReactTable
-                                        getTheadTrProps={
+                                        PaginationComponent={Pagination}
+                                        getTableProps={
                                             () => {
                                                 return {
                                                     style: {
-                                                        backgroundColor:  "#e7ff00"
+                                                        border: "1px solid #5ca3c9"
                                                     }
                                                 }
                                             }
                                         }
-                                        className="-striped -highlight"
-                                        filterable
+                                        getTdProps={
+                                            () => {
+                                                return {
+                                                    style: {
+                                                        borderTop: "1px solid #5ca3c9",
+                                                        borderRight: "none"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        getTheadTrProps={
+                                            () => {
+                                                return {
+                                                    style: {
+                                                        backgroundColor: "#c2cfd6",
+                                                        color: "#3e515b",
+                                                        fontWeight: "bold",
+                                                        borderRight: "none",
+                                                        textAlign: "left",
+                                                        padding: "4px"
+                                                    }
+                                                }
+                                            }
+                                        }
                                         defaultFilterMethod={(filter, row) =>
                                             String(row[filter.id]).toLowerCase().startsWith(filter.value.toLowerCase())
                                         }
@@ -382,7 +459,8 @@ class NewPatientCard extends Component{
                                         columns={[
                                             {
                                                 Header: "Last Submission",
-                                                accessor: "date"
+                                                accessor: "date",
+                                                maxWidth: 250
                                             },
                                             {
                                                 Header: "Note",
@@ -393,50 +471,6 @@ class NewPatientCard extends Component{
                                         noDataText='No Notes Recorded'
                                     />
                                 </div>
-                                <Row/>
-                                <Row>
-                                    <Col xs="12" md="12">
-                                        <Card>
-                                            <CardHeader>
-                                                Add a Note for {firstname}
-                                            </CardHeader>
-                                            <CardBody>
-                                                <FormGroup row>
-                                                    <Col md="3">
-                                                        <Label>Note</Label>
-                                                    </Col>
-                                                    <Col xs="12" md="9">
-                                                        <Input type="new_note"
-                                                               name="new_note"
-                                                               value={new_note}
-                                                               placeholder="Enter your note"
-                                                               onChange={this.onChange}/>
-                                                    </Col>
-                                                </FormGroup>
-                                            </CardBody>
-
-                                            <CardFooter>
-                                                <Row>
-                                                    <Col >
-                                                        <Button color="success" size="sm" className="float-right" onClick={this.onSubmit}>Submit</Button>{' '}
-                                                    </Col>
-                                                    {/*<Col >*/}
-                                                    {/*<Button color="danger" size="sm" className="float-right" onClick={this.toggle}>Close</Button>{' '}*/}
-                                                    {/*</Col>*/}
-                                                </Row>
-                                                <Modal isOpen={this.state.modal_submit}>
-                                                    <ModalHeader toggle={this.toggle_submit}>Success!</ModalHeader>
-                                                    <ModalBody>
-                                                        You have successfully created a note!
-                                                    </ModalBody>
-                                                    <ModalFooter>
-                                                        <Button color="primary" onClick={this.toggle_submit}>Okay</Button>{' '}
-                                                    </ModalFooter>
-                                                </Modal>
-                                            </CardFooter>
-                                        </Card>
-                                    </Col>
-                                </Row>
                             </CardBody>
 
                         </Card>

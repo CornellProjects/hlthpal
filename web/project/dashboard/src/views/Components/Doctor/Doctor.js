@@ -177,7 +177,7 @@ class Forms extends Component {
               </CardBlock>
               <CardFooter>
               <Row>
-              <Col md="1">
+              <Col sm="2"md="1">
               <Button type="submit" size="sm" color="primary" onClick={this.onSubmit}><i className="fa fa-dot-circle-o"></i> Submit</Button>
               </Col>
               <Col md="1">

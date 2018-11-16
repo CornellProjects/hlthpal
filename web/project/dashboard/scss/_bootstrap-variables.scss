@@ -4,7 +4,7 @@
 // Color system
 //
 
-$white:                           #fff;
+$white:                           #fff !default;
 $gray-100:                        #f0f3f5;
 $gray-200:                        #c2cfd6;
 $gray-300:                        #a4b7c1;
@@ -47,6 +47,7 @@ $theme-colors: (
   primary:                        $orange,
   secondary:                      $gray-300,
   success:                        $green,
+  submit:                         $green,
   info:                           $cyan,
   warning:                        $yellow,
   danger:                         $red,

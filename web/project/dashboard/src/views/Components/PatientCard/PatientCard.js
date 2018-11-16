@@ -174,7 +174,7 @@ class PatientCard extends Component{
                     <ModalHeader toggle={this.toggle}> Patient Detail</ModalHeader>
                     <ModalBody>
                         <Row>
-                            <Col md="3">
+                            <Col md="5">
                                 <Label>Patient Name: {firstname + " " + lastname}</Label>
                             </Col>
                             <Col md="3">

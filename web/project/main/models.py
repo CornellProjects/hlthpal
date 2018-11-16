@@ -30,7 +30,7 @@ class Entity(models.Model):
 # Model to extend User class on the creation of a new doctor
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor')
-    entity = models.ForeignKey(Entity)
+    # entity = models.ForeignKey(Entity)
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
@@ -39,17 +39,16 @@ class Doctor(models.Model):
 # Model to extend User class on the creation of a new patient
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient')
-    # doctor = models.ForeignKey(Doctor)
-    doctor = models.CharField(max_length=100)
-    care_giver = models.CharField(max_length=100)
-    diagnosis = models.CharField(max_length=50, blank=True)
-    gender = models.CharField(max_length=6, blank=True)
-    mobile = models.CharField(max_length=15, blank=True)
+    doctor = models.ForeignKey(Doctor, null=True, blank=True)
+    care_giver = models.CharField(max_length=100, null=True, blank=True)
+    diagnosis = models.CharField(max_length=50, null=True, blank=True)
+    gender = models.CharField(max_length=6, null=True, blank=True)
+    mobile = models.CharField(max_length=15, null=True, blank=True)
     address = models.CharField(max_length=250, null=True, blank=True)
     category = models.CharField(max_length=200, null=True, blank=True)
     referral = models.CharField(max_length=200, null=True, blank=True)
     street = models.CharField(max_length=200, null=True, blank=True)
-    sector = models.CharField(max_length=200)
+    sector = models.CharField(max_length=200, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     state = models.CharField(max_length=100, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)

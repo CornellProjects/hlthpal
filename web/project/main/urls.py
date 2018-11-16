@@ -13,6 +13,8 @@ urlpatterns = [
     # User APIs
     url(r'^api/register', views.UserCreateView.as_view(), name="register"),
     url(r'^api/login', views.UserLoginView.as_view(), name="login"),
+    url(r'^api/logout', views.UserLogoutView.as_view(), name="logout"),
+    url(r'^api/valid_email', views.UserValidateEmail.as_view(), name="validate_email"),
     url(r'^api/user', views.CurrentUserView.as_view(), name="user"),
     url(r'^api/profile', views.UserProfileView.as_view(), name="profile"),
     url(r'^api/record', views.RecordAPIView.as_view(), name="record"),
@@ -26,6 +28,7 @@ urlpatterns = [
     # Privileged user APIs
     url(r'^api/entity', views.EntityCreateView.as_view(), name="entity"),
     url(r'^api/doctor', views.DoctorCreateView.as_view(), name="doctor"),
+    url(r'^api/all_doctors', views.DoctorGetView.as_view(), name="all_doctors"),
     url(r'^api/patient/history$', views.PatientHistoryView.as_view(), name="patient_history"),
     url(r'^api/patient/activate$', views.PatientActivateView.as_view(), name="patient_activate"),
     url(r'^api/patient/deactivate$', views.PatientDeactivateView.as_view(), name="patient_deactivate"),
