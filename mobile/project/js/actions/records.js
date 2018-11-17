@@ -103,8 +103,8 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                body: JSON.stringify(symptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
-                answersArray = {} //resets the answersArray after every submission
-                mySymptoms = {}
+                Object.keys(answersArray).map(function(key){delete answersArray[key]}) //resets the answersArray after every submission
+                Object.keys(mySymptoms).map(function(key){delete mySymptoms[key]})
                 if (callback) {
                     callback();
                 }});
@@ -244,6 +244,8 @@ export const createRecord = ({ token, username, password, answersArray, mySympto
                 const record = new Record(answersArray, mySymptoms, totalScore);
                 const offlineAnswerHandler = new OfflineAnswerHandler();
                 offlineAnswerHandler.saveRecord(record);
+                Object.keys(answersArray).map(function(key){delete answersArray[key]}) //resets the answersArray after every submission
+                Object.keys(mySymptoms).map(function(key){delete mySymptoms[key]})
             }
         });
     };
