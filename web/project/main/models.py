@@ -93,7 +93,7 @@ class Answer(models.Model):
 # Model to store symptoms from the user
 class Symptom(models.Model):
     symptom = models.CharField(max_length=255)
-    answer = models.IntegerField(null=True, blank=True)
+    answer = models.IntegerField()
     record = models.ForeignKey(Record)
 
 class Log(models.Model):
