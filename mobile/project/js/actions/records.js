@@ -12,34 +12,40 @@ export const CREATE_RECORD       = 'CREATE_RECORD';
 const base64 = require('base-64');
 
 function calculateRecordScore(myArray) {
-    var count = 0;
+    var count = Object.keys(myArray).map(function(key){
+        if (!isNaN(parseInt(myArray[key].answer))){
+            return parseInt(myArray[key].answer)
+        }
+        else { return 0 }
+    });
+    count = count.reduce((a, b) => a + b, 0);
+    return count;
+};
 
+function calculateSympRecordScore(myArray) {
+    var count = 0;
     myArray.forEach(function(item) {
         if (!isNaN(parseInt(item.answer))){
             count += parseInt(item.answer);
         }
     });
-
     return count;
 };
 
 function assignRecord(myArray, record) {
+    let myNewArray = Object.keys(myArray).map(function(key){
+        myArray[key].record = record
+//        if  myArray[key]
+        return myArray[key];
+    });
+    return myNewArray;
+};
+
+function prepareRecord(myArray, record) { //only push questions that have been filled
     let myNewArray = []
     myArray.forEach(function(item) {
         item.record = record;
         myNewArray.push(item)
-    });
-
-    return myNewArray;
-};
-
-function prepareRecord(myArray) { //only push questions that have been filled
-    let myNewArray = []
-    myArray.forEach(function(item) {
-        myNewArray.push(item)
-        if (item.answer !== ""){
-            myNewArray.push(item);
-        }
     });
     return myNewArray;
 };
@@ -72,9 +78,8 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
             const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
             const parsed = JSON.parse(str).id;
 
-            answers = assignRecord(answersArray, parsed);
-            mySymptoms = assignRecord(mySymptoms, parsed);
-//            newAnswersArray = prepareRecord(answersArray);
+            let answers = assignRecord(answersArray, parsed);
+            let symptoms = assignRecord(mySymptoms, parsed);
 
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
@@ -95,11 +100,11 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                    'Authorization': 'JWT '+token,
                    },
 
-               body: JSON.stringify(mySymptoms)
+               body: JSON.stringify(symptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
-                answersArray.length = 0 //resets the answersArray after every submission
-                mySymptoms.length = 0
+                answersArray = {} //resets the answersArray after every submission
+                mySymptoms = {}
                 if (callback) {
                     callback();
                 }});
@@ -129,11 +134,8 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
             const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
             const parsed = JSON.parse(str).id;
 
-            answers = assignRecord(answersArray, parsed);
-            mySymptoms = assignRecord(mySymptoms, parsed);
-            newAnswersArray = prepareRecord(answersArray);
-
-//            console.log('answersarray', answersArray);
+            let answers = assignRecord(answersArray, parsed);
+            let symptoms = assignRecord(mySymptoms, parsed);
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
                    headers: {
@@ -153,11 +155,11 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                    'Authorization': 'Basic '+ base64.encode(username + ":" + password),
                    },
 
-               body: JSON.stringify(mySymptoms)
+               body: JSON.stringify(symptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
-                answersArray.length = 0 //resets the answersArray after every submission
-                mySymptoms.length = 0
+                Object.keys(answersArray).map(function(key){delete answersArray[key]}) //resets the answersArray after every submission
+                Object.keys(mySymptoms).map(function(key){delete mySymptoms[key]})
                 if (callback) {
                     callback();
                 }});

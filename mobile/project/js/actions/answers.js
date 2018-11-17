@@ -158,8 +158,8 @@ export const setSymptom = ({ record, symptom, rating }) => {
 };
 
 export const createSymptomObject = ({ record, symptom, rating }) => {
-    if (rating === undefined) {
-        rating = 0;
+    if (rating === undefined || rating === '') {
+       rating = null;
     }
 
     if (symptom === undefined) {

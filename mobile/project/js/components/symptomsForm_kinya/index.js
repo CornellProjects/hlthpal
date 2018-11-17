@@ -27,7 +27,9 @@ class symptomsForm extends Component {
     onButtonPress() {
         const { record, mySymptoms, rating, symptom } = this.props;
         if (symptom != '') {
-            mySymptoms.push(this.props.setSymptom({ record, symptom, rating }).payload);
+            mySymptoms[symptom] = this.props.setSymptom({ record, symptom, rating }).payload
+            this.setState({ symptom : ''})
+            console.log(symptom, mySymptoms)
         }
         this.props.resetRating(rating);
         Actions.otherSymptoms_k();
