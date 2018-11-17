@@ -39,8 +39,9 @@ class QtwoTen extends Component {
   }
 
   onBackPress() {
-    const { answersArray } = this.props;
-    answersArray.pop();
+    const { answersArray, question } = this.props;
+//    answersArray.pop();
+    delete answersArray[question]
     Actions.qtwoNine();
   }
 
@@ -49,7 +50,8 @@ class QtwoTen extends Component {
 
     let text = '';
 
-    answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
+//    answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
+    answersArray[question] = this.props.setAnswer({ record, question, text, rating }).payload;
     this.props.resetRating(rating);
     Actions.qtwoEleven();
   }
