@@ -19,7 +19,7 @@ export default {
       icon: 'icon-star',
     },
     {
-      name: 'Add Patients',
+      name: 'Add Patient',
       url: '/addPatients',
       icon: 'icon-calculator',
     },
