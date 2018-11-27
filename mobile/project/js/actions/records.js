@@ -11,34 +11,33 @@ export const CREATE_RECORD       = 'CREATE_RECORD';
 
 const base64 = require('base-64');
 
-function calculateRecordScore(myArray) {
+function calculateRecordScore(myDict) {
+    var count = Object.keys(myDict).map(function(key){
+        if (!isNaN(parseInt(myDict[key].answer))){
+            return parseInt(myDict[key].answer)
+        }
+        else { return 0 }
+    });
+    count = count.reduce((a, b) => a + b, 0);
+    return count;
+};
+
+function calculateSympRecordScore(myDict) {
     var count = 0;
-    myArray.forEach(function(item) {
+    myDict.forEach(function(item) {
         if (!isNaN(parseInt(item.answer))){
             count += parseInt(item.answer);
         }
     });
-
     return count;
 };
 
-function assignRecord(myArray, record) {
-    myArray.forEach(function(item) {
-        item.record = record;
+function assignRecord(myDict, record) {
+    let myNewDict = Object.keys(myDict).map(function(key){
+        myDict[key].record = record
+        return myDict[key];
     });
-
-    return myArray;
-};
-
-function prepareRecord(myArray) { //only push questions that have been filled
-    let myNewArray = []
-    myArray.forEach(function(item) {
-        myNewArray.push(item)
-        if (item.answer !== ""){
-            myNewArray.push(item);
-        }
-    });
-    return myNewArray;
+    return myNewDict;
 };
 
 const setCurrentRecord = (dispatch, record) => {
@@ -69,9 +68,8 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
             const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
             const parsed = JSON.parse(str).id;
 
-            answersArray = assignRecord(answersArray, parsed);
-            mySymptoms = assignRecord(mySymptoms, parsed);
-            newAnswersArray = prepareRecord(answersArray);
+            let answers = assignRecord(answersArray, parsed);
+            let symptoms = assignRecord(mySymptoms, parsed);
 
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
@@ -81,7 +79,7 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                    'Authorization': 'JWT '+ token,
                    },
 
-                   body: JSON.stringify(answersArray)
+                   body: JSON.stringify(answers)
             }).then(response => {console.log('ANSWERS', response)});
 
             fetch(myUrl + '/api/symptom', {
@@ -92,18 +90,14 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
                    'Authorization': 'JWT '+token,
                    },
 
-               body: JSON.stringify(mySymptoms)
+               body: JSON.stringify(symptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
-                answersArray.length = 0;
-                mySymptoms.length = 0;
+                Object.keys(answersArray).map(function(key){delete answersArray[key]}) //resets the answersArray after every submission
+                Object.keys(mySymptoms).map(function(key){delete mySymptoms[key]})
                 if (callback) {
                     callback();
                 }});
-        }
-        else if(response.status == 500){
-            console.log("500 error");
-            console.log(response);
         }
 
     });
@@ -130,11 +124,8 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
             const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
             const parsed = JSON.parse(str).id;
 
-            answersArray = assignRecord(answersArray, parsed);
-            mySymptoms = assignRecord(mySymptoms, parsed);
-            newAnswersArray = prepareRecord(answersArray);
-
-            console.log('answersarray', answersArray);
+            let answers = assignRecord(answersArray, parsed);
+            let symptoms = assignRecord(mySymptoms, parsed);
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
                    headers: {
@@ -143,7 +134,7 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                    'Authorization': 'Basic ' + base64.encode(username + ":" + password),
                    },
 
-                   body: JSON.stringify(answersArray)
+                   body: JSON.stringify(answers)
             }).then(response => {console.log('ANSWERS', response)});
 
             fetch(myUrl + '/api/symptom', {
@@ -154,11 +145,11 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
                    'Authorization': 'Basic '+ base64.encode(username + ":" + password),
                    },
 
-               body: JSON.stringify(mySymptoms)
+               body: JSON.stringify(symptoms)
             }).then(response => {
                 console.log('SYMPTOMS', response);
-                answersArray.length = 0;
-                mySymptoms.length = 0;
+                Object.keys(answersArray).map(function(key){delete answersArray[key]}) //resets the answersArray after every submission
+                Object.keys(mySymptoms).map(function(key){delete mySymptoms[key]})
                 if (callback) {
                     callback();
                 }});
@@ -167,6 +158,7 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
             console.log(response);
         }
         });
+
 
 }
 
@@ -236,13 +228,14 @@ export const createRecord = ({ token, username, password, answersArray, mySympto
                 console.log('There is network connectivity, submitting the record online.');
                 timestamp = new Date();
 //                submitCreateRecordCall(token, answersArray, mySymptoms, totalScore, timestamp.getTime());
-                console.log("Username", username, "password", password);
                 submitCreateRecordCallNoToken(username, password, answersArray, mySymptoms, totalScore, timestamp.getTime());
             } else {
                 console.log('No network connectivity, persisting the record locally.');
                 const record = new Record(answersArray, mySymptoms, totalScore);
                 const offlineAnswerHandler = new OfflineAnswerHandler();
                 offlineAnswerHandler.saveRecord(record);
+                Object.keys(answersArray).map(function(key){delete answersArray[key]}) //resets the answersArray after every submission
+                Object.keys(mySymptoms).map(function(key){delete mySymptoms[key]})
             }
         });
     };

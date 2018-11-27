@@ -70,7 +70,7 @@ export function add(item) {
 	}
 }
 export const answerChanged = (rating, question) => {
-    if (parseInt(question) < 9) {
+    if (parseInt(question) < 9 || isNaN(parseInt(question))) { // checks if question number 1-8 or a symptom
         const options = {
             'Not at all':     0,
             'Slightly':       1,
@@ -160,8 +160,8 @@ export const setSymptom = ({ record, symptom, rating }) => {
 };
 
 export const createSymptomObject = ({ record, symptom, rating }) => {
-    if (rating === undefined) {
-        rating = 0;
+    if (rating === undefined || rating === '') {
+        rating = null; //0;
     }
 
     if (symptom === undefined) {

@@ -29,7 +29,7 @@ class symptomsForm extends Component {
     onButtonPress() {
         const { record, mySymptoms, rating, symptom } = this.props;
         if (symptom != '') {
-            mySymptoms.push(this.props.setSymptom({ record, symptom, rating }).payload);
+            mySymptoms[symptom] = this.props.setSymptom({ record, symptom, rating }).payload;
         }
         this.props.resetRating(rating);
         Actions.otherSymptoms({"lang":this.props.lang});
@@ -37,8 +37,8 @@ class symptomsForm extends Component {
 
     render() {
         let symptomsForm = symptomsFormLang[this.props.lang];
-        console.log(symptomsForm);
-        console.log(symptomsFormLang);
+//        console.log(symptomsForm);
+//        console.log(symptomsFormLang);
 
         return (
             <Container style={styles.container}>
@@ -77,7 +77,7 @@ class symptomsForm extends Component {
                         optionStyle={{fontSize:20, paddingTop: 8}}
                         optionContainerStyle={{ height: 60, alignItems: 'center' }}
                         selectedIndex={ this.props.rating }
-                        onSelection={value => this.props.answerChanged(value)}
+                        onSelection={value => this.props.answerChanged(value, this.props.symptom)}
                         />
                     </Card>
 
@@ -103,7 +103,7 @@ function bindAction(dispatch) {
   return {
     openDrawer: () => dispatch(openDrawer()),
     symptomChanged: text => dispatch(symptomChanged(text)),
-    answerChanged: rating => dispatch(answerChanged(rating)),
+    answerChanged: (rating, question) => dispatch(answerChanged(rating, question)),
     resetRating: rating => dispatch(resetRating(rating)),
     setSymptom: (record, symptom, rating) => dispatch(createSymptomObject(record, symptom, rating)),
   };
