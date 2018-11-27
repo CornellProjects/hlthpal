@@ -125,7 +125,7 @@ class Question extends Component {
                   optionStyle={{fontSize:20, paddingTop: 8}}
                   optionContainerStyle={{ height: 60, alignItems: 'center' }}
                   selectedIndex={ this.props.rating }
-                  onSelection={value => this.props.answerChanged(value)}
+                  onSelection={value => this.props.answerChanged(value, this.props.questionName)}
                 />
             </Card>
         </Content>
@@ -138,7 +138,7 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
-    answerChanged: rating => dispatch(answerChanged(rating)),
+    answerChanged: (rating, question) => dispatch(answerChanged(rating, question)),
     resetRating: rating => dispatch(resetRating(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
     setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),

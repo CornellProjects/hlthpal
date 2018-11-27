@@ -69,45 +69,48 @@ export function add(item) {
 		item
 	}
 }
+export const answerChanged = (rating, question) => {
+    console.log(rating, question)
+    if (parseInt(question) < 9) {
+        const options = {
+            'Not at all':     0,
+            'Slightly':       1,
+            'Moderately':     2,
+            'Severely':       3,
+            'Overwhelmingly': 4,
+            'Ntanarimwe':     0,
+            'Bukeya':         1,
+            'Buringaniye':    2,
+            'Byinshi':        3,
+            'Byinshi cyane':  4
+        };
 
-export const answerChanged = (rating) => {
-    const options = {
-        'Not at all':     0,
-        'Slightly':       1,
-        'Moderately':     2,
-        'Severely':       3,
-        'Overwhelmingly': 4,
-        'Ntanarimwe':     0,
-        'Bukeya':         1,
-        'Buringaniye':    2,
-        'Byinshi':        3,
-        'Byinshi cyane':  4
-    };
+        return {
+            type: ANSWER_CHANGED,
+            payload: options[rating]
+        };
+    }
+    else {
+        const options = {
+            'Yes':              0,
+            'Most of the time': 1,
+            'Sometimes':        2,
+            'Occasionally':     3,
+            'Not at all':       4,
+            'Yego':             0,
+            'Kenshi cyane':     1,
+            'Rimwe narimwe':    2,
+            'Sikenshi':         3,
+            'Ntanarimwe':       4
+        };
 
-    return {
-        type: ANSWER_CHANGED,
-        payload: options[rating]
-    };
-};
+        return {
+            type: ANSWER_CHANGED,
+            payload: options[rating]
+        };
 
-export const answerModified = (rating) => {
-    const options = {
-        'Yes':              0,
-        'Most of the time': 1,
-        'Sometimes':        2,
-        'Occasionally':     3,
-        'Not at all':       4,
-        'Yego':             0,
-        'Kenshi cyane':     1,
-        'Rimwe narimwe':    2,
-        'Sikenshi':         3,
-        'Ntanarimwe':       4
-    };
+    }
 
-    return {
-        type: ANSWER_CHANGED,
-        payload: options[rating]
-    };
 };
 
 export const resetRating = (rating) => {
