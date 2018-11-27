@@ -70,7 +70,6 @@ export function add(item) {
 	}
 }
 export const answerChanged = (rating, question) => {
-    console.log(rating, question)
     if (parseInt(question) < 9) {
         const options = {
             'Not at all':     0,
