@@ -6,7 +6,6 @@ import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
 import Footer from '../../components/Footer/';
 import Dashboard from '../../views/Dashboard/';
-import Charts from '../../views/Charts/';
 
 // Components
 import Forms from '../../views/Components/Forms/';
@@ -29,8 +28,8 @@ class Full extends Component {
             <Container fluid>
               <Switch>
                 {/*<Route path="/home" name="My patients" component={Patients}/>*/}
-                <Route path="/home" name="My patients" component={PatientsTable}/>
-                <Route path="/addPatients" name="Add Patients" component={Forms}/>
+                <Route path="/home" name="My Patients" component={PatientsTable}/>
+                <Route path="/addPatients" name="Add Patient" component={Forms}/>
                 <Route path="/addDoctors" name="Add Doctors" component={Doctor}/>
                 <Route path="/addHospitals" name="Add Hospitals" component={Hospital}/>
                 <Route path="/viewPatient" name="Patient Info" component={NewPatientCard}/>
