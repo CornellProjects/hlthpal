@@ -15,6 +15,7 @@ import FillInfo from './components/fillInfo';
 import RecordList from './components/RecordList';
 import symptomsForm from './components/symptomsForm';
 import Instructions from './components/instructions';
+import finalScreen from './components/finalScreen';
 
 const RouterWithRedux = connect()(Router);
 
@@ -88,6 +89,7 @@ class AppNavigator extends Component {
             <Scene key="questions" component={Question} />
             <Scene key="otherSymptoms" component={otherSymptoms} />
             <Scene key="symptomsForm" component={symptomsForm} />
+            <Scene key="finalScreen" component={finalScreen} />
           </Scene>
         </RouterWithRedux>
       </Drawer>

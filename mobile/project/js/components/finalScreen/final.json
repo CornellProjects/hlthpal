@@ -1,14 +1,12 @@
 {
     "english":{
-        "hi":"Hi",
-        "greeting":", how are you today?",
-        "record":"Take record",
-        "change": "Change Language to Kinyarwanda"
+        "summary":"Thank you for letting us know how you are doing today. We look forward to your next update.",
+        "remarks":"Please click below to go back to the home screen.",
+        "home": "Home"
     },
     "kr":{
-        "hi":"Muraho",
-        "greeting":", Amakuru yawe uyumunsi?",
-        "record":"Fata amajwi",
-        "change": "Change Language to English"
+        "summary":"Thank you for letting us know how you are doing today. We look forward to your next update.",
+        "remarks":"Please click below to go back to the home screen.",
+        "home": "Intaho"
     }
 }

@@ -38,8 +38,8 @@ class Question extends Component {
   }
 
   onBackPress() {
-    const { answersArray } = this.props;
-    answersArray.pop();
+    const { answersArray, question } = this.props;
+    delete answersArray[question]
     if(parseInt(this.props.questionName) == 1){
         Actions.home({lang: this.props.lang});
     }
@@ -62,7 +62,7 @@ class Question extends Component {
 
     let text = '';
 
-    answersArray.push(this.props.setAnswer({ record, question, text, rating }).payload);
+    answersArray[question] = this.props.setAnswer({ record, question, text, rating }).payload;
     this.props.resetRating(rating);
     if(parseInt(this.props.questionName) == 8){
         Actions.otherSymptoms({lang: this.props.lang});
@@ -71,9 +71,8 @@ class Question extends Component {
         Actions.questions({questionName: parseInt(this.props.questionName) + 1, lang: this.props.lang});
     }
     else{
-//        console.log(answersArray);
         this.props.createRecord({ token, username, password, answersArray, mySymptoms, score });
-        Actions.home({lang: this.props.lang});
+        Actions.finalScreen({lang: this.props.lang});
     }
   }
 
