@@ -16,11 +16,17 @@ import { Container,
          View} from 'native-base';
 import { Grid, Row } from 'react-native-easy-grid';
 import { setIndex } from '../../actions/list';
+import { setLanguage } from '../../actions/language';
 import { directoryExists } from '../../handlers/fileHandler';
 import { submitOfflineRecords } from '../../actions/records';
 import { openDrawer } from '../../actions/drawer';
 
 import styles from './styles';
+
+import Perf from 'ReactPerf';
+
+const homeLang = require('./home.json');
+var lang = "kr";
 
 class Home extends Component {
 
@@ -28,6 +34,8 @@ class Home extends Component {
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
     openDrawer: React.PropTypes.func,
+    setLanguage: React.PropTypes.func,
+    language: React.PropTypes.string
   }
 
   newPage(index) {
@@ -37,6 +45,8 @@ class Home extends Component {
 
   componentWillMount() {
     const { token } = this.props;
+    if(this.props.lang)
+        lang = this.props.lang;
   }
 
   componentWillUnmount() {
@@ -63,10 +73,24 @@ class Home extends Component {
 
   onButtonPress() {
     const { token } = this.props;
-    Actions.Instructions();
+    Actions.Instructions({lang: lang});
+  }
+
+  onLanguageChange(){
+//    this.props.setLanguage("english");
+//    console.log(this.props);
+    if(lang == "english"){
+        lang = "kr"
+    }
+    else{
+        lang = "english";
+    }
+    Actions.home({lang: lang});
   }
 
   render() {
+    let home = homeLang[lang];
+    let greeting = home["hi"] + " " + this.props.first_name + home["greeting"];
      return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -87,16 +111,21 @@ class Home extends Component {
         <Content>
           <View style={styles.mt}>
             <Text style={styles.text}>
-              Hi {this.props.first_name}, how are you today?
+              {greeting}
             </Text>
             <View style={styles.buttons}>
                 <Button rounded style={styles.round} onPress={() => this.onButtonPress()}>
-                    <Text style={styles.btn}>Take record</Text>
+                    <Text style={styles.btn}>{home["record"]}</Text>
                 </Button>
                 {/*<Button light rounded style={styles.light} onPress={() => this.onButtonPress()}>
                     <Text style={styles.btn}>View Past Data</Text>
                 </Button>*/}
             </View>
+         </View>
+         <View style={styles.contentContainer}>
+             <Button rounded bordered style={styles.round} onPress={() => this.onLanguageChange()}>
+                <Text style={styles.center}>{home["change"]}</Text>
+             </Button>
          </View>
         </Content>
       </Container>
@@ -108,6 +137,7 @@ function bindAction(dispatch) {
   return {
     setIndex: index => dispatch(setIndex(index)),
     openDrawer: () => dispatch(openDrawer()),
+    setLanguage: lang => dispatch(setLanguage(lang))
   };
 }
 
@@ -116,7 +146,8 @@ const mapStateToProps = state => ({
   token: state.user.token,
   first_name: state.user.first_name,
   username: state.user.username,
-  password: state.user.password
+  password: state.user.password,
+  language: state.language
 });
 
 export default connect(mapStateToProps, bindAction)(Home);

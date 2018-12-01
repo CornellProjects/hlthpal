@@ -10,6 +10,8 @@ import { SegmentedControls } from 'react-native-radio-buttons';
 import { setSymptom, createSymptomObject, symptomChanged, answerChanged, resetRating } from '../../actions/answers';
 import styles from './styles';
 
+const symptomsFormLang = require('./symptoms-form.json');
+
 class symptomsForm extends Component {
     onSymptomInputChange(text) {
         this.props.symptomChanged(text);
@@ -27,20 +29,16 @@ class symptomsForm extends Component {
     onButtonPress() {
         const { record, mySymptoms, rating, symptom } = this.props;
         if (symptom != '') {
-            mySymptoms.push(this.props.setSymptom({ record, symptom, rating }).payload);
+            mySymptoms[symptom] = this.props.setSymptom({ record, symptom, rating }).payload;
         }
         this.props.resetRating(rating);
-        Actions.otherSymptoms();
+        Actions.otherSymptoms({"lang":this.props.lang});
     }
 
     render() {
-        const options = [
-            'Not at all',
-            'Slightly',
-            'Moderately',
-            'Severely',
-            'Overwhelmingly'
-        ];
+        let symptomsForm = symptomsFormLang[this.props.lang];
+//        console.log(symptomsForm);
+//        console.log(symptomsFormLang);
 
         return (
             <Container style={styles.container}>
@@ -64,7 +62,7 @@ class symptomsForm extends Component {
                     <Item regular style={styles.list}>
                         <TextField
                         style={styles.input}
-                        placeholder='Enter Symptom Here...'
+                        placeholder={symptomsForm["placeholder"]}
                         value={this.props.symptom}
                         onChangeText={this.onSymptomInputChange.bind(this)}
                         />
@@ -74,24 +72,24 @@ class symptomsForm extends Component {
                         <SegmentedControls
                         direction={'column'}
                         tint={'#F16C00'}
-                        options={options}
+                        options={symptomsForm["options"]}
                         containerBorderRadius={0}
                         optionStyle={{fontSize:20, paddingTop: 8}}
                         optionContainerStyle={{ height: 60, alignItems: 'center' }}
                         selectedIndex={ this.props.rating }
-                        onSelection={value => this.props.answerChanged(value)}
+                        onSelection={value => this.props.answerChanged(value, this.props.symptom)}
                         />
                     </Card>
 
                     <Grid style={styles.buttons}>
                         <Col>
-                            <Button rounded light onPress={() => Actions.otherSymptoms()} style={styles.center}>
-                                <Text>Cancel</Text>
+                            <Button rounded light onPress={() => Actions.otherSymptoms({"lang":this.props.lang})} style={styles.center}>
+                                <Text>{symptomsForm["cancel"]}</Text>
                             </Button>
                         </Col>
                         <Col>
                             <Button rounded onPress={() => this.onButtonPress()} style={styles.center}>
-                                <Text>Add</Text>
+                                <Text>{symptomsForm["add"]}</Text>
                             </Button>
                         </Col>
                     </Grid>
@@ -105,7 +103,7 @@ function bindAction(dispatch) {
   return {
     openDrawer: () => dispatch(openDrawer()),
     symptomChanged: text => dispatch(symptomChanged(text)),
-    answerChanged: rating => dispatch(answerChanged(rating)),
+    answerChanged: (rating, question) => dispatch(answerChanged(rating, question)),
     resetRating: rating => dispatch(resetRating(rating)),
     setSymptom: (record, symptom, rating) => dispatch(createSymptomObject(record, symptom, rating)),
   };

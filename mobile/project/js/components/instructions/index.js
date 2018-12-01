@@ -22,6 +22,7 @@ import { setIndex } from '../../actions/list';
 import { openDrawer } from '../../actions/drawer';
 import styles from './styles';
 
+const instructionLang = require('./instructions.json');
 
 class Instructions extends Component {
 
@@ -38,6 +39,7 @@ class Instructions extends Component {
   }
 
   render() {
+    let instructions = instructionLang[this.props.lang];
     return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -58,20 +60,18 @@ class Instructions extends Component {
         <Content>
             <Grid style={styles.buttons}>
                 <Col>
-                    <Button rounded bordered onPress={() => Actions.home()} style={styles.center}>
-                    <Text>Cancel</Text>
+                    <Button rounded bordered onPress={() => Actions.home({lang: this.props.lang})} style={styles.center}>
+                    <Text>{instructions["cancel"]}</Text>
                     </Button>
                 </Col>
                 <Col>
-                    <Button rounded onPress={() => Actions.qtwoOne()} style={styles.center}>
-                    <Text>Next</Text>
+                    <Button rounded onPress={() => Actions.questions({questionName: "1", lang: this.props.lang})} style={styles.center}>
+                    <Text>{instructions["next"]}</Text>
                     </Button>
                 </Col>
             </Grid>
            <Text style={styles.text}>
-            Below is a list of symptoms, which you may or may not have experienced. For
-            each symptom, please tick one box that best describe how it affected you
-            over the past 3 days.
+            {instructions["instruction"]}
           </Text>
         </Content>
       </Container>

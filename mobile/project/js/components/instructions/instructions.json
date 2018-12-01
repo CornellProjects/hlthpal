@@ -1,0 +1,12 @@
+{
+    "english":{
+        "instruction":"Below is a list of symptoms, which you may or may not have experienced. For each symptom, please tick one box that best describe how it affected you over the past 3 days.",
+        "next":"Next",
+        "cancel": "Cancel"
+    },
+    "kr":{
+        "instruction":"Urabona urutonde rwibimenyetso , ushobora kuba warabigize cyangwa utarigeze ubigira. Kuri buri kimenyetso, shyira akamenyetso mukazu kabugenewe ugaragaza uburyo byagenze muminsi 3 ishize",
+        "next":"Ibikurikira",
+        "cancel": "Reka"
+    }
+}

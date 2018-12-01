@@ -9,24 +9,13 @@ import Home from './components/home/';
 import BlankPage from './components/blankPage';
 import SideBar from './components/sideBar';
 import { statusBarColor } from './themes/base-theme';
-import QtwoOne from './components/qtwoOne';
-import QtwoTwo from './components/qtwoTwo';
-import QtwoThree from './components/qtwoThree';
-import QtwoFour from './components/qtwoFour';
-import QtwoFive from './components/qtwoFive';
-import QtwoSix from './components/qtwoSix';
-import QtwoSeven from './components/qtwoSeven';
-import QtwoEight from './components/qtwoEight';
-import QtwoNine from './components/qtwoNine';
-import QtwoTen from './components/qtwoTen';
-import QtwoEleven from './components/qtwoEleven';
-import QtwoTwelve from './components/qtwoTwelve';
-import finalScreen from './components/finalScreen';
+import Question from './components/questions';
 import otherSymptoms from './components/otherSymptoms';
 import FillInfo from './components/fillInfo';
 import RecordList from './components/RecordList';
 import symptomsForm from './components/symptomsForm';
 import Instructions from './components/instructions';
+import finalScreen from './components/finalScreen';
 
 const RouterWithRedux = connect()(Router);
 
@@ -54,55 +43,6 @@ class AppNavigator extends Component {
   closeDrawer() {
     if (this.props.drawerState === 'opened') {
       this.props.closeDrawer();
-    }
-  }
-
-  _renderScene(props) { // eslint-disable-line class-methods-use-this
-    switch (props.scene.route.key) {
-      case 'login':
-        return <Login />;
-      case 'home':
-        return <Home />;
-      case 'blankPage':
-        return <BlankPage />;
-      case 'fillInfo':
-        return <FillInfo />;
-      case 'qtwoOne':
-        return <QtwoOne />
-      case 'qtwoTwo':
-        return <QtwoTwo />
-      case 'qtwoThree':
-        return <QtwoThree />
-      case 'qtwoFour':
-        return <QtwoFour />
-      case 'qtwoFive':
-        return <QtwoFive />
-      case 'qtwoSix':
-        return <QtwoSix />
-      case 'qtwoSeven':
-        return <QtwoSeven />
-      case 'qtwoEight':
-        return <QtwoEight />
-      case 'qtwoNine':
-        return <QtwoNine />
-      case 'qtwoTen':
-        return <QtwoTen />
-      case 'qtwoEleven':
-        return <QtwoEleven />
-      case 'qtwoTwelve':
-        return <QtwoTwelve />
-      case 'otherSymptoms':
-        return <otherSymptoms />
-      case 'symptomsForm':
-        return <symptomsForm />
-      case 'RecordList':
-        return <RecordList />
-      case 'Instructions':
-        return <Instructions />
-      case 'finalScreen':
-        return <finalScreen />
-      default:
-        return <Login />;
     }
   }
 
@@ -144,23 +84,11 @@ class AppNavigator extends Component {
             <Scene key="login" component={Login} hideNavBar initial />
             <Scene key="fillInfo" component={FillInfo} />
             <Scene key="home" component={Home} />
+            <Scene key="Instructions" component={Instructions} />
             <Scene key="blankPage" component={BlankPage} />
-            <Scene key="qtwoOne" component={QtwoOne} />
-            <Scene key="qtwoTwo" component={QtwoTwo} />
-            <Scene key="qtwoThree" component={QtwoThree} />
-            <Scene key="qtwoFour" component={QtwoFour} />
-            <Scene key="qtwoFive" component={QtwoFive} />
-            <Scene key="qtwoSix" component={QtwoSix} />
-            <Scene key="qtwoSeven" component={QtwoSeven} />
-            <Scene key="qtwoEight" component={QtwoEight} />
-            <Scene key="qtwoNine" component={QtwoNine} />
-            <Scene key="qtwoTen" component={QtwoTen} />
-            <Scene key="qtwoEleven" component={QtwoEleven} />
-            <Scene key="qtwoTwelve" component={QtwoTwelve} />
+            <Scene key="questions" component={Question} />
             <Scene key="otherSymptoms" component={otherSymptoms} />
             <Scene key="symptomsForm" component={symptomsForm} />
-            <Scene key="RecordList" component={RecordList} />
-            <Scene key="Instructions" component={Instructions} />
             <Scene key="finalScreen" component={finalScreen} />
           </Scene>
         </RouterWithRedux>

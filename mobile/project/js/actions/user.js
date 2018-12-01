@@ -81,6 +81,10 @@ export const loginUser = ({ email, password }) => {
                             loginUserFail(dispatch);
                         }
                     })
+                    .catch((error) => {
+                        console.log("There was an error");
+                        console.log(error);
+                    });
     //                    .catch((error) => {
     ////                        console.log(error.response.data);
     //                        const str = JSON.stringify({

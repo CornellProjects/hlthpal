@@ -23,6 +23,8 @@ import { openDrawer } from '../../actions/drawer';
 import SymptomList from '../SymptomList';
 import styles from './styles';
 
+const otherSymptomsLang = require('./other-symptoms.json');
+
 class otherSymptoms extends Component {
 
   static propTypes = {
@@ -37,6 +39,7 @@ class otherSymptoms extends Component {
   }
 
   render() {
+    let otherSymptoms = otherSymptomsLang[this.props.lang];
     return (
       <Container style={styles.container}>
         <Header style={{backgroundColor:'#F16C00'}}>
@@ -46,7 +49,7 @@ class otherSymptoms extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>Other Symptoms</Title>
+            <Title>{otherSymptoms["othersymptoms"]}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
@@ -57,26 +60,25 @@ class otherSymptoms extends Component {
         <Content>
             <Grid style={styles.buttons}>
                 <Col>
-                    <Button rounded bordered onPress={() => Actions.qtwoSeven()} style={styles.center}>
-                    <Text>Back</Text>
+                    <Button rounded bordered onPress={() => Actions.questions({"questionName": "8", "lang":this.props.lang})} style={styles.center}>
+                    <Text>{otherSymptoms["back"]}</Text>
                     </Button>
                 </Col>
                 <Col>
-                    <Button rounded onPress={() => Actions.qtwoEight()} style={styles.center}>
-                    <Text>Next</Text>
+                    <Button rounded onPress={() => Actions.questions({"questionName": "9", "lang":this.props.lang})} style={styles.center}>
+                    <Text>{otherSymptoms["next"]}</Text>
                     </Button>
                 </Col>
             </Grid>
             <Text style={styles.text}>
-            Please list any other symptoms not mentioned above, and tick one box to show how
-             they have affected you over the past 3 days.
+            {otherSymptoms["instruction"]}
             </Text>
             <SymptomList />
             <Grid style={styles.buttons}>
                 <Row>
                     <Col>
-                        <Button rounded onPress={() => Actions.symptomsForm()} style={styles.button}>
-                            <Text>Add</Text>
+                        <Button rounded onPress={() => Actions.symptomsForm({"lang":this.props.lang})} style={styles.button}>
+                            <Text>{otherSymptoms["add"]}</Text>
                         </Button>
                     </Col>
                 </Row>

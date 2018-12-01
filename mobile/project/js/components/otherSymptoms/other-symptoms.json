@@ -1,0 +1,16 @@
+{
+    "english":{
+        "instruction":"Please list any other symptoms not mentioned above, and tick one box to show how they have affected you over the past 3 days.",
+        "next":"Next",
+        "back": "Back",
+        "add":"Add",
+        "othersymptoms": "Other Symptoms"
+    },
+    "kr":{
+        "instruction":"Ongeramo kururu rutonde ibindi bimenyetso  byaba bitagaragajwe hejuru, hanyuma ushyire mukazu  akamenyetso ugaragaza uburyo byakugizeho ingaruka muminsi itatu ishyize",
+        "next":"Ibikurikira",
+        "back": "Subira inyuma",
+        "add":"Ongeramo",
+        "othersymptoms": "Cyangwa ikimenyetso"
+    }
+}

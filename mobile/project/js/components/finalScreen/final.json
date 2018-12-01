@@ -1,0 +1,12 @@
+{
+    "english":{
+        "summary":"Thank you for letting us know how you are doing today. We look forward to your next update.",
+        "remarks":"Please click below to go back to the home screen.",
+        "home": "Home"
+    },
+    "kr":{
+        "summary":"Thank you for letting us know how you are doing today. We look forward to your next update.",
+        "remarks":"Please click below to go back to the home screen.",
+        "home": "Intaho"
+    }
+}

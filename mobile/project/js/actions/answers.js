@@ -69,35 +69,47 @@ export function add(item) {
 		item
 	}
 }
+export const answerChanged = (rating, question) => {
+    if (parseInt(question) < 9 || isNaN(parseInt(question))) { // checks if question number 1-8 or a symptom
+        const options = {
+            'Not at all':     0,
+            'Slightly':       1,
+            'Moderately':     2,
+            'Severely':       3,
+            'Overwhelmingly': 4,
+            'Ntanarimwe':     0,
+            'Bukeya':         1,
+            'Buringaniye':    2,
+            'Byinshi':        3,
+            'Byinshi cyane':  4
+        };
 
-export const answerChanged = (rating) => {
-    const options = {
-        'Not at all':     0,
-        'Slightly':       1,
-        'Moderately':     2,
-        'Severely':       3,
-        'Overwhelmingly': 4
-    };
+        return {
+            type: ANSWER_CHANGED,
+            payload: options[rating]
+        };
+    }
+    else {
+        const options = {
+            'Yes':              0,
+            'Most of the time': 1,
+            'Sometimes':        2,
+            'Occasionally':     3,
+            'Not at all':       4,
+            'Yego':             0,
+            'Kenshi cyane':     1,
+            'Rimwe narimwe':    2,
+            'Sikenshi':         3,
+            'Ntanarimwe':       4
+        };
 
-    return {
-        type: ANSWER_CHANGED,
-        payload: options[rating]
-    };
-};
+        return {
+            type: ANSWER_CHANGED,
+            payload: options[rating]
+        };
 
-export const answerModified = (rating) => {
-    const options = {
-        'Yes':              0,
-        'Most of the time': 1,
-        'Sometimes':        2,
-        'Occasionally':     3,
-        'Not at all':       4
-    };
+    }
 
-    return {
-        type: ANSWER_CHANGED,
-        payload: options[rating]
-    };
 };
 
 export const resetRating = (rating) => {
@@ -148,8 +160,8 @@ export const setSymptom = ({ record, symptom, rating }) => {
 };
 
 export const createSymptomObject = ({ record, symptom, rating }) => {
-    if (rating === undefined) {
-        rating = 0;
+    if (rating === undefined || rating === '') {
+        rating = null; //0;
     }
 
     if (symptom === undefined) {
@@ -172,7 +184,7 @@ export const createSymptomObject = ({ record, symptom, rating }) => {
 
 export const updateAnswer = ({ token, record, question, rating, text }) => {
     return (dispatch) => {
-
+        console.log("Updating the answer and calling the api to send the answer responses");
         fetch(myUrl + '/api/edit_answer/' + record + '/' + question, {
                    method: 'PUT',
                    headers: {

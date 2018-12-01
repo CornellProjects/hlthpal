@@ -16,8 +16,8 @@ export type State = {
 }
 
 const initialState = {
-    mySymptoms: [],
-    answersArray: [],
+    mySymptoms: {},
+    answersArray: {},
     selectedRecord: '',
     selectedSymptom: '',
     record: '',
