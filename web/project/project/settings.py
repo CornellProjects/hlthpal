@@ -9,7 +9,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-import os
+import os, json
 import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -87,14 +87,16 @@ DATABASES = {
 }
 
 # Set up MY-Sql Database
+# with open('database.json') as data_file:
+#         data = json.load(data_file)
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': '_MY_DB_NAME_',
-#         'USER': '_MY_DB_USER_',
-#         'PASSWORD': '_MY_PASSWORD_',
-#         'HOST': 'localhost',
-#         'PORT': '',
+#         'NAME': data['NAME'],
+#         'USER': data['USER'],
+#         'PASSWORD': data['PASSWORD'],
+#         'HOST': data['HOST'],
+#         'PORT': data['PORT']
 #     }
 # }
 
