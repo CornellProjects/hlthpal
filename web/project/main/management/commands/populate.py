@@ -20,11 +20,8 @@ class Command(BaseCommand):
             '11': 'Over the past 3 days, have you felt at peace?',
             '12': 'Have you had enough help and advice for your family to plan for the future?'
         }
-<<<<<<< HEAD
-        if len(Question.objects.all()) == 0: # Questions ahve not been populated yet
-=======
+
         if len(Question.objects.all()) == 0: # Questions have not been populated yet
->>>>>>> mobile-v1.1
             for question_number in questions:
                 q = Question.objects.create(question_number=question_number, question=questions[question_number])
 

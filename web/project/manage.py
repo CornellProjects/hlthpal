@@ -20,9 +20,5 @@ if __name__ == "__main__":
                 "forget to activate a virtual environment?"
             )
         raise
-<<<<<<< HEAD
-    execute_from_command_line(['./manage.py', 'populate'])
-=======
     # execute_from_command_line(['./manage.py', 'populate']) # this populates the questions
->>>>>>> mobile-v1.1
     execute_from_command_line(sys.argv)
