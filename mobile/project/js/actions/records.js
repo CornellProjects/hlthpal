@@ -47,9 +47,7 @@ const setCurrentRecord = (dispatch, record) => {
     });
 };
 
-const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_date, callback) => {
-    console.log('Submitting a record to the server.');
-
+const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_date, callback) => {;
     fetch(myUrl + '/api/record', {
                method: 'POST',
                headers: {
@@ -67,10 +65,8 @@ const submitCreateRecordCall = (token, answersArray, mySymptoms, score, created_
         if (response.status < 400) {
             const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
             const parsed = JSON.parse(str).id;
-
             let answers = assignRecord(answersArray, parsed);
             let symptoms = assignRecord(mySymptoms, parsed);
-
             fetch(myUrl + '/api/answer', {
                    method: 'POST',
                    headers: {
@@ -123,7 +119,6 @@ const submitCreateRecordCallNoToken = (username, password, answersArray, mySympt
         if (response.status < 400){
             const str = JSON.stringify(eval('(' + response._bodyInit + ')'));
             const parsed = JSON.parse(str).id;
-
             let answers = assignRecord(answersArray, parsed);
             let symptoms = assignRecord(mySymptoms, parsed);
             fetch(myUrl + '/api/answer', {
@@ -181,6 +176,7 @@ export const submitOfflineRecords = (token, username, password) => {
                     recordObject.answers,
                     recordObject.symptoms,
                     recordObject.score,
+                    recordObject.questionTime,
                     recordObject.created_date,
                     cleanUp);
             });

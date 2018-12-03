@@ -121,14 +121,15 @@ export const resetRating = (rating) => {
     };
 };
 
-export const setAnswer = ({ record, question, textInput, rating }) => {
+export const setAnswer = ({ record, question, textInput, rating, questionTime }) => {
+    console.log(value);
     return {
         type: SET_ANSWER,
         payload: { prop, value }
     };
 };
 
-export const createAnswerObject = ({ record, question, text_input, rating }) => {
+export const createAnswerObject = ({ record, question, text_input, rating, questionTime }) => {
     if ((rating === undefined) || (rating === '')) {
         rating = null;
     }
@@ -143,7 +144,8 @@ export const createAnswerObject = ({ record, question, text_input, rating }) => 
         "answer":   rating,
         "text":     text_input,
         "question": question,
-        "record":   record
+        "record":   record,
+        "questionTime": questionTime
     };
 
     return {

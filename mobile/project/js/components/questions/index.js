@@ -16,7 +16,6 @@ import { createRecord, retrieveAnswersFromLocalStorage } from '../../actions/rec
 const questionListLang = require('./question-list.json');
 
 class Question extends Component {
-
   static propTypes = {
     setIndex: React.PropTypes.func,
     list: React.PropTypes.arrayOf(React.PropTypes.string),
@@ -30,7 +29,6 @@ class Question extends Component {
   componentWillMount() {
     this.props.setQuestion(this.props.questionName);
     const questionName = this.props.questionName;
-
   }
 
   componentDidMount() {
@@ -61,8 +59,8 @@ class Question extends Component {
                 password} = this.props;
 
     let text = '';
-
-    answersArray[question] = this.props.setAnswer({ record, question, text, rating }).payload;
+    let questionTime = new Date().getTime();
+    answersArray[question] = this.props.setAnswer({ record, question, text, rating, questionTime }).payload;
     this.props.resetRating(rating);
     if(parseInt(this.props.questionName) == 8){
         Actions.otherSymptoms({lang: this.props.lang});
@@ -71,6 +69,7 @@ class Question extends Component {
         Actions.questions({questionName: parseInt(this.props.questionName) + 1, lang: this.props.lang});
     }
     else{
+        console.log(answersArray);
         this.props.createRecord({ token, username, password, answersArray, mySymptoms, score });
         Actions.finalScreen({lang: this.props.lang});
     }
@@ -140,7 +139,7 @@ function bindAction(dispatch) {
     answerChanged: (rating, question) => dispatch(answerChanged(rating, question)),
     resetRating: rating => dispatch(resetRating(rating)),
     setQuestion: question => dispatch(setQuestion(question)),
-    setAnswer: (record, question, textInput, rating) => dispatch(createAnswerObject(record, question, textInput, rating)),
+    setAnswer: (record, question, textInput, rating, questionTime) => dispatch(createAnswerObject(record, question, textInput, rating, questionTime)),
     createRecord: (token, username, password, answersArray, mySymptoms, score) => dispatch(createRecord(token, username, password, answersArray, mySymptoms, score)),
 
   };

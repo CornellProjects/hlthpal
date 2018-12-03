@@ -346,7 +346,8 @@ class AnswerSerializer(ModelSerializer):
             'answer',
             'text',
             'question',
-            'record'
+            'record',
+            'questionTime'
         ]
         list_serializer_class = AnswerListSerializer
 
@@ -386,6 +387,7 @@ class AnswerGetSerializer(ModelSerializer):
             'question',
             'answer',
             'text',
+            'questionTime'
         ]
 
 class SymptomGetSerializer(ModelSerializer):
