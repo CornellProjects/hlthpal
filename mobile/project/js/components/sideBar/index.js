@@ -27,9 +27,9 @@ class SideBar extends Component {
         <ListItem button onPress={() => { Actions.home(); this.props.closeDrawer(); }} >
           <Text>Home</Text>
         </ListItem>
-        <ListItem button onPress={() => { Actions.RecordList(); this.props.closeDrawer(); }} >
+{/*        <ListItem button onPress={() => { Actions.RecordList(); this.props.closeDrawer(); }} >
           <Text>List View</Text>
-        </ListItem>
+        </ListItem>*/}
       </Content>
     );
   }
