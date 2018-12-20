@@ -48,7 +48,7 @@ class otherSymptoms extends Component {
               <Icon active name="menu" />
             </Button>
           </Left>
-          <Body>
+          <Body style={{flex: 2}}>
             <Title>{otherSymptoms["othersymptoms"]}</Title>
           </Body>
           <Right>

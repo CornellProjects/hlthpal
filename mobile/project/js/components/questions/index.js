@@ -41,6 +41,9 @@ class Question extends Component {
     if(parseInt(this.props.questionName) == 1){
         Actions.home({lang: this.props.lang});
     }
+    else if(parseInt(this.props.questionName) == 9){
+        Actions.otherSymptoms({lang: this.props.lang});
+    }
     else{
         Actions.questions({questionName: parseInt(this.props.questionName) - 1, lang: this.props.lang});
     }
@@ -69,7 +72,7 @@ class Question extends Component {
         Actions.questions({questionName: parseInt(this.props.questionName) + 1, lang: this.props.lang});
     }
     else{
-        console.log(answersArray);
+//        console.log(answersArray);
         this.props.createRecord({ token, username, password, answersArray, mySymptoms, score });
         Actions.finalScreen({lang: this.props.lang});
     }
@@ -111,9 +114,14 @@ class Question extends Component {
                     </Button>
                 </Col>
             </Grid>
+            {(parseInt(this.props.questionName) === 1 || parseInt(this.props.questionName) >= 9) &&
+            <Text style={styles.symptom_text}>
+            {questionList[this.props.questionName]["title"]}
+            </Text>}
+            {(!(parseInt(this.props.questionName) === 1 || parseInt(this.props.questionName) >= 9)) &&
             <Text style={styles.text}>
             {questionList[this.props.questionName]["title"]}
-            </Text>
+            </Text>}
             <Card style={styles.radios}>
                 <SegmentedControls
                   direction={'column'}

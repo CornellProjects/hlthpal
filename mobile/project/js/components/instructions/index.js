@@ -49,7 +49,7 @@ class Instructions extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Instructions'}</Title>
+            <Title>{instructions['page-title']}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>

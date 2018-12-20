@@ -49,7 +49,7 @@ class finalScreen extends Component {
               </Button>
             </Left>
             <Body>
-              <Title>{(this.props.name) ? this.props.name : 'Summary'}</Title>
+              <Title>{final['page-title']}</Title>
             </Body>
             <Right>
                <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
@@ -59,7 +59,7 @@ class finalScreen extends Component {
           </Header>
           <Content>
             <Text style={styles.text}>
-              {final['summary']}.{"\n\n"}
+              {final['summary']}{"\n\n"}
               {final['remarks']}
             </Text>
             <Grid style={styles.buttons}>

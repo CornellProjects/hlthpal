@@ -1,11 +1,13 @@
 {
     "english":{
+        "page-title": "Home",
         "hi":"Hi",
         "greeting":", how are you today?",
         "record":"Take record",
         "change": "Change Language to Kinyarwanda"
     },
     "kr":{
+        "page-title": "Murugo",
         "hi":"Muraho",
         "greeting":", Amakuru yawe uyumunsi?",
         "record":"Fata amajwi",

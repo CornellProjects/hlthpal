@@ -100,7 +100,7 @@ class Home extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>{(this.props.name) ? this.props.name : 'Home'}</Title>
+            <Title>{home["page-title"]}</Title>
           </Body>
           <Right>
              <Button transparent onPress={() => Actions.login({ type: ActionConst.RESET })}>
