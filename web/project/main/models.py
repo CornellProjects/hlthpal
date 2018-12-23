@@ -84,7 +84,7 @@ class Answer(models.Model):
     answer = models.IntegerField(null=True, blank=True)
     question = models.ForeignKey(Question, null=True, blank=True)
     record = models.ForeignKey(Record)
-    questionTime = models.IntegerField(null=True, blank=True)
+    questionTime = models.DateTimeField(null=True, blank=True) # models.IntegerField(null=True, blank=True)
     # we only want to accept one answer per question per Record
     # class Meta:
     #     unique_together = ["record", "question"]
