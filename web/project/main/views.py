@@ -208,6 +208,18 @@ class AnswerAPIView(ListCreateAPIView):
     serializer_class = AnswerSerializer
     permission_classes = [IsAuthenticated]
 
+    def post(self, request, *args, **kwargs):
+        '''Validates if user can be registered by checking email/username doesn't already exist'''
+        print(request.data, '1')
+        for i in range(len(request.data)):
+            request.data[i]['question'] = Question.objects.get(question_number=request.data[i]['question']).id
+        print(request.data, '2')
+        serializer = AnswerSerializer(data=request.data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def get_serializer(self, *args, **kwargs):
         if "data" in kwargs:
             data = kwargs["data"]
