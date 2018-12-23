@@ -62,7 +62,7 @@ class Question extends Component {
                 password} = this.props;
 
     let text = '';
-    let questionTime = new Date().getTime();
+    let questionTime = new Date(); // new Date().getTime();
     answersArray[question] = this.props.setAnswer({ record, question, text, rating, questionTime }).payload;
     this.props.resetRating(rating);
     if(parseInt(this.props.questionName) == 8){
