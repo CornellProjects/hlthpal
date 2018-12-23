@@ -210,10 +210,8 @@ class AnswerAPIView(ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         '''Validates if user can be registered by checking email/username doesn't already exist'''
-        print(request.data, '1')
         for i in range(len(request.data)):
-            request.data[i]['question'] = Question.objects.get(question_number=request.data[i]['question']).id
-        print(request.data, '2')
+            request.data[i]['question'] = str(Question.objects.get(question_number=request.data[i]['question']).id) # sql returns long integers so need to cast back
         serializer = AnswerSerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
@@ -546,8 +544,8 @@ class PatientDataGetView(ListAPIView):
     queryset = User.objects.filter(is_staff=False)
 
     def get(self, request, format=None):
-        # patients = User.objects.filter(is_staff=False, is_active=True, date_joined__gte=datetime.date(2018, 06, 28))
-        patients = User.objects.filter(is_staff=False, is_active=True)
+        patients = User.objects.filter(is_staff=False, is_active=True, date_joined__gte=datetime.date(2018, 06, 28))
+        # patients = User.objects.filter(is_staff=False, is_active=True)
         result = []
         if not request.user.is_anonymous:
             Log.objects.create(user=request.user, activity='view_dashboard')
