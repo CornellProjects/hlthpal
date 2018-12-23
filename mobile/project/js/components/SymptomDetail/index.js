@@ -13,7 +13,7 @@ class RecordDetail extends Component {
 
     // IN-PROGRESS
     goToEditView(symptom) {
-        this.props.selectSymptom(symptom);
+//        this.props.selectSymptom(symptom);
     }
 
     render() {

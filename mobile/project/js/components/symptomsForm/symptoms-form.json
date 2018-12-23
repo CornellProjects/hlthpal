@@ -9,6 +9,7 @@
         "placeholder":"Injiza ikimenyetso hano...",
         "add":"Ongeramo",
         "cancel": "Reka",
-        "options":["Ntanarimwe", "Sikenshi", "Rimwe narimwe", "Kenshi cyane", "Yego"]
+        "options":["Ntanarimwe", "Bukeya", "Buringaniye", "Byinshi", "Byinshi cyane"]
+
     }
 }
